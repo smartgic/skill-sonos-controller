@@ -1,6 +1,4 @@
 from mycroft import MycroftSkill, intent_handler
-from soco.music_services import MusicService
-from soco.discovery import by_name
 from soco import discover
 
 
@@ -26,6 +24,7 @@ class SonosController(MycroftSkill):
             'sonos.discovery.intent', self.handle_speaker_discovery)
 
     def handle_speaker_discovery(self, message):
+        self._discovery()
         if self.speakers:
             self.speak_dialog("sonos.discovery.dialog")
             for speaker in self.speakers:
@@ -38,3 +37,7 @@ class SonosController(MycroftSkill):
 
     def on_settings_changed(self):
         return
+
+
+def create_skill():
+    return SonosController()
