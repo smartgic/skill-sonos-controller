@@ -12,7 +12,7 @@ class SonosController(MycroftSkill):
         if not self.speakers:
             self.log.error(
                 'I could not find any Sonos devices on your network')
-            self.speak_dialog('error.disovery.dialog')
+            self.speak_dialog('error.disovery')
         else:
             self.log.info(
                 '{} Sonos device(s) found'.format(len(self.speakers)))
@@ -24,7 +24,7 @@ class SonosController(MycroftSkill):
     def handle_speaker_discovery(self, message):
         self._discovery()
         if self.speakers:
-            self.speak_dialog('sonos.discovery.dialog')
+            self.speak_dialog('sonos.discovery')
             for speaker in self.speakers:
                 self.speak(speaker.player_name)
 
