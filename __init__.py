@@ -17,10 +17,7 @@ class SonosController(MycroftSkill):
             self.log.info(
                 '{} Sonos device(s) found'.format(len(self.speakers)))
 
-    def _intents(self):
-        self.register_intent_file(
-            'sonos.discovery.intent', self.handle_speaker_discovery)
-
+    @intent_handler('sonos.discovery.intent')
     def handle_speaker_discovery(self, message):
         self._discovery()
         if self.speakers:
@@ -34,7 +31,6 @@ class SonosController(MycroftSkill):
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
-        self._intents()
 
     def on_settings_changed(self):
         return
