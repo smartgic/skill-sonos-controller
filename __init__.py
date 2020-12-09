@@ -41,6 +41,9 @@ class SonosController(MycroftSkill):
             if list_service == 'yes':
                 for service in services:
                     self.speak(service)
+        else:
+            self.log.warning('no subscription found to any music service')
+            self.speak_dialog('error.list')
 
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
