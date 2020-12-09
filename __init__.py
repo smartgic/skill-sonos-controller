@@ -24,9 +24,12 @@ class SonosController(MycroftSkill):
     def handle_speaker_discovery(self, message):
         self._discovery()
         if self.speakers:
-            self.speak_dialog('sonos.discovery')
-            for speaker in self.speakers:
-                self.speak(speaker.player_name)
+            self.speak_dialog('sonos.discovery', data={
+                              "total": len(self.speakers)})
+            list_devices = self.ask_yesno('sonos.list')
+            if list_devices == 'yes':
+                for speaker in self.speakers:
+                    self.speak(speaker.player_name)
 
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
