@@ -11,7 +11,7 @@ class SonosController(MycroftSkill):
         MycroftSkill.__init__(self)
         self.speakers = []
         self.services = []
-        self.service = 'Amazon Music'
+        self.service = 'Spotify'
         self.provider = MusicService(self.service)
 
     def _discovery(self):
