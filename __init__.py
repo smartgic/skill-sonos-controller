@@ -46,6 +46,7 @@ class SonosController(MycroftSkill):
     def _check_speaker(self, speaker):
         for device in self.speakers:
             if speaker in device.player_name.lower():
+                self.log.info('{} speaker found'.format(speaker))
                 return True
             return False
 
