@@ -60,8 +60,8 @@ class SonosController(MycroftSkill):
                     if service in subscription.lower():
                         self.log.info('{} subscription found'.format(service))
                         return svc
-            else:
-                self.log.error('{} service not supported'.format(service))
+        self.speak_dialog('error.support', data={"service": service})
+        self.log.error('{} service not supported'.format(service))
 
     @intent_handler('sonos.discovery.intent')
     def handle_speaker_discovery(self, message):
