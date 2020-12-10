@@ -2,7 +2,7 @@ play a {playlist} playlist (on | in) {speaker}
 play a {playlist} play list (on | in) {speaker}
 play {playlist} playlist (on | in) {speaker}
 play {playlist} play list (on | in) {speaker}
-play a {playlist} playlist from {sonos.service} (on | in) {speaker}
-play a {playlist} play list from {sonos.service} (on | in) {speaker}
-play {playlist} play list from {sonos.service} (on | in) {speaker}
-play {playlist} playlist from {sonos.service} (on | in) {speaker}
+play a {playlist} playlist from {service} (on | in) {speaker}
+play a {playlist} play list from {service} (on | in) {speaker}
+play {playlist} play list from {service} (on | in) {speaker}
+play {playlist} playlist from {service} (on | in) {speaker}
