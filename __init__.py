@@ -96,8 +96,6 @@ class SonosController(MycroftSkill):
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
 
-        self.log.info(playlist)
-
         if self.services and service in self.services:
             device_name = self._check_speaker(speaker)
             if device_name:
@@ -110,8 +108,7 @@ class SonosController(MycroftSkill):
                         device = by_name(device_name)
                         device.clear_queue()
                         device.add_to_queue(picked)
-                        device.play()
-                        self.log.info(picked)
+                        device.play_from_queue(0)
                     except exceptions.SoCoException as e:
                         self.log.error(e)
                 else:
