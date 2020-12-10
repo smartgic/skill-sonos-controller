@@ -88,9 +88,9 @@ class SonosController(MycroftSkill):
                 if self._check_category('playlists'):
                     try:
                         playlists = self.provider.search('playlists', playlist)
-                        self.log.info(choice(playlists))
                         device = by_name(speaker)
-                        device.add_to_queue(choice(playlists))
+                        picked = choice(playlists)
+                        device.add_to_queue(picked)
                         device.play()
                     except exceptions.SoCoException as e:
                         self.log.error(e)
