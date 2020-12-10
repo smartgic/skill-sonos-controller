@@ -107,7 +107,7 @@ class SonosController(MycroftSkill):
                     "speaker": speaker})
 
     def _entity(self):
-        self.register_entity_file('sonos.service.entity')
+        self.register_entity_file('service.entity')
 
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
