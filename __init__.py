@@ -87,7 +87,7 @@ class SonosController(MycroftSkill):
             if self._check_speaker(speaker):
                 if self._check_category('playlists'):
                     try:
-                        playlists = service.search('playlists', playlist)
+                        playlists = self.provider.search('playlists', playlist)
                         device = by_name(speaker)
                         device.add_to_queue(choice(playlists))
                         device.play()
