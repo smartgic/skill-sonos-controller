@@ -47,7 +47,7 @@ class SonosController(MycroftSkill):
         for device in self.speakers:
             if speaker in device.player_name.lower():
                 self.log.info('{} speaker found'.format(speaker))
-                return True
+                return device.player_name
         return False
 
     @intent_handler('sonos.discovery.intent')
@@ -84,11 +84,12 @@ class SonosController(MycroftSkill):
         speaker = message.data.get('speaker')
 
         if self.services and service in self.services:
-            if self._check_speaker(speaker):
+            device_name = self._check_speaker(speaker)
+            if device_name:
                 if self._check_category('playlists'):
                     try:
                         playlists = self.provider.search('playlists', playlist)
-                        device = by_name(speaker)
+                        device = by_name(device_name)
                         self.log.info('device selected {}'.format(device))
                         device.add_to_queue(choice(playlists))
                         device.play()
