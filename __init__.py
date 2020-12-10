@@ -121,7 +121,7 @@ class SonosController(MycroftSkill):
                             '{} playlist from {} on {} started'.format(
                                 picked, service, speaker))
                         self.speak_dialog('sonos.playlist', data={
-                            'playlist': picked, 'service': service,
+                            'playlist': picked.title, 'service': service,
                             'speaker': speaker})
                     except exceptions.SoCoException as e:
                         self.log.error(e)
