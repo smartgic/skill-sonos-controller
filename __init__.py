@@ -45,7 +45,7 @@ class SonosController(MycroftSkill):
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
-            if speaker in device.player_name:
+            if speaker in device.player_name.lower():
                 return True
             return False
 
@@ -58,7 +58,7 @@ class SonosController(MycroftSkill):
             list_device = self.ask_yesno('sonos.list')
             if list_device == 'yes':
                 for speaker in self.speakers:
-                    self.speak(speaker.player_name)
+                    self.speak(speaker.player_name.lower())
 
     @intent_handler('sonos.service.intent')
     def handle_subscribed_services(self, message):
