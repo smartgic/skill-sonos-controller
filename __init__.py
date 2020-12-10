@@ -5,6 +5,11 @@ from soco.discovery import by_name
 from soco import exceptions
 from random import choice
 
+SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
+                      "Google Play Music", "Napster", "Plex", "Sonos Radio",
+                      "SoundCloud", "Spotify", "TuneIn", "Wolfgangs Music",
+                      "YouTube Music"]
+
 
 class SonosController(MycroftSkill):
     def __init__(self):
@@ -41,14 +46,22 @@ class SonosController(MycroftSkill):
         for categories in self.provider.available_search_categories:
             if category in categories:
                 return True
-        return False
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
             if speaker in device.player_name.lower():
                 self.log.info('{} speaker found'.format(speaker))
                 return device.player_name
-        return False
+
+    def _check_service(self, service):
+        for svc in SUPPORTED_SERVICES:
+            if service in svc.lower():
+                for subscription in self.services:
+                    if service in subscription.lower():
+                        self.log.info('{} subscription found'.format(service))
+                        return svc
+            else:
+                self.log.error('{} service not supported'.format(service))
 
     @intent_handler('sonos.discovery.intent')
     def handle_speaker_discovery(self, message):
@@ -79,7 +92,7 @@ class SonosController(MycroftSkill):
     def handle_playlist(self, message):
         service = self.service
         if message.data.get('service'):
-            service = message.data.get('service')
+            service = self._check_service(message.data.get('service'))
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
 
