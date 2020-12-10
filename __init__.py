@@ -60,6 +60,9 @@ class SonosController(MycroftSkill):
                 self.log.debug('{} speaker has been found'.format(device))
                 return device.player_name
 
+        self.log.warning('{} speaker not found'.format(speaker))
+        self.speak_dialog('error.speaker', data={'speaker': speaker})
+
     def _check_service(self, service):
         for svc in SUPPORTED_SERVICES:
             if service in svc.lower():
@@ -67,6 +70,7 @@ class SonosController(MycroftSkill):
                     if service in subscription.lower():
                         self.log.debug('{} subscription found'.format(service))
                         return svc
+
         self.speak_dialog('error.support', data={'service': service})
         self.log.error('{} service not supported'.format(service))
 
@@ -130,14 +134,27 @@ class SonosController(MycroftSkill):
                         'there is no playlist category for this service')
                     self.speak_dialog('error.category', data={
                         'category': playlist})
-            else:
-                self.log.warning(
-                    '{} speaker not found'.format(speaker))
-                self.speak_dialog('error.speaker', data={
-                    'speaker': speaker})
+
+    @intent_handler('sonos.command.intent')
+    def handle_command(self, message):
+        command = message.data.get('command')
+        if message.data.get('speaker'):
+            device_name = self._check_speaker(message.data.get('speaker'))
+
+        if command == "stop":
+            try:
+                if device_name:
+                    device = by_name(device_name)
+                    device.stop()
+                else:
+                    for device in self.speakers:
+                        device.stop()
+            except exceptions.SoCoException as e:
+                self.log.error(e)
 
     def _entity(self):
         self.register_entity_file('service.entity')
+        self.register_entity_file('sonos.command.entity')
 
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
