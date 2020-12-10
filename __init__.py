@@ -48,7 +48,7 @@ class SonosController(MycroftSkill):
             if speaker in device.player_name.lower():
                 self.log.info('{} speaker found'.format(speaker))
                 return True
-            return False
+        return False
 
     @intent_handler('sonos.discovery.intent')
     def handle_speaker_discovery(self, message):
