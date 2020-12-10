@@ -96,16 +96,20 @@ class SonosController(MycroftSkill):
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
 
+        self.log.info(playlist)
+
         if self.services and service in self.services:
             device_name = self._check_speaker(speaker)
             if device_name:
                 if self._check_category('playlists'):
                     try:
                         playlists = self.provider.search('playlists', playlist)
+                        picked = choice(playlists)
                         device = by_name(device_name)
                         device.clear_queue()
-                        device.add_to_queue(choice(playlists))
+                        device.add_to_queue(picked)
                         device.play()
+                        self.log.info(picked)
                     except exceptions.SoCoException as e:
                         self.log.error(e)
                 else:
@@ -127,7 +131,7 @@ class SonosController(MycroftSkill):
         self.on_settings_changed()
         self._discovery()
         self._subscribed_services()
-        # self._entity()
+        self._entity()
 
     def on_settings_changed(self):
         return
