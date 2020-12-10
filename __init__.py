@@ -17,7 +17,6 @@ class SonosController(MycroftSkill):
         self.speakers = []
         self.services = []
         self.service = 'Spotify'
-        self.provider = MusicService(self.service)
 
     def _discovery(self):
         try:
@@ -42,10 +41,11 @@ class SonosController(MycroftSkill):
         except exceptions.SoCoException as e:
             self.log.error(e)
 
-    def _check_category(self, category):
-        for categories in self.provider.available_search_categories:
+    def _check_category(self, service, category):
+        provider = MusicService(service)
+        for categories in provider.available_search_categories:
             if category in categories:
-                return True
+                return provider
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
@@ -101,9 +101,11 @@ class SonosController(MycroftSkill):
         if self.services and service in self.services:
             device_name = self._check_speaker(speaker)
             if device_name:
-                if self._check_category('playlists'):
+                check_category = self._check_category(service, 'playlists')
+                if check_category:
                     try:
-                        playlists = self.provider.search('playlists', playlist)
+                        playlists = check_category.search(
+                            'playlists', playlist)
                         picked = choice(playlists)
                         device = by_name(device_name)
                         device.clear_queue()
