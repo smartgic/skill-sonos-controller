@@ -41,7 +41,7 @@ class SonosController(MycroftSkill):
         for categories in self.provider.available_search_categories:
             if category in categories:
                 return True
-            return False
+        return False
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
@@ -96,7 +96,8 @@ class SonosController(MycroftSkill):
                 else:
                     self.log.warning(
                         'there is no playlist category for this service')
-                    self.speak_dialog('error.playlist')
+                    self.speak_dialog('error.category', data={
+                        "category": playlist})
             else:
                 self.log.warning(
                     '{} speaker not found'.format(speaker))
