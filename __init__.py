@@ -31,6 +31,7 @@ class SonosController(MycroftSkill):
         else:
             self.log.info(
                 '{} device(s) found'.format(len(self.speakers)))
+            self.log.debug(self.speakers)
 
     def _subscribed_services(self):
         try:
@@ -42,15 +43,21 @@ class SonosController(MycroftSkill):
             self.log.error(e)
 
     def _check_category(self, service, category):
-        provider = MusicService(service)
-        for categories in provider.available_search_categories:
-            if category in categories:
-                return provider
+        try:
+            provider = MusicService(service)
+            for categories in provider.available_search_categories:
+                if category in categories:
+                    return provider
+        except exceptions.SoCoException as e:
+            self.log.error(e)
+
+        self.log.warning('no {} category for this service'.format(category))
+        self.speak_dialog('error.category', data={"category": category})
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
             if speaker in device.player_name.lower():
-                self.log.info('{} speaker found'.format(speaker))
+                self.log.debug('{} speaker has been found'.format(device))
                 return device.player_name
 
     def _check_service(self, service):
@@ -58,7 +65,7 @@ class SonosController(MycroftSkill):
             if service in svc.lower():
                 for subscription in self.services:
                     if service in subscription.lower():
-                        self.log.info('{} subscription found'.format(service))
+                        self.log.debug('{} subscription found'.format(service))
                         return svc
         self.speak_dialog('error.support', data={"service": service})
         self.log.error('{} service not supported'.format(service))
@@ -86,7 +93,7 @@ class SonosController(MycroftSkill):
             return self.services
         else:
             self.log.warning('no subscription found for any music service')
-            self.speak_dialog('error.list')
+            self.speak_dialog('error.service')
 
     @intent_handler('sonos.playlist.intent')
     def handle_playlist(self, message):
