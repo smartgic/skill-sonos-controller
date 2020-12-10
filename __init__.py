@@ -79,7 +79,7 @@ class SonosController(MycroftSkill):
     def handle_playlist(self, message):
         service = self.service
         if message.data.get('service'):
-            service = message.data.get('service')
+            service = message.data.get('sonos.service')
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
 
