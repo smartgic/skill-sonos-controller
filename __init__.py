@@ -114,7 +114,7 @@ class SonosController(MycroftSkill):
         self.on_settings_changed()
         self._discovery()
         self._subscribed_services()
-        # self._entity()
+        self._entity()
 
     def on_settings_changed(self):
         return
