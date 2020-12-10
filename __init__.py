@@ -90,7 +90,6 @@ class SonosController(MycroftSkill):
                     try:
                         playlists = self.provider.search('playlists', playlist)
                         device = by_name(device_name)
-                        self.log.info('device selected {}'.format(device))
                         device.clear_queue()
                         device.add_to_queue(choice(playlists))
                         device.play()
@@ -107,11 +106,15 @@ class SonosController(MycroftSkill):
                 self.speak_dialog('error.speaker', data={
                     "speaker": speaker})
 
+    def _entity(self):
+        self.register_entity_file('sonos.services.entity')
+
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
         self._discovery()
         self._subscribed_services()
+        self._entity()
 
     def on_settings_changed(self):
         return
