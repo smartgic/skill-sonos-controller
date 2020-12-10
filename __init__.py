@@ -85,7 +85,7 @@ class SonosController(MycroftSkill):
 
         if self.services and service in self.services:
             if self._check_speaker(speaker):
-                if self._check_category('playlist'):
+                if self._check_category('playlists'):
                     try:
                         playlists = service.search('playlists', playlist)
                         device = by_name(speaker)
