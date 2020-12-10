@@ -52,7 +52,7 @@ class SonosController(MycroftSkill):
             self.log.error(e)
 
         self.log.warning('no {} category for this service'.format(category))
-        self.speak_dialog('error.category', data={"category": category})
+        self.speak_dialog('error.category', data={'category': category})
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
@@ -67,7 +67,7 @@ class SonosController(MycroftSkill):
                     if service in subscription.lower():
                         self.log.debug('{} subscription found'.format(service))
                         return svc
-        self.speak_dialog('error.support', data={"service": service})
+        self.speak_dialog('error.support', data={'service': service})
         self.log.error('{} service not supported'.format(service))
 
     @intent_handler('sonos.discovery.intent')
@@ -75,7 +75,7 @@ class SonosController(MycroftSkill):
         self._discovery()
         if self.speakers:
             self.speak_dialog('sonos.discovery', data={
-                              "total": len(self.speakers)})
+                              'total': len(self.speakers)})
             list_device = self.ask_yesno('sonos.list')
             if list_device == 'yes':
                 for speaker in self.speakers:
@@ -85,7 +85,7 @@ class SonosController(MycroftSkill):
     def handle_subscribed_services(self, message):
         if self.services:
             self.speak_dialog('sonos.service', data={
-                              "total": len(self.services)})
+                              'total': len(self.services)})
             list_service = self.ask_yesno('sonos.list')
             if list_service == 'yes':
                 for service in self.services:
@@ -116,18 +116,25 @@ class SonosController(MycroftSkill):
                         device.clear_queue()
                         device.add_to_queue(picked)
                         device.play_from_queue(0)
+
+                        self.log.debug(
+                            '{} playlist from {} on {} started'.format(
+                                picked, service, speaker))
+                        self.speak_dialog('sonos.playlist', data={
+                            'playlist': picked, 'service': service,
+                            'speaker': speaker})
                     except exceptions.SoCoException as e:
                         self.log.error(e)
                 else:
                     self.log.warning(
                         'there is no playlist category for this service')
                     self.speak_dialog('error.category', data={
-                        "category": playlist})
+                        'category': playlist})
             else:
                 self.log.warning(
                     '{} speaker not found'.format(speaker))
                 self.speak_dialog('error.speaker', data={
-                    "speaker": speaker})
+                    'speaker': speaker})
 
     def _entity(self):
         self.register_entity_file('service.entity')
