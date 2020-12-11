@@ -138,8 +138,9 @@ class SonosController(MycroftSkill):
     @intent_handler('sonos.command.intent')
     def handle_command(self, message):
         command = message.data.get('command')
-        if message.data.get('speaker'):
-            device_name = self._check_speaker(message.data.get('speaker'))
+        speaker = message.data.get('speaker', False)
+        if speaker:
+            device_name = self._check_speaker(speaker)
 
         if command == "stop":
             try:
