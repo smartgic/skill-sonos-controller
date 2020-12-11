@@ -202,6 +202,23 @@ class SonosController(MycroftSkill):
                                 device.volume -= 10
             except exceptions.SoCoException as e:
                 self.log.error(e)
+        elif command == 'what is playing':
+            try:
+                if speaker:
+                    device = by_name(device_name)
+                    if self._get_state(device.player_name) == 'PLAYING':
+                        self.speak('{} by {}'.format(
+                            device.get_current_track_info()['title'],
+                            device.get_current_track_info()['artist']))
+                else:
+                    for device in self.speakers:
+                        if self._get_state(device.player_name) == 'PLAYING':
+                            self.speak('{} by {} on {}'.format(
+                                device.get_current_track_info()['title'],
+                                device.get_current_track_info()['artist'],
+                                speaker))
+            except exceptions.SoCoException as e:
+                self.log.error(e)
 
     def _entity(self):
         self.register_entity_file('service.entity')
