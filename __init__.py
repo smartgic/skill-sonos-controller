@@ -34,8 +34,9 @@ class SonosController(MycroftSkill):
             self.log.debug(self.speakers)
 
     def _get_state(self, speaker):
-        device = by_name(self._check_speaker(speaker))
-        return device.get_current_transport_info()['current_transport_state']
+        dev = by_name(speaker)
+        if dev:
+            return dev.get_current_transport_info()['current_transport_state']
 
     def _subscribed_services(self):
         try:
@@ -143,10 +144,9 @@ class SonosController(MycroftSkill):
     def handle_command(self, message):
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
+        device_name = None
         if speaker:
-            self.log.info(speaker)
             device_name = self._check_speaker(speaker)
-            self.log.info(device_name)
 
         if command == "pause":
             try:
@@ -156,7 +156,7 @@ class SonosController(MycroftSkill):
                         device.pause()
                 else:
                     for device in self.speakers:
-                        if self._get_state(device) == 'PLAYING':
+                        if self._get_state(deviceplayer_name) == 'PLAYING':
                             device.pause()
             except exceptions.SoCoException as e:
                 self.log.error(e)
