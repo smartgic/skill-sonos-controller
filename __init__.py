@@ -175,10 +175,10 @@ class SonosController(MycroftSkill):
                 else:
                     for device in self.speakers:
                         if self._get_state(device.player_name) == 'PLAYING':
-                        if command == 'much louder':
-                            device.volume += 30
-                        else:
-                            device.volume += 10
+                            if command == 'much louder':
+                                device.volume += 30
+                            else:
+                                device.volume += 10
             except exceptions.SoCoException as e:
                 self.log.error(e)
         elif (
