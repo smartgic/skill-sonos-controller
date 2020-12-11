@@ -140,7 +140,9 @@ class SonosController(MycroftSkill):
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
         if speaker:
+            self.log.info(speaker)
             device_name = self._check_speaker(speaker)
+            self.log.info(device_name)
 
         if command == "pause":
             try:
