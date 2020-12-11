@@ -142,14 +142,14 @@ class SonosController(MycroftSkill):
         if speaker:
             device_name = self._check_speaker(speaker)
 
-        if command == "stop":
+        if command == "pause":
             try:
-                if device_name:
+                if speaker:
                     device = by_name(device_name)
-                    device.stop()
+                    device.pause()
                 else:
                     for device in self.speakers:
-                        device.stop()
+                        device.pause()
             except exceptions.SoCoException as e:
                 self.log.error(e)
 
