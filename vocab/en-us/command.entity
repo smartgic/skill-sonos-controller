@@ -8,10 +8,13 @@ pause
 play
 previous
 quieter
+resume
 shuffle off
 shuffle on
 song
 stop
+turn down
+turn up
 volume down
 volume up
 what is playing
