@@ -34,7 +34,7 @@ class SonosController(MycroftSkill):
             self.log.debug(self.speakers)
 
     def _get_state(self, speaker):
-        device = self._check_speaker(speaker)
+        device = by_name(self._check_speaker(speaker))
         return device.get_current_transport_info()['current_transport_state']
 
     def _subscribed_services(self):
