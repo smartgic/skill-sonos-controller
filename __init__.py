@@ -175,6 +175,21 @@ class SonosController(MycroftSkill):
                             device.volume += 10
             except exceptions.SoCoException as e:
                 self.log.error(e)
+        elif (
+            command == 'volume down' or command == 'decrease' or
+            command == 'turn down'
+        ):
+            try:
+                if speaker:
+                    device = by_name(device_name)
+                    if self._get_state(device.player_name) == 'PLAYING':
+                        device.volume -= 10
+                else:
+                    for device in self.speakers:
+                        if self._get_state(device.player_name) == 'PLAYING':
+                            device.volume -= 10
+            except exceptions.SoCoException as e:
+                self.log.error(e)
 
     def _entity(self):
         self.register_entity_file('service.entity')
