@@ -162,32 +162,44 @@ class SonosController(MycroftSkill):
                 self.log.error(e)
         elif (
             command == 'louder' or command == 'volume up' or
-            command == 'increase' or command == 'turn up'
+            command == 'turn up' or command == 'much louder'
         ):
             try:
                 if speaker:
                     device = by_name(device_name)
                     if self._get_state(device.player_name) == 'PLAYING':
-                        device.volume += 10
+                        if command == 'much louder':
+                            device.volume += 30
+                        else:
+                            device.volume += 10
                 else:
                     for device in self.speakers:
                         if self._get_state(device.player_name) == 'PLAYING':
+                        if command == 'much louder':
+                            device.volume += 30
+                        else:
                             device.volume += 10
             except exceptions.SoCoException as e:
                 self.log.error(e)
         elif (
-            command == 'volume down' or command == 'decrease' or
-            command == 'turn down'
+            command == 'volume down' or command == 'quieter' or
+            command == 'turn down' or command == 'much quieter'
         ):
             try:
                 if speaker:
                     device = by_name(device_name)
                     if self._get_state(device.player_name) == 'PLAYING':
-                        device.volume -= 10
+                        if command == 'much quieter':
+                            device.volume -= 30
+                        else:
+                            device.volume -= 10
                 else:
                     for device in self.speakers:
                         if self._get_state(device.player_name) == 'PLAYING':
-                            device.volume -= 10
+                            if command == 'much quieter':
+                                device.volume -= 30
+                            else:
+                                device.volume -= 10
             except exceptions.SoCoException as e:
                 self.log.error(e)
 
