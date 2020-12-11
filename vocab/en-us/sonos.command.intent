@@ -1,1 +1,3 @@
-{command} music (|{speaker})
+{command} music on {speaker}
+{command} music {speaker}
+{command} music ({speaker})

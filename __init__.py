@@ -33,6 +33,10 @@ class SonosController(MycroftSkill):
                 '{} device(s) found'.format(len(self.speakers)))
             self.log.debug(self.speakers)
 
+    def _get_state(self, speaker):
+        device = self._check_speaker(speaker)
+        return device.get_current_transport_info()['current_transport_state']
+
     def _subscribed_services(self):
         try:
             # Commented until SoCo integrates this method back
