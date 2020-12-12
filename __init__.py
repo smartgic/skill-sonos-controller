@@ -210,6 +210,8 @@ class SonosController(MycroftSkill):
                         self.speak('{} by {}'.format(
                             device.get_current_track_info()['title'],
                             device.get_current_track_info()['artist']))
+                    else:
+                        self.speak_dialog('error.playing')
                 else:
                     for device in self.speakers:
                         if self._get_state(device.player_name) == 'PLAYING':
@@ -217,6 +219,26 @@ class SonosController(MycroftSkill):
                                 device.get_current_track_info()['title'],
                                 device.get_current_track_info()['artist'],
                                 device.player_name))
+                    else:
+                        self.speak_dialog('error.playing')
+            except exceptions.SoCoException as e:
+                self.log.error(e)
+        elif command == 'next' or command == 'previous':
+            try:
+                if speaker:
+                    device = by_name(device_name)
+                    if self._get_state(device.player_name) == 'PLAYING':
+                        if command == 'next':
+                            device.next
+                        elif command == 'previous':
+                            device.previous
+                else:
+                    for device in self.speakers:
+                        if self._get_state(device.player_name) == 'PLAYING':
+                            if command == 'next':
+                                device.next
+                            elif command == 'previous':
+                                device.previous
             except exceptions.SoCoException as e:
                 self.log.error(e)
 
