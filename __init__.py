@@ -71,7 +71,7 @@ class SonosController(MycroftSkill):
                     self.log.debug(
                         '{} is part of a group, {} is coordinator'.format(
                             device, coordinator))
-                    return coordinator
+                    return coordinator.player_name
 
                 self.log.debug('{} speaker has been found'.format(device))
                 return device.player_name
