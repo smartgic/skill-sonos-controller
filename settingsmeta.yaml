@@ -5,5 +5,5 @@ skillMetadata:
         - name: default_music_service
           type: select
           label: Default source of music
-          options: "Spotify|Spotify;Amazon Music|Amazon Music;Music Library|music_library"
+          options: "Amazon Music|Amazon Music;Music Library|music_library;Spotify|Spotify"
           value: "music_library"
