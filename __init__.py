@@ -42,11 +42,6 @@ class SonosController(MycroftSkill):
         if dev:
             return dev.get_current_transport_info()['current_transport_state']
 
-    def _get_coordinator(self, speaker):
-        dev = by_name(speaker)
-        if len(dev.group.members) > 1:
-            return dev.group.coordinator.player_name
-
     def _subscribed_services(self):
         try:
             # Commented until SoCo integrates this method back
@@ -71,6 +66,13 @@ class SonosController(MycroftSkill):
     def _check_speaker(self, speaker):
         for device in self.speakers:
             if speaker in device.player_name.lower():
+                if len(device.group.members) > 1:
+                    coordinator = device.group.coordinator.player_name
+                    self.log.debug(
+                        '{} is part of a group, {} is coordinator'.format(
+                            device, coordinator))
+                    return coordinator
+
                 self.log.debug('{} speaker has been found'.format(device))
                 return device.player_name
 
@@ -123,10 +125,6 @@ class SonosController(MycroftSkill):
 
         if self.services and service in self.services:
             device_name = self._check_speaker(speaker)
-            coordinator = self._get_coordinator(device_name)
-
-            if coordinator:
-                device_name = coordinator
             if device_name:
                 check_category = self._check_category(service, 'playlists')
                 if check_category:
