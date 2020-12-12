@@ -161,7 +161,7 @@ class SonosController(MycroftSkill):
         if speaker:
             device_name = self._check_speaker(speaker)
 
-        if command == 'pause' or command == 'stop':
+        if command == 'pause' or command == 'stop music':
             try:
                 if speaker:
                     device = by_name(device_name)
