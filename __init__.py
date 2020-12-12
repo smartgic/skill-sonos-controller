@@ -229,16 +229,16 @@ class SonosController(MycroftSkill):
                     device = by_name(device_name)
                     if self._get_state(device.player_name) == 'PLAYING':
                         if command == 'next':
-                            device.next
+                            device.next()
                         elif command == 'previous':
-                            device.previous
+                            device.previous()
                 else:
                     for device in self.speakers:
                         if self._get_state(device.player_name) == 'PLAYING':
                             if command == 'next':
-                                device.next
+                                device.next()
                             elif command == 'previous':
-                                device.previous
+                                device.previous()
             except exceptions.SoCoException as e:
                 self.log.error(e)
 
