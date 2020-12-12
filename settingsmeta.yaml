@@ -2,7 +2,7 @@ skillMetadata:
   sections:
     - name: Configuration
       fields:
-        - name: default_music_service
+        - name: default_source
           type: select
           label: Default source of music
           options: "Amazon Music|Amazon Music;Music Library|music_library;Spotify|Spotify"

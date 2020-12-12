@@ -1,14 +1,15 @@
 from mycroft import MycroftSkill, intent_handler
 from soco import discover
+from soco.music_library import MusicLibrary
 from soco.music_services import MusicService
 from soco.discovery import by_name
 from soco import exceptions
 from random import choice
 
 SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
-                      "Google Play Music", "Napster", "Plex", "Sonos Radio",
-                      "SoundCloud", "Spotify", "TuneIn", "Wolfgangs Music",
-                      "YouTube Music"]
+                      "Google Play Music", "Music Library", "Napster", "Plex",
+                      "Sonos Radio", "SoundCloud", "Spotify", "TuneIn",
+                      "Wolfgangs Music", "YouTube Music"]
 
 
 class SonosController(MycroftSkill):
@@ -16,7 +17,10 @@ class SonosController(MycroftSkill):
         MycroftSkill.__init__(self)
         self.speakers = []
         self.services = []
-        self.service = 'Spotify'
+        self.service = None
+
+    def _setup(self):
+        self.service = self.settings.get('default_source')
 
     def _discovery(self):
         try:
@@ -37,6 +41,11 @@ class SonosController(MycroftSkill):
         dev = by_name(speaker)
         if dev:
             return dev.get_current_transport_info()['current_transport_state']
+
+    def _get_coordinator(self, speaker):
+        dev = by_name(speaker)
+        if len(dev.group.members) > 1:
+            return dev.group.coordinator.player_name
 
     def _subscribed_services(self):
         try:
@@ -114,6 +123,10 @@ class SonosController(MycroftSkill):
 
         if self.services and service in self.services:
             device_name = self._check_speaker(speaker)
+            coordinator = self._get_coordinator(device_name)
+
+            if coordinator:
+                device_name = coordinator
             if device_name:
                 check_category = self._check_category(service, 'playlists')
                 if check_category:
@@ -249,12 +262,12 @@ class SonosController(MycroftSkill):
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
-        self._discovery()
-        self._subscribed_services()
-        self._entity()
 
     def on_settings_changed(self):
-        return
+        self._setup()
+        self._entity()
+        self._discovery()
+        self._subscribed_services()
 
 
 def create_skill():
