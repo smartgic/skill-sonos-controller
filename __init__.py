@@ -216,7 +216,7 @@ class SonosController(MycroftSkill):
                             self.speak('{} by {} on {}'.format(
                                 device.get_current_track_info()['title'],
                                 device.get_current_track_info()['artist'],
-                                device))
+                                device.player_name))
             except exceptions.SoCoException as e:
                 self.log.error(e)
 
