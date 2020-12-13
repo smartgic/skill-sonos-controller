@@ -67,12 +67,11 @@ class SonosController(MycroftSkill):
         for device in self.speakers:
             if speaker in device.player_name.lower():
                 if len(device.group.members) > 1:
-                    coordinator = device.group.coordinator.player_name
-                    self.log.info('{} part of a group'.format(coordinator))
+                    coordinator = device.group.coordinator
                     self.log.debug(
                         '{} is part of a group, {} is coordinator'.format(
-                            device, coordinator))
-                    return coordinator
+                            device, coordinator.player_name))
+                    return coordinator.player_name
 
                 self.log.debug('{} speaker has been found'.format(device))
                 return device.player_name
