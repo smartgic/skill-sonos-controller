@@ -187,11 +187,11 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if self._get_state(device.player_name) == 'PLAYING':
+                    if self._get_state(device.player_name) == 'STOPPED':
                         device.play()
                 else:
                     for device in self.speakers:
-                        if self._get_state(device.player_name) == 'PLAYING':
+                        if self._get_state(device.player_name) == 'STOPPED':
                             device.play()
             except exceptions.SoCoException as e:
                 self.log.error(e)
