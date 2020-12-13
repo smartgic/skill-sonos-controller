@@ -1,6 +1,15 @@
+"much louder"
+"much quieter"
+"restart music"
+"shuffle off"
+"shuffle on"
+"stop music"
+"turn down the volume"
+"turn up the volume"
+"volume down"
+"volume up"
+"what is playing"
 louder
-much louder
-much quieter
 next
 off
 pause
@@ -8,12 +17,4 @@ play
 previous
 quieter
 resume
-shuffle off
-shuffle on
 song
-"stop music"
-turn down
-turn up
-volume down
-volume up
-"what is playing"

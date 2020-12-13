@@ -159,7 +159,7 @@ class SonosController(MycroftSkill):
         if speaker:
             device_name = self._check_speaker(speaker)
 
-        if command == 'pause' or command == 'stop music':
+        if command == 'pause':
             try:
                 if speaker:
                     device = by_name(device_name)
@@ -171,9 +171,33 @@ class SonosController(MycroftSkill):
                             device.pause()
             except exceptions.SoCoException as e:
                 self.log.error(e)
+        elif command == 'stop music':
+            try:
+                if speaker:
+                    device = by_name(device_name)
+                    if self._get_state(device.player_name) == 'PLAYING':
+                        device.stop()
+                else:
+                    for device in self.speakers:
+                        if self._get_state(device.player_name) == 'PLAYING':
+                            device.stop()
+            except exceptions.SoCoException as e:
+                self.log.error(e)
+        elif command == 'restart music':
+            try:
+                if speaker:
+                    device = by_name(device_name)
+                    if self._get_state(device.player_name) == 'PLAYING':
+                        device.play()
+                else:
+                    for device in self.speakers:
+                        if self._get_state(device.player_name) == 'PLAYING':
+                            device.play()
+            except exceptions.SoCoException as e:
+                self.log.error(e)
         elif (
             command == 'louder' or command == 'volume up' or
-            command == 'turn up' or command == 'much louder'
+            command == 'turn up volume' or command == 'much louder'
         ):
             try:
                 if speaker:
@@ -194,7 +218,7 @@ class SonosController(MycroftSkill):
                 self.log.error(e)
         elif (
             command == 'volume down' or command == 'quieter' or
-            command == 'turn down' or command == 'much quieter'
+            command == 'turn down volume' or command == 'much quieter'
         ):
             try:
                 if speaker:
