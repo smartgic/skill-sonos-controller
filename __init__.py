@@ -26,11 +26,11 @@ class SonosController(MycroftSkill):
         self.service = self.settings.get('default_source')
         self.code = self.settings.get('link_code')
         self.nato_dict = self.translate_namedvalues('codes')
-        self._authentication()
 
     def _authentication(self):
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
         provider = MusicService(self.service)
+
         if not os.path.isfile(token_file):
             _, link_code = provider.device_or_app_link_auth_part1()
             self.log.info(link_code)
@@ -39,7 +39,7 @@ class SonosController(MycroftSkill):
             self.speak_dialog('sonos.link_code', data={
                 'url': self.url_redirect, 'link_code': data})
 
-        if not os.path.isfile(token_file) and self.code:
+        if not os.path.isfile(token_file) and self.code != '':
             provider.device_or_app_link_auth_part2(self.code)
 
     def _discovery(self):
@@ -307,6 +307,7 @@ class SonosController(MycroftSkill):
 
     def on_settings_changed(self):
         self._setup()
+        self._authentication()
         self._entity()
         self._discovery()
         self._subscribed_services()
