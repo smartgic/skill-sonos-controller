@@ -25,6 +25,7 @@ class SonosController(MycroftSkill):
     def _setup(self):
         self.service = self.settings.get('default_source')
         self.code = self.settings.get('link_code')
+        self.nato_dict = self.translate_namedvalues('codes')
 
     def _authentication(self):
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
@@ -299,8 +300,6 @@ class SonosController(MycroftSkill):
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
-        self.nato_dict = self.translate_namedvalues('codes')
-        self.log.info("NATO", self.nato_dict)
 
     def on_settings_changed(self):
         self._setup()
