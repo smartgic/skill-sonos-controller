@@ -300,7 +300,7 @@ class SonosController(MycroftSkill):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
         self.nato_dict = self.translate_namedvalues('codes')
-        self.log.info(self.nato_dict)
+        self.log.info("NATO", self.nato_dict)
 
     def on_settings_changed(self):
         self._setup()
