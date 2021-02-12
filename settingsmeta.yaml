@@ -7,3 +7,7 @@ skillMetadata:
           label: Default source of music
           options: "Amazon Music|Amazon Music;Music Library|music_library;Spotify|Spotify"
           value: "music_library"
+        - name: link_code
+          type: text
+          label: Link code
+          value: ""

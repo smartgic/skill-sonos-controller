@@ -5,6 +5,7 @@ from soco.music_services import MusicService
 from soco.discovery import by_name
 from soco import exceptions
 from random import choice
+import os
 
 SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
                       "Google Play Music", "Music Library", "Napster", "Plex",
@@ -18,9 +19,21 @@ class SonosController(MycroftSkill):
         self.speakers = []
         self.services = []
         self.service = None
+        self.url_redirect = 'sonos.smartgic.io'
 
     def _setup(self):
         self.service = self.settings.get('default_source')
+        self.code = self.settings.get('link_code')
+
+    def _authentication(self):
+        token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
+        if not os.path.isfile(token_file):
+            provider = MusicService(self.service)
+            _, link_code = provider.device_or_app_link_auth_part1()
+            data = {"code": '. '.join(
+                map(self.nato_dict.get, link_code)) + '.'}
+            self.speak_dialog('sonos.link_code', data={
+                'url': self.url_redirect, 'link_code': data})
 
     def _discovery(self):
         try:
@@ -284,12 +297,14 @@ class SonosController(MycroftSkill):
     def initialize(self):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
+        self.nato_dict = self.translate_namedvalues('codes')
 
     def on_settings_changed(self):
         self._setup()
         self._entity()
         self._discovery()
         self._subscribed_services()
+        self._authentication()
 
 
 def create_skill():
