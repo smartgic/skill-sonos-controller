@@ -29,14 +29,16 @@ class SonosController(MycroftSkill):
 
     def _authentication(self):
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
-        if not os.path.isfile(token_file) and not self.code:
-            provider = MusicService(self.service)
+        provider = MusicService(self.service)
+        if not os.path.isfile(token_file):
             _, link_code = provider.device_or_app_link_auth_part1()
             self.log.info(link_code)
             data = {"slash": '. '.join(
                 map(self.nato_dict.get, link_code)) + '.'}
             self.speak_dialog('sonos.link_code', data={
                 'url': self.url_redirect, 'link_code': data})
+        elif not os.path.isfile(token_file) and self.code:
+            provider.device_or_app_link_auth_part2(self.code)
 
     def _discovery(self):
         try:
