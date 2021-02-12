@@ -20,6 +20,7 @@ class SonosController(MycroftSkill):
         self.services = []
         self.service = None
         self.url_redirect = 'sonos.smartgic.io'
+        self.nato_dict = None
 
     def _setup(self):
         self.service = self.settings.get('default_source')
