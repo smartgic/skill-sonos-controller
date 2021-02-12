@@ -33,7 +33,7 @@ class SonosController(MycroftSkill):
             provider = MusicService(self.service)
             _, link_code = provider.device_or_app_link_auth_part1()
             self.log.info(link_code)
-            data = {"code": '. '.join(
+            data = {"slash": '. '.join(
                 map(self.nato_dict.get, link_code)) + '.'}
             self.speak_dialog('sonos.link_code', data={
                 'url': self.url_redirect, 'link_code': data})
