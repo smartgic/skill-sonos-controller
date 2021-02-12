@@ -31,6 +31,7 @@ class SonosController(MycroftSkill):
         if not os.path.isfile(token_file):
             provider = MusicService(self.service)
             _, link_code = provider.device_or_app_link_auth_part1()
+            self.log.info(link_code)
             data = {"code": '. '.join(
                 map(self.nato_dict.get, link_code)) + '.'}
             self.speak_dialog('sonos.link_code', data={
