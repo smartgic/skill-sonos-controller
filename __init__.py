@@ -29,7 +29,8 @@ class SonosController(MycroftSkill):
 
     def _authentication(self):
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
-        if self.service != 'Music Library' or not self.service:
+
+        if self.service != 'Music Library' or not (self.service is None):
             provider = MusicService(self.service)
             if not os.path.isfile(token_file) and self.code != '':
                 provider.device_or_app_link_auth_part2(self.code)
