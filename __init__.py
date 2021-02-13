@@ -34,7 +34,7 @@ class SonosController(MycroftSkill):
             provider = MusicService(self.service)
             if not os.path.isfile(token_file) and self.code != '':
                 provider.device_or_app_link_auth_part2(self.code)
-            elif os.path.isfile(token_file):
+            elif not os.path.isfile(token_file):
                 _, link_code = provider.device_or_app_link_auth_part1()
                 self.log.info(link_code)
                 data = {"slash": '. '.join(
