@@ -32,15 +32,23 @@ class SonosController(MycroftSkill):
 
         if self.service is not None and self.service != 'Music Library':
             provider = MusicService(self.service)
+
             if not os.path.isfile(token_file) and self.code != '':
-                provider.device_or_app_link_auth_part2(self.code)
+                try:
+                    provider.device_or_app_link_auth_part2(self.code)
+                    self.speak_dialog('sonos.authenticated')
+                except exceptions.SoCoException as e:
+                    self.log.error(e)
             elif not os.path.isfile(token_file):
-                _, link_code = provider.device_or_app_link_auth_part1()
-                self.log.info(link_code)
-                data = {"slash": '. '.join(
-                    map(self.nato_dict.get, link_code)) + '.'}
-                self.speak_dialog('sonos.link_code', data={
-                    'url': self.url_redirect, 'link_code': data})
+                try:
+                    _, link_code = provider.device_or_app_link_auth_part1()
+                    self.log.info('Sonos link code: {}'.format(link_code))
+                    data = {"slash": '. '.join(
+                        map(self.nato_dict.get, link_code)) + '.'}
+                    self.speak_dialog('sonos.link_code', data={
+                        'url': self.url_redirect, 'link_code': data})
+                except exceptions.SoCoException as e:
+                    self.log.error(e)
 
     def _discovery(self):
         try:
