@@ -35,7 +35,7 @@ class SonosController(MycroftSkill):
         # This path is required by SoCo Python library and can't be changed
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
 
-        if self.service is not None and self.service != 'Music Library':
+        if self.service is not None and self.service != 'Music Library' or self.service != 'Sonos Radio':
             provider = MusicService(self.service)
 
             if not os.path.isfile(token_file) and self.code != '':
