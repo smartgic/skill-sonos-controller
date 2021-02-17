@@ -7,6 +7,7 @@ from soco import exceptions
 from random import choice
 import os
 
+# List of current supported service by Sonos.
 SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
                       "Google Play Music", "Music Library", "Napster", "Plex",
                       "Sonos Radio", "SoundCloud", "Spotify", "TuneIn",
@@ -16,18 +17,22 @@ SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
 class SonosController(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
+
         self.speakers = []
         self.services = []
         self.service = None
-        self.url_redirect = 'sonos.smartgic.io'
         self.nato_dict = None
 
     def _setup(self):
-        self.service = self.settings.get('default_source')
+        # By default the Music Library service is used
+        self.service = self.settings.get('default_source', 'Music Library')
         self.code = self.settings.get('link_code')
+        # Initiate NATO dict
+        # https://en.wikipedia.org/wiki/NATO_phonetic_alphabet
         self.nato_dict = self.translate_namedvalues('codes')
 
     def _authentication(self):
+        # This path is required by SoCo Python library and can't be changed
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
 
         if self.service is not None and self.service != 'Music Library':
@@ -46,7 +51,7 @@ class SonosController(MycroftSkill):
                     data = {"slash": '. '.join(
                         map(self.nato_dict.get, link_code)) + '.'}
                     self.speak_dialog('sonos.link_code', data={
-                        'url': self.url_redirect, 'link_code': data})
+                                      'link_code': data})
                 except exceptions.SoCoException as e:
                     self.log.error(e)
 
