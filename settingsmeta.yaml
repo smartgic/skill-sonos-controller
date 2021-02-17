@@ -5,7 +5,7 @@ skillMetadata:
         - name: default_source
           type: select
           label: Default source of music
-          options: "Music Library|Music Library;Spotify|Spotify;Sonos Radio|Sonos Radio"
+          options: "Music Library|Music Library;Spotify|Spotify"
           value: "Music Library"
         - name: link_code
           type: text

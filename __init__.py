@@ -10,8 +10,8 @@ import os
 # List of current supported service by Sonos.
 SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
                       "Google Play Music", "Music Library", "Napster", "Plex",
-                      "Sonos Radio", "SoundCloud", "Spotify", "TuneIn",
-                      "Wolfgangs Music", "YouTube Music"]
+                      "SoundCloud", "Spotify", "TuneIn", "Wolfgangs Music",
+                      "YouTube Music"]
 
 
 class SonosController(MycroftSkill):
@@ -35,7 +35,7 @@ class SonosController(MycroftSkill):
         # This path is required by SoCo Python library and can't be changed
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
 
-        if self.service is not None and self.service != 'Music Library' or self.service != 'Sonos Radio':
+        if self.service is not None and self.service != 'Music Library':
             provider = MusicService(self.service)
 
             if not os.path.isfile(token_file) and self.code != '':

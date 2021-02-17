@@ -13,7 +13,6 @@ This skill interacts with your Sonos devices and allows you to play music from d
 * Local library
 * Amazone Music *(account required)*
 * Spotify *(account required)*
-* Sonos Radio
 
 ## Examples
 
