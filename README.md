@@ -3,8 +3,17 @@
 
 # <img src="docs/sonos.png" card_color="#0000" style="vertical-align:bottom"/> Sonos Controller
 
+Control Sonos speakers
+
 ## About
 
+[Sonos](https://www.sonos.com) is the ultimate wireless home sound system: a whole-house WiFi network that fills your home with brilliant sound, room by room.
+
+This skill interacts with your Sonos devices and allows you to play music from different music sources such as:
+* Local library
+* Amazone Music *(Amazon account)*
+* Spotify *(Prenium account)*
+* Sonos Radio
 
 ## Examples
 
@@ -20,6 +29,11 @@ $ msm install https://github.com/smartgic/mycroft-sonos-controller-skill.git
 
 ## Configuration
 
+This skill utilizes the `settings.json` file which allows you to configure this skill via `home.mycroft.ai` after a few seconds of having the skill installed you should see something like below in the https://home.mycroft.ai/#/skill location:
+
+<img src='docs/sonos-controller-config.png' width='450'/>
+
+Fill this out with your appropriate information and hit save.
 
 ## Credits
 
