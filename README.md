@@ -11,8 +11,8 @@ Control Sonos speakers with music providers support
 
 This skill interacts with your Sonos devices and allows you to play music from different music sources such as:
 * Local library
-* Amazone Music *(Amazon account)*
-* Spotify *(Prenium account)*
+* Amazone Music *(account required)*
+* Spotify *(account required)*
 * Sonos Radio
 
 ## Examples
