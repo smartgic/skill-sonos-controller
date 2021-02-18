@@ -361,8 +361,8 @@ class SonosController(MycroftSkill):
                                 device.get_current_track_info()['title'],
                                 device.get_current_track_info()['artist'],
                                 device.player_name))
-                    else:
-                        self.speak_dialog('error.playing')
+                        else:
+                            self.speak_dialog('error.playing')
             except exceptions.SoCoException as e:
                 self.log.error(e)
         elif command == 'next' or command == 'previous':
