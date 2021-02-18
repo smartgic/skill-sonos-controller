@@ -202,18 +202,25 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.playlist.intent')
     def handle_playlist(self, message):
-        self.log.debug('into the playlist handler')
+        self.log.debug('handle_playlist')
         service = self.service
         if message.data.get('service'):
             service = self._check_service(message.data.get('service'))
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
 
+        self.log.debug(service)
+
         if self.services and service in self.services:
             device_name = self._check_speaker(speaker)
+            self.log.debug('inside service')
             if device_name:
                 check_category = self._check_category(service, 'playlists')
+                self.log.debug('inside device_name')
+
                 if check_category:
+                    self.log.debug('inside check_category')
+
                     try:
                         picked = None
                         title = None
