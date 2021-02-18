@@ -7,11 +7,19 @@ from soco import exceptions
 from random import choice
 import os
 
-# List of current supported service by Sonos.
+# List of current supported service by SoCo
 SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
                       "Google Play Music", "Music Library", "Napster", "Plex",
                       "SoundCloud", "Spotify", "TuneIn", "Wolfgangs Music",
                       "YouTube Music"]
+
+# Service that requires authentication
+REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music']
+
+# List a supported categories for MusicLibrary
+SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
+                                'genres', 'composers', 'tracks', 'share',
+                                'sonos_playlists', 'playlists']
 
 
 class SonosController(MycroftSkill):
@@ -22,6 +30,10 @@ class SonosController(MycroftSkill):
         self.services = []
         self.service = None
         self.nato_dict = None
+
+    """
+    Register some default values to empty initialized variables 
+    """
 
     def _setup(self):
         # By default the Music Library service is used
@@ -35,7 +47,7 @@ class SonosController(MycroftSkill):
         # This path is required by SoCo Python library and can't be changed
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
 
-        if self.service is not None and self.service != 'Music Library':
+        if self.service is not None and self.service in REQUIRED_AUTHENTICATION:
             provider = MusicService(self.service)
 
             if not os.path.isfile(token_file) and self.code != '':
@@ -55,6 +67,12 @@ class SonosController(MycroftSkill):
                 except exceptions.SoCoException as e:
                     self.log.error(e)
 
+    """
+    Discover Sonos devices registered on the local network and
+    add the speakers to a list.
+    https://tinyurl.com/kahwd11y
+    """
+
     def _discovery(self):
         try:
             self.speakers = discover()
@@ -70,25 +88,47 @@ class SonosController(MycroftSkill):
                 '{} device(s) found'.format(len(self.speakers)))
             self.log.debug(self.speakers)
 
+    """
+    Get the current playback state.
+    https://tinyurl.com/5az3lcb5
+    """
+
     def _get_state(self, speaker):
         dev = by_name(speaker)
         if dev:
             return dev.get_current_transport_info()['current_transport_state']
 
+    """
+    Get a list of the names of all subscribed music services.
+    https://tinyurl.com/zu3ymsd9
+    """
+
     def _subscribed_services(self):
         try:
             # Commented until SoCo integrates this method back
             # self.services = MusicService.get_subscribed_services_names()
-            self.services = ['Spotify', 'Amazon Music',
-                             'Sonos Radio' 'Wolfgangs Music']
+            self.services = ['Spotify', 'Amazon Music', 'Wolfgangs Music']
             return self.services
         except exceptions.SoCoException as e:
             self.log.error(e)
 
+    """
+    Check if a category is available for a specific service or library.
+    https://tinyurl.com/1plj5lzv
+    """
+
     def _check_category(self, service, category):
         try:
-            provider = MusicService(service)
-            for categories in provider.available_search_categories:
+            provider = None
+            available_categories = None
+            if service == 'Music Library':
+                provider = MusicLibrary()
+                available_categories = SUPPORTED_LIBRARY_CATEGORIES
+            else:
+                provider = MusicService(service)
+                available_categories = provider.available_search_categories
+
+            for categories in available_categories:
                 if category in categories:
                     return provider
         except exceptions.SoCoException as e:
@@ -96,6 +136,13 @@ class SonosController(MycroftSkill):
 
         self.log.warning('no {} category for this service'.format(category))
         self.speak_dialog('error.category', data={'category': category})
+
+    """
+    Check if the speaker is part of the discovered speakers and checks
+    if it's part of a group. If part of a group then retrieve the coordinator
+    of this group.
+    https://tinyurl.com/4chwrb6u
+    """
 
     def _check_speaker(self, speaker):
         for device in self.speakers:
@@ -112,6 +159,10 @@ class SonosController(MycroftSkill):
 
         self.log.warning('{} speaker not found'.format(speaker))
         self.speak_dialog('error.speaker', data={'speaker': speaker})
+
+    """
+    Check if the spoken service is part of the supported services.
+    """
 
     def _check_service(self, service):
         for svc in SUPPORTED_SERVICES:
@@ -163,19 +214,30 @@ class SonosController(MycroftSkill):
                 check_category = self._check_category(service, 'playlists')
                 if check_category:
                     try:
-                        playlists = check_category.search(
-                            'playlists', playlist)
-                        picked = choice(playlists)
+                        picked = None
+                        title = None
                         device = by_name(device_name)
                         device.clear_queue()
-                        device.add_to_queue(picked)
+                        if service == 'Music Library':
+                            playlists = {}
+                            for pl in check_category.get_playlists(
+                                    search_term=playlist):
+                                playlists[pl.to_dict()['title']] = pl.to_dict()[
+                                    'resources'][0]['uri']
+                            picked = choice(list(playlists.keys()))
+                            device.add_uri_to_queue(playlists[picked])
+                            title = picked
+                        else:
+                            picked = choice(playlists)
+                            device.add_to_queue(picked)
+                            title = picked.title
                         device.play_from_queue(0)
 
                         self.log.debug(
                             '{} playlist from {} on {} started'.format(
                                 picked, service, speaker))
                         self.speak_dialog('sonos.playlist', data={
-                            'playlist': picked.title, 'service': service,
+                            'playlist': title, 'service': service,
                             'speaker': speaker})
                     except exceptions.SoCoException as e:
                         self.log.error(e)
