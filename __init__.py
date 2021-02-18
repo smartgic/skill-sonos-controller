@@ -223,7 +223,7 @@ class SonosController(MycroftSkill):
                         if service == 'Music Library':
                             playlists = {}
                             for pl in check_category.get_playlists(
-                                    search_term=playlist):
+                                    search_term=playlist, complete_result=True):
                                 playlists[pl.to_dict()['title']] = pl.to_dict()[
                                     'resources'][0]['uri']
                             if playlists:
