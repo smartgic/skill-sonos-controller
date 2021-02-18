@@ -202,6 +202,7 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.playlist.intent')
     def handle_playlist(self, message):
+        self.log.debug('into the playlist handler')
         service = self.service
         if message.data.get('service'):
             service = self._check_service(message.data.get('service'))
