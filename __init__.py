@@ -32,7 +32,7 @@ class SonosController(MycroftSkill):
         self.nato_dict = None
 
     """
-    Register some default values to empty initialized variables 
+    Register some default values to empty initialized variables
     """
 
     def _setup(self):
@@ -230,10 +230,16 @@ class SonosController(MycroftSkill):
                                 picked = choice(list(playlists.keys()))
                                 device.add_uri_to_queue(playlists[picked])
                                 title = picked
+                            else:
+                                self.log.warning('playlist not found')
+                                self.speak_dialog('error.playlist', data={
+                                                  'playlist': playlist})
+                                return
                         else:
                             picked = choice(playlists)
                             device.add_to_queue(picked)
                             title = picked.title
+
                         device.play_from_queue(0)
 
                         self.log.debug(
