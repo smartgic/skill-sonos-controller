@@ -211,7 +211,10 @@ class SonosController(MycroftSkill):
 
         self.log.debug(service)
 
-        if self.services and service in self.services:
+        if (
+            self.services and service in self.services or
+            service == 'Music Library'
+        ):
             device_name = self._check_speaker(speaker)
             self.log.debug('inside service')
             if device_name:
