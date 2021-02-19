@@ -1,6 +1,7 @@
 "much louder"
 "much quieter"
 "restart music"
+"resume music"
 "shuffle off"
 "shuffle on"
 "stop music"
@@ -10,11 +11,11 @@
 "volume up"
 "what is playing"
 louder
-next
+"next music"
 off
 pause
 play
-previous
+"previous music"
 quieter
 resume
 song

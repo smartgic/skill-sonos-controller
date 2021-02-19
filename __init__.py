@@ -221,14 +221,15 @@ class SonosController(MycroftSkill):
                         device = by_name(device_name)
                         device.clear_queue()
                         if service == 'Music Library':
-                            playlists = {}
+                            pls = {}
                             for pl in check_category.get_playlists(
-                                    search_term=playlist, complete_result=True):
-                                playlists[pl.to_dict()['title']] = pl.to_dict()[
+                                    search_term=playlist,
+                                    complete_result=True):
+                                pls[pl.to_dict()['title']] = pl.to_dict()[
                                     'resources'][0]['uri']
-                            if playlists:
-                                picked = choice(list(playlists.keys()))
-                                device.add_uri_to_queue(playlists[picked])
+                            if pls:
+                                picked = choice(list(pls.keys()))
+                                device.add_uri_to_queue(pls[picked])
                                 title = picked
                             else:
                                 self.log.warning('playlist not found')
@@ -236,9 +237,9 @@ class SonosController(MycroftSkill):
                                                   'playlist': playlist})
                                 return
                         else:
-                            playlists = check_category.search(
-                                'playlists', playlist)
-                            picked = choice(playlists)
+                            pls = check_category.search(
+                                'playlists', pls)
+                            picked = choice(pls)
                             device.add_to_queue(picked)
                             title = picked.title
 
@@ -290,7 +291,7 @@ class SonosController(MycroftSkill):
                             device.stop()
             except exceptions.SoCoException as e:
                 self.log.error(e)
-        elif command == 'restart music':
+        elif command == 'restart music' or command == 'resume music':
             try:
                 if speaker:
                     device = by_name(device_name)
@@ -357,22 +358,25 @@ class SonosController(MycroftSkill):
                 else:
                     for device in self.speakers:
                         if self._get_state(device.player_name) == 'PLAYING':
-                            self.speak('{} by {} on {}'.format(
-                                device.get_current_track_info()['title'],
-                                device.get_current_track_info()['artist'],
-                                device.player_name))
+                            if device.get_current_track_info()['title']:
+                                self.speak('{} by {} on {}'.format(
+                                    device.get_current_track_info()['title'],
+                                    device.get_current_track_info()['artist'],
+                                    device.player_name))
+                            else:
+                                self.speak_dialog('warning.playing')
                         else:
-                            self.speak_dialog('error.playing')
+                            self.speak_dialog('warning.playing')
             except exceptions.SoCoException as e:
                 self.log.error(e)
-        elif command == 'next' or command == 'previous':
+        elif command == 'next music' or command == 'previous music':
             try:
                 if speaker:
                     device = by_name(device_name)
                     if self._get_state(device.player_name) == 'PLAYING':
-                        if command == 'next':
+                        if command == 'next music':
                             device.next()
-                        elif command == 'previous':
+                        elif command == 'previous music':
                             device.previous()
                 else:
                     for device in self.speakers:
