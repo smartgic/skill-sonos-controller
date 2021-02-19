@@ -12,10 +12,7 @@
 "what is playing"
 louder
 "next music"
-off
 pause
 play
 "previous music"
 quieter
-resume
-song
