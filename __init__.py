@@ -47,7 +47,7 @@ class SonosController(MycroftSkill):
         # This path is required by SoCo Python library and can't be changed
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
 
-        if self.service is not None and self.service in REQUIRED_AUTHENTICATION:
+        if self.service in REQUIRED_AUTHENTICATION:
             provider = MusicService(self.service)
 
             if not os.path.isfile(token_file) and self.code != '':
