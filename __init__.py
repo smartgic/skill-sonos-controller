@@ -107,7 +107,8 @@ class SonosController(MycroftSkill):
         try:
             # Commented until SoCo integrates this method back
             # self.services = MusicService.get_subscribed_services_names()
-            self.services = ['Spotify', 'Amazon Music', 'Wolfgangs Music']
+            self.services = ['Spotify', 'Amazon Music',
+                             'Wolfgangs Music', 'Music Library']
             return self.services
         except exceptions.SoCoException as e:
             self.log.error(e)
