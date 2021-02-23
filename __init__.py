@@ -238,7 +238,7 @@ class SonosController(MycroftSkill):
                                 return
                         else:
                             pls = check_category.search(
-                                'playlists', pls)
+                                'playlists', playlist)
                             picked = choice(pls)
                             device.add_to_queue(picked)
                             title = picked.title
