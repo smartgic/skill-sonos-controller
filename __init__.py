@@ -271,16 +271,21 @@ class SonosController(MycroftSkill):
             self.services and service in self.services or
             service == 'Music Library'
         ):
+            self.log.debug("=============", album)
             device_name = self._check_speaker(speaker)
             if device_name:
+                self.log.debug("++++++++++++++++++", album)
                 check_category = self._check_category(service, 'albums')
                 if check_category:
                     try:
+                        self.log.debug(
+                            "*************************", check_category)
                         picked = None
                         title = None
                         device = by_name(device_name)
                         device.clear_queue()
                         if service == 'Music Library':
+                            self.log.debug("///////////////////", service)
                             albs = {}
                             for alb in check_category.get_albums(
                                     search_term=album,
@@ -297,6 +302,7 @@ class SonosController(MycroftSkill):
                                                   'album': album})
                                 return
                         else:
+                            self.log.debug("||||||||||||||||||", service)
                             albs = check_category.search(
                                 'albums', album)
                             picked = choice(albs)
