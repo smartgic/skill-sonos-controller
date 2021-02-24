@@ -17,6 +17,8 @@ This skill interacts with your Sonos devices and allows you to play music from d
 
 * "play soundtrack playlist on dining room"
 * "play soundtrack playlist from spotify on dining room"
+* "play soundtrack album on dining room"
+* "play soundtrack album from spotify on dining room"
 * "discover sonos devices"
 * "what is playing"
 * "what are my music services"
