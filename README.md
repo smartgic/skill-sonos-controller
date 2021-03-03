@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/smartgic/mycroft-sonos-controller-skill.svg?branch=20.08)](https://travis-ci.com/github/smartgic/mycroft-sonos-controller-skill) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-pink.svg?style=flat)](https://github.com/smartgic/mycroft-sonos-controller-skill/pulls) [![Skill: MIT](https://img.shields.io/badge/mycroft.ai-skill-blue)](https://mycroft.ai) [![Discord](https://img.shields.io/discord/809074036733902888)](https://discord.gg/Vu7Wmd9j) 
+[![Build Status](https://travis-ci.com/smartgic/mycroft-sonos-controller-skill.svg?branch=20.8.1)](https://travis-ci.com/github/smartgic/mycroft-sonos-controller-skill) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-pink.svg?style=flat)](https://github.com/smartgic/mycroft-sonos-controller-skill/pulls) [![Skill: MIT](https://img.shields.io/badge/mycroft.ai-skill-blue)](https://mycroft.ai) [![Discord](https://img.shields.io/discord/809074036733902888)](https://discord.gg/Vu7Wmd9j)
 
 
 # <img src="docs/sonos.png" card_color="#0000" style="vertical-align:bottom"/> Sonos Controller
@@ -15,6 +15,10 @@ This skill interacts with your Sonos devices and allows you to play music from d
 
 ## Examples
 
+* "play i got a feeling on living room"
+* "play i got a feeling by black eyed peace on living room"
+* "play i got a feeling from spotify on living room"
+* "play i got a feeling by black eyed peace from spotify on living room"
 * "play soundtrack playlist on dining room"
 * "play soundtrack playlist from spotify on dining room"
 * "play soundtrack album on dining room"
