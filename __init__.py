@@ -309,7 +309,7 @@ class SonosController(MycroftSkill):
                         'category': album})
 
     @intent_handler('sonos.track.intent')
-    def handle_album(self, message):
+    def handle_track(self, message):
         service = self.service
         artist = None
         if message.data.get('service'):
