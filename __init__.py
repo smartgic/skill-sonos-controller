@@ -6,22 +6,9 @@ from soco.discovery import by_name
 from soco import exceptions
 from random import choice
 from urllib.parse import unquote
+import constants as const
 import os
 import re
-
-# List of current supported service by SoCo
-SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
-                      "Google Play Music", "Music Library", "Napster", "Plex",
-                      "SoundCloud", "Spotify", "TuneIn", "Wolfgangs Music",
-                      "YouTube Music"]
-
-# Service that requires authentication
-REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music']
-
-# List a supported categories for MusicLibrary
-SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
-                                'genres', 'composers', 'tracks', 'share',
-                                'sonos_playlists', 'playlists']
 
 
 class SonosController(MycroftSkill):
@@ -49,7 +36,7 @@ class SonosController(MycroftSkill):
         # This path is required by SoCo Python library and can't be changed
         token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
 
-        if self.service in REQUIRED_AUTHENTICATION:
+        if self.service in const.REQUIRED_AUTHENTICATION:
             provider = MusicService(self.service)
 
             if not os.path.isfile(token_file) and self.code != '':
@@ -126,7 +113,7 @@ class SonosController(MycroftSkill):
             available_categories = None
             if service == 'Music Library':
                 provider = MusicLibrary()
-                available_categories = SUPPORTED_LIBRARY_CATEGORIES
+                available_categories = const.SUPPORTED_LIBRARY_CATEGORIES
             else:
                 provider = MusicService(service)
                 available_categories = provider.available_search_categories
@@ -168,7 +155,7 @@ class SonosController(MycroftSkill):
     """
 
     def _check_service(self, service):
-        for svc in SUPPORTED_SERVICES:
+        for svc in const.SUPPORTED_SERVICES:
             if service in svc.lower():
                 for subscription in self.services:
                     if service in subscription.lower():
