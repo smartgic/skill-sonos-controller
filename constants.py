@@ -12,4 +12,4 @@ SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
                                 'genres', 'composers', 'tracks', 'share',
                                 'sonos_playlists', 'playlists']
 
-TOKEN_FILE = '/.config/Soco/token_store.json'
+TOKEN_FILE = '/.config/SoCo/token_store.json'
