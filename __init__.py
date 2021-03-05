@@ -161,8 +161,8 @@ class SonosController(MycroftSkill):
             if service in svc.lower():
                 for subscription in self.services:
                     if service in subscription.lower():
-                        R_A = REQUIRED_AUTHENTICATION
-                        if service in map(str.lower, set(R_A)):
+                        r_a = map(str.lower, set(REQUIRED_AUTHENTICATION))
+                        if service in r_a:
                             token_file = os.getenv('HOME') + TOKEN_FILE
                             if not os.path.isfile(token_file):
                                 self.log.warning(
