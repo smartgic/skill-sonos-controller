@@ -6,7 +6,7 @@ from soco.discovery import by_name
 from soco import exceptions
 from random import choice
 from urllib.parse import unquote
-from .constants import REQUIRED_AUTHENTICATION,\
+from .constants import REQUIRED_AUTHENTICATION, TOKEN_FILE, \
     SUPPORTED_LIBRARY_CATEGORIES, SUPPORTED_SERVICES
 import os
 import re
@@ -35,7 +35,7 @@ class SonosController(MycroftSkill):
 
     def _authentication(self):
         # This path is required by SoCo Python library and can't be changed
-        token_file = os.getenv('HOME') + '/.config/Soco/token_store.json'
+        token_file = os.getenv('HOME') + TOKEN_FILE
 
         if self.service in REQUIRED_AUTHENTICATION:
             provider = MusicService(self.service)
@@ -152,7 +152,8 @@ class SonosController(MycroftSkill):
         self.speak_dialog('error.speaker', data={'speaker': speaker})
 
     """
-    Check if the spoken service is part of the supported services.
+    Check if the spoken service is part of the supported services and
+    if it is check if authentication is required.
     """
 
     def _check_service(self, service):
@@ -160,7 +161,17 @@ class SonosController(MycroftSkill):
             if service in svc.lower():
                 for subscription in self.services:
                     if service in subscription.lower():
-                        self.log.debug('{} subscription found'.format(service))
+                        if service in REQUIRED_AUTHENTICATION.lower()":
+                            token_file = os.getenv('HOME') + TOKEN_FILE
+                            if not os.path.isfile(token_file):
+                                self.log.warning(
+                                    '{} requires authentication'.format(
+                                        service))
+                                self.speak_dialog('error.authentication', data={
+                                    'service': service})
+                                return
+                        self.log.debug('{} subscription found'.format(
+                            service))
                         return svc
 
         self.speak_dialog('error.support', data={'service': service})
@@ -381,7 +392,7 @@ class SonosController(MycroftSkill):
                         self.log.debug(
                             '{} from {} on {} started'.format(
                                 picked, service, speaker))
-                        self.speak_dialog('sonos.album', data={
+                        self.speak_dialog('sonos.track', data={
                             'track': title, 'service': service,
                             'speaker': speaker})
                     except exceptions.SoCoException as e:
