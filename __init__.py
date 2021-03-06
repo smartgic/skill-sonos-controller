@@ -168,8 +168,9 @@ class SonosController(MycroftSkill):
                                 self.log.warning(
                                     '{} requires authentication'.format(
                                         service))
-                                self.speak_dialog('error.authentication', data={
-                                    'service': service})
+                                self.speak_dialog(
+                                    'error.authentication', data={
+                                        'service': service})
                                 return
                         self.log.debug('{} subscription found'.format(
                             service))
