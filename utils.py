@@ -86,7 +86,7 @@ def get_state(self, speaker):
     return None
 
 
-def check_category(self, service, category):
+def get_category(self, service, category):
     """Check if a category is available for a specific service or library.
     https://tinyurl.com/1plj5lzv
 

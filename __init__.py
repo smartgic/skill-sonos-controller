@@ -4,7 +4,7 @@ from soco import exceptions
 from random import choice
 from urllib.parse import unquote
 from .utils import authentication, discovery, get_state, \
-    check_category, subscribed_services, check_speaker, check_service, \
+    get_category, subscribed_services, check_speaker, check_service, \
     run_command
 
 
@@ -81,7 +81,7 @@ class SonosController(MycroftSkill):
         ):
             device_name = check_speaker(self, speaker)
             if device_name:
-                check_category = check_category(self, service, 'playlists')
+                check_category = get_category(self, service, 'playlists')
                 if check_category:
                     try:
                         picked = None
@@ -140,7 +140,7 @@ class SonosController(MycroftSkill):
         ):
             device_name = check_speaker(self, speaker)
             if device_name:
-                check_category = check_category(self, service, 'albums')
+                check_category = get_category(self, service, 'albums')
                 if check_category:
                     try:
                         picked = None
@@ -202,7 +202,7 @@ class SonosController(MycroftSkill):
         ):
             device_name = check_speaker(self, speaker)
             if device_name:
-                check_category = check_category(self, service, 'tracks')
+                check_category = get_category(self, service, 'tracks')
                 if check_category:
                     try:
                         picked = None
