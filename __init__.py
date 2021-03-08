@@ -287,23 +287,10 @@ class SonosController(MycroftSkill):
             command == 'louder' or command == 'volume up' or
             command == 'turn up volume' or command == 'much louder'
         ):
-            try:
-                if speaker:
-                    device = by_name(device_name)
-                    if get_state(self, device.player_name) == 'PLAYING':
-                        if command == 'much louder':
-                            device.volume += 30
-                        else:
-                            device.volume += 10
-                else:
-                    for device in self.speakers:
-                        if get_state(self, device.player_name) == 'PLAYING':
-                            if command == 'much louder':
-                                device.volume += 30
-                            else:
-                                device.volume += 10
-            except exceptions.SoCoException as e:
-                self.log.error(e)
+            if command == 'much louder':
+                run_command(self, 'volume', speaker, extras='+= 30')
+            else:
+                run_command(self, 'volume', speaker, extras='+= 10')
         elif (
             command == 'volume down' or command == 'quieter' or
             command == 'turn down volume' or command == 'much quieter'
