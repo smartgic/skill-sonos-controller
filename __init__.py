@@ -287,29 +287,36 @@ class SonosController(MycroftSkill):
             command == 'louder' or command == 'volume up' or
             command == 'turn up volume' or command == 'much louder'
         ):
+            volume = 10
             if command == 'much louder':
-                run_command(self, 'volume', speaker, extras='+= 30')
-            else:
-                run_command(self, 'volume', speaker, extras='+= 10')
-        elif (
-            command == 'volume down' or command == 'quieter' or
-            command == 'turn down volume' or command == 'much quieter'
-        ):
+                volume = 30
             try:
                 if speaker:
                     device = by_name(device_name)
                     if get_state(self, device.player_name) == 'PLAYING':
-                        if command == 'much quieter':
-                            device.volume -= 30
-                        else:
-                            device.volume -= 10
+                        device.volume -= volume
                 else:
                     for device in self.speakers:
                         if get_state(self, device.player_name) == 'PLAYING':
-                            if command == 'much quieter':
-                                device.volume -= 30
-                            else:
-                                device.volume -= 10
+                            device.volume -= volume
+            except exceptions.SoCoException as e:
+                self.log.error(e)
+        elif (
+            command == 'volume down' or command == 'quieter' or
+            command == 'turn down volume' or command == 'much quieter'
+        ):
+            volume = 10
+            if command == 'much quieter':
+                volume = 30
+            try:
+                if speaker:
+                    device = by_name(device_name)
+                    if get_state(self, device.player_name) == 'PLAYING':
+                        device.volume -= volume
+                else:
+                    for device in self.speakers:
+                        if get_state(self, device.player_name) == 'PLAYING':
+                            device.volume -= volume
             except exceptions.SoCoException as e:
                 self.log.error(e)
         elif command == 'what is playing':
@@ -337,23 +344,10 @@ class SonosController(MycroftSkill):
             except exceptions.SoCoException as e:
                 self.log.error(e)
         elif command == 'next music' or command == 'previous music':
-            try:
-                if speaker:
-                    device = by_name(device_name)
-                    if get_state(self, device.player_name) == 'PLAYING':
-                        if command == 'next music':
-                            device.next()
-                        elif command == 'previous music':
-                            device.previous()
-                else:
-                    for device in self.speakers:
-                        if get_state(self, device.player_name) == 'PLAYING':
-                            if command == 'next music':
-                                device.next()
-                            elif command == 'previous music':
-                                device.previous()
-            except exceptions.SoCoException as e:
-                self.log.error(e)
+            cmd = 'next'
+            if command == 'previous music':
+                cmd = 'previous'
+            run_command(self, cmd, speaker)
 
     def _entity(self):
         """Register the Padatious entities

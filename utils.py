@@ -218,14 +218,11 @@ def run_command(self, command, speaker=None, state='playing', extras=None):
     if speaker:
         device_name = check_speaker(self, speaker)
 
-    if command == 'volume' and extras:
-        eval_string = 'device.{} {}'.format(command, extras)
-
     try:
         if speaker:
             device = by_name(device_name)
             if get_state(self, device.player_name) == state.upper():
-                eval(eval_string)
+                eval('device.{}()'.format(command))
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
