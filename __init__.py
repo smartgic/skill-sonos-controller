@@ -4,7 +4,8 @@ from soco import exceptions
 from random import choice
 from urllib.parse import unquote
 from .utils import authentication, discovery, get_state, \
-    check_category, subscribed_services, check_speaker, check_service
+    check_category, subscribed_services, check_speaker, check_service, \
+    run_command
 
 
 class SonosController(MycroftSkill):
@@ -277,17 +278,7 @@ class SonosController(MycroftSkill):
             device_name = check_speaker(self, speaker)
 
         if command == 'pause':
-            try:
-                if speaker:
-                    device = by_name(device_name)
-                    if get_state(self, device.player_name) == 'PLAYING':
-                        device.pause()
-                else:
-                    for device in self.speakers:
-                        if get_state(self, device.player_name) == 'PLAYING':
-                            device.pause()
-            except exceptions.SoCoException as e:
-                self.log.error(e)
+            run_command(self, command, speaker)
         elif command == 'stop music':
             try:
                 if speaker:

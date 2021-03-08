@@ -199,7 +199,7 @@ def check_service(self, service):
     return None
 
 
-def command(self, command, speaker=None):
+def run_command(self, command, speaker=None):
     """Execute command on Sonos device, if no speaker is spoken then
     the function will check for all the speakers that are playing
     music.
