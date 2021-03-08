@@ -278,31 +278,11 @@ class SonosController(MycroftSkill):
             device_name = check_speaker(self, speaker)
 
         if command == 'pause':
-            run_command(self, command, speaker)
+            run_command(self, 'pause', speaker)
         elif command == 'stop music':
-            try:
-                if speaker:
-                    device = by_name(device_name)
-                    if get_state(self, device.player_name) == 'PLAYING':
-                        device.stop()
-                else:
-                    for device in self.speakers:
-                        if get_state(self, device.player_name) == 'PLAYING':
-                            device.stop()
-            except exceptions.SoCoException as e:
-                self.log.error(e)
+            run_command(self, 'stop', speaker)
         elif command == 'restart music' or command == 'resume music':
-            try:
-                if speaker:
-                    device = by_name(device_name)
-                    if get_state(self, device.player_name) == 'STOPPED':
-                        device.play()
-                else:
-                    for device in self.speakers:
-                        if get_state(self, device.player_name) == 'STOPPED':
-                            device.play()
-            except exceptions.SoCoException as e:
-                self.log.error(e)
+            run_command(self, 'stop', speaker, 'stopped')
         elif (
             command == 'louder' or command == 'volume up' or
             command == 'turn up volume' or command == 'much louder'
