@@ -1,6 +1,6 @@
 import os
 import re
-import utils
+import .utils
 from mycroft import MycroftSkill, intent_handler
 from soco import discover
 from soco.music_library import MusicLibrary
