@@ -396,10 +396,10 @@ class SonosController(MycroftSkill):
 
     def on_settings_changed(self):
         self._setup()
-        utils.authentication()
+        utils.authentication(self)
         self._entity()
-        utils.discovery()
-        utils.subscribed_services()
+        utils.discovery(self)
+        utils.subscribed_services(self)
 
 
 def create_skill():
