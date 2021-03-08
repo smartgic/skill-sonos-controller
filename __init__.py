@@ -294,11 +294,11 @@ class SonosController(MycroftSkill):
                 if speaker:
                     device = by_name(device_name)
                     if get_state(self, device.player_name) == 'PLAYING':
-                        device.volume -= volume
+                        device.volume += volume
                 else:
                     for device in self.speakers:
                         if get_state(self, device.player_name) == 'PLAYING':
-                            device.volume -= volume
+                            device.volume += volume
             except exceptions.SoCoException as e:
                 self.log.error(e)
         elif (
