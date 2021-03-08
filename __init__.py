@@ -1,9 +1,4 @@
-import os
-import re
 from mycroft import MycroftSkill, intent_handler
-from soco import discover
-from soco.music_library import MusicLibrary
-from soco.music_services import MusicService
 from soco.discovery import by_name
 from soco import exceptions
 from random import choice
@@ -16,14 +11,15 @@ class SonosController(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
 
+        # Initialize variables with empty or None values
         self.speakers = []
         self.services = []
         self.service = None
         self.nato_dict = None
 
     def _setup(self):
-        """
-        Register some default values to empty initialized variables
+        """Provision initialized variables and retrieve configuration
+        from home.mycroft.ai.
         """
         # By default the Music Library service is used
         self.service = self.settings.get('default_source', 'Music Library')
@@ -33,7 +29,12 @@ class SonosController(MycroftSkill):
         self.nato_dict = self.translate_namedvalues('codes')
 
     @intent_handler('sonos.discovery.intent')
-    def handle_speaker_discovery(self, message):
+    def handle_speaker_discovery(self):
+        """Handle the Sonos devices discovery triggered by intents
+
+        It's only used by the user to get the device names, the main discovery
+        is automatically triggered during the skill initialization.
+        """
         discovery(self)
         if self.speakers:
             self.speak_dialog('sonos.discovery', data={
@@ -44,7 +45,16 @@ class SonosController(MycroftSkill):
                     self.speak(speaker.player_name.lower())
 
     @intent_handler('sonos.service.intent')
-    def handle_subscribed_services(self, message):
+    def handle_subscribed_services(self):
+        """Handle the subscribed services listing triggerd by intents
+
+        It's only used by the user to get the service that are subscribed by
+        the Sonos devices. The service detection is performed during the
+        skill initialization.
+
+        :return: A list of services
+        :rtype: list
+        """
         if self.services:
             self.speak_dialog('sonos.service', data={
                               'total': len(self.services)})
@@ -388,6 +398,8 @@ class SonosController(MycroftSkill):
                 self.log.error(e)
 
     def _entity(self):
+        """Register the Padatious entities
+        """
         self.register_entity_file('service.entity')
         self.register_entity_file('command.entity')
 

@@ -17,6 +17,8 @@ def authentication(self):
     SoCo is currently looking to bring back the music service which will make
     this function disappears in the future.
     https://github.com/SoCo/SoCo/pull/763s
+
+    :raises SoCoException: Raise SoCoException
     """
     # This path is required by SoCo Python library and can't be changed
     token_file = os.getenv('HOME') + TOKEN_FILE
@@ -48,14 +50,13 @@ def discovery(self):
     """Discover Sonos devices registered on the local network and
     add the them to a list.
     https://tinyurl.com/kahwd11y
+
+    :raises SoCoException: Raise SoCoException
     """
-    self.log.debug("===== {}".format(self.speakers))
     try:
         self.speakers = discover()
     except exceptions.SoCoException as err:
         self.log.error(err)
-
-    self.log.debug(">>>>>>>>>> {}".format(self.speakers))
 
     if not self.speakers:
         self.log.warning('unable to find sonos devices')
@@ -64,16 +65,16 @@ def discovery(self):
         self.log.info(
             '{} device(s) found'.format(len(self.speakers)))
 
-    self.log.debug("<<<<<<<<<<<<<< {}".format(self.speakers))
-
 
 def get_state(self, speaker):
     """Get the current playback state.
     https://tinyurl.com/5az3lcb5
 
     :param speaker: Speaker to check the playback state
+    :type speaker: string
     :return: The current transport state
     :rtype: str
+    :raises SoCoException: Raise SoCoException
     """
     try:
         device = by_name(speaker)
@@ -90,7 +91,9 @@ def check_category(self, service, category):
     https://tinyurl.com/1plj5lzv
 
     :param service: Music service to check the categories
+    :type service: string
     :param category: Which category to check
+    :type category: string
     :return: A music provider depending the service
     :rtype:
     """
@@ -124,6 +127,7 @@ def subscribed_services(self):
 
     :return: A list of subscribed services
     :rtype: list
+    :raises SoCoException: Raise SoCoException
     """
     try:
         # Commented until SoCo integrates this method back
@@ -143,8 +147,10 @@ def check_speaker(self, speaker):
     https://tinyurl.com/4chwrb6u
 
     :param speaker: Which speaker to looking for
+    :type speaker: string
     :return: Speaker name
     :rtype: str
+    :raises SoCoException: Raise SoCoException
     """
     try:
         for device in self.speakers:
@@ -169,8 +175,10 @@ def check_service(self, service):
     authentication.
 
     :param service: Music service to check
+    :type service: string
     :return: Speaker name
     :rtype: str
+    :raises SoCoException: Raise SoCoException
     """
     if service in map(str.lower, set(SUPPORTED_SERVICES)):
         for subscription in self.services:
@@ -189,3 +197,31 @@ def check_service(self, service):
     self.speak_dialog('error.support', data={'service': service})
 
     return None
+
+
+def command(self, command, speaker=None):
+    """Execute command on Sonos device, if no speaker is spoken then
+    the function will check for all the speakers that are playing
+    music.
+
+    :param command: Command to execute
+    :type command: string
+    :param speaker: Which speaker to apply the command
+    :type speaker: string, optional
+    :raises SoCoException: Raise SoCoException
+    """
+    device_name = None
+    if speaker:
+        device_name = check_speaker(self, speaker)
+
+    try:
+        if speaker:
+            device = by_name(device_name)
+            if get_state(self, device.player_name) == 'PLAYING':
+                eval('device.{}()'.format(command))
+        else:
+            for device in self.speakers:
+                if get_state(self, device.player_name) == 'PLAYING':
+                    eval('device.{}()'.format(command))
+    except exceptions.SoCoException as e:
+        self.log.error(e)
