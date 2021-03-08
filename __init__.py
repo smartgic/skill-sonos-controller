@@ -21,8 +21,6 @@ class SonosController(MycroftSkill):
         self.service = None
         self.nato_dict = None
 
-        discovery(self)
-
     def _setup(self):
         """
         Register some default values to empty initialized variables

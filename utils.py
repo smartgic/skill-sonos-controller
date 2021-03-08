@@ -51,7 +51,7 @@ def discovery(self):
     """
     self.log.debug("===== {}".format(self.speakers))
     try:
-        self.speakers = discover(timeout=10, allow_network_scan=True)
+        self.speakers = discover()
     except exceptions.SoCoException as err:
         self.log.error(err)
 
