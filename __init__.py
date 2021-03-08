@@ -266,8 +266,6 @@ class SonosController(MycroftSkill):
         if speaker:
             device_name = check_speaker(self, speaker)
 
-
-nd Project Services Executive, will take on responsibility for a strategy and planning function that will pull
         if command == 'pause':
             try:
                 if speaker:
