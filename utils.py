@@ -12,7 +12,6 @@ from .constants import SUPPORTED_LIBRARY_CATEGORIES, \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
 
 
-
 def authentication(self):
     """Some music services require an authentication.
     SoCo is currently looking to bring back the music service which will make
@@ -55,11 +54,9 @@ def discovery(self):
     except exceptions.SoCoException as err:
         self.log.error(err)
 
-    self.log.debug('========= {}'.format(self.speakers))
-
     if not self.speakers:
         self.log.warning('unable to find sonos devices')
-        self.speak_dialog('error.disovery')
+        self.speak_dialog('error.discovery')
     else:
         self.log.info(
             '{} device(s) found'.format(len(self.speakers)))

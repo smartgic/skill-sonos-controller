@@ -1,6 +1,5 @@
 import os
 import re
-from .utils import *
 from mycroft import MycroftSkill, intent_handler
 from soco import discover
 from soco.music_library import MusicLibrary
@@ -9,13 +8,15 @@ from soco.discovery import by_name
 from soco import exceptions
 from random import choice
 from urllib.parse import unquote
+from ..utils import authentication, discovery, get_state, \
+    check_category, subscribed_services, check_speaker, check_service
 
 
 class SonosController(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
 
-        
+        self.speakers = []
         self.services = []
         self.service = None
         self.nato_dict = None
@@ -24,7 +25,6 @@ class SonosController(MycroftSkill):
         """
         Register some default values to empty initialized variables
         """
-        self.speakers = []
         # By default the Music Library service is used
         self.service = self.settings.get('default_source', 'Music Library')
         self.code = self.settings.get('link_code')
@@ -34,7 +34,7 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.discovery.intent')
     def handle_speaker_discovery(self, message):
-        utils.discovery(self)
+        discovery(self)
         if self.speakers:
             self.speak_dialog('sonos.discovery', data={
                               'total': len(self.speakers)})
@@ -61,17 +61,16 @@ class SonosController(MycroftSkill):
     def handle_playlist(self, message):
         service = self.service
         if message.data.get('service'):
-            service = utils.check_service(self, message.data.get('service'))
+            service = check_service(self, message.data.get('service'))
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
         if (
             self.services and service in self.services or
             service == 'Music Library'
         ):
-            device_name = utils.check_speaker(self, speaker)
+            device_name = check_speaker(self, speaker)
             if device_name:
-                check_category = utils.check_category(self, service,
-                    'playlists')
+                check_category = check_category(self, service, 'playlists')
                 if check_category:
                     try:
                         picked = None
@@ -121,16 +120,16 @@ class SonosController(MycroftSkill):
     def handle_album(self, message):
         service = self.service
         if message.data.get('service'):
-            service = utils.check_service(self, message.data.get('service'))
+            service = check_service(self, message.data.get('service'))
         album = message.data.get('album')
         speaker = message.data.get('speaker')
         if (
             self.services and service in self.services or
             service == 'Music Library'
         ):
-            device_name = utils.check_speaker(self, speaker)
+            device_name = check_speaker(self, speaker)
             if device_name:
-                check_category = utils.check_category(self, service, 'albums')
+                check_category = check_category(self, service, 'albums')
                 if check_category:
                     try:
                         picked = None
@@ -181,7 +180,7 @@ class SonosController(MycroftSkill):
         service = self.service
         artist = None
         if message.data.get('service'):
-            service = utils.check_service(self, message.data.get('service'))
+            service = check_service(self, message.data.get('service'))
         if message.data.get('artist'):
             artist = message.data.get('artist')
         track = message.data.get('track')
@@ -190,9 +189,9 @@ class SonosController(MycroftSkill):
             self.services and service in self.services or
             service == 'Music Library'
         ):
-            device_name = utils.check_speaker(self, speaker)
+            device_name = check_speaker(self, speaker)
             if device_name:
-                check_category = utils.check_category(self, service, 'tracks')
+                check_category = check_category(self, service, 'tracks')
                 if check_category:
                     try:
                         picked = None
@@ -265,17 +264,19 @@ class SonosController(MycroftSkill):
         speaker = message.data.get('speaker', False)
         device_name = None
         if speaker:
-            device_name = utils.check_speaker(self, speaker)
+            device_name = check_speaker(self, speaker)
 
+
+nd Project Services Executive, will take on responsibility for a strategy and planning function that will pull
         if command == 'pause':
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'PLAYING':
+                    if get_state(self, device.player_name) == 'PLAYING':
                         device.pause()
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'PLAYING':
+                        if get_state(self, device.player_name) == 'PLAYING':
                             device.pause()
             except exceptions.SoCoException as e:
                 self.log.error(e)
@@ -283,11 +284,11 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'PLAYING':
+                    if get_state(self, device.player_name) == 'PLAYING':
                         device.stop()
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'PLAYING':
+                        if get_state(self, device.player_name) == 'PLAYING':
                             device.stop()
             except exceptions.SoCoException as e:
                 self.log.error(e)
@@ -295,11 +296,11 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'STOPPED':
+                    if get_state(self, device.player_name) == 'STOPPED':
                         device.play()
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'STOPPED':
+                        if get_state(self, device.player_name) == 'STOPPED':
                             device.play()
             except exceptions.SoCoException as e:
                 self.log.error(e)
@@ -310,14 +311,14 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'PLAYING':
+                    if get_state(self, device.player_name) == 'PLAYING':
                         if command == 'much louder':
                             device.volume += 30
                         else:
                             device.volume += 10
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'PLAYING':
+                        if get_state(self, device.player_name) == 'PLAYING':
                             if command == 'much louder':
                                 device.volume += 30
                             else:
@@ -331,14 +332,14 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'PLAYING':
+                    if get_state(self, device.player_name) == 'PLAYING':
                         if command == 'much quieter':
                             device.volume -= 30
                         else:
                             device.volume -= 10
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'PLAYING':
+                        if get_state(self, device.player_name) == 'PLAYING':
                             if command == 'much quieter':
                                 device.volume -= 30
                             else:
@@ -349,7 +350,7 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'PLAYING':
+                    if get_state(self, device.player_name) == 'PLAYING':
                         self.speak('{} by {}'.format(
                             device.get_current_track_info()['title'],
                             device.get_current_track_info()['artist']))
@@ -357,7 +358,7 @@ class SonosController(MycroftSkill):
                         self.speak_dialog('error.playing')
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'PLAYING':
+                        if get_state(self, device.player_name) == 'PLAYING':
                             if device.get_current_track_info()['title']:
                                 self.speak('{} by {} on {}'.format(
                                     device.get_current_track_info()['title'],
@@ -373,14 +374,14 @@ class SonosController(MycroftSkill):
             try:
                 if speaker:
                     device = by_name(device_name)
-                    if utils.get_state(self, device.player_name) == 'PLAYING':
+                    if get_state(self, device.player_name) == 'PLAYING':
                         if command == 'next music':
                             device.next()
                         elif command == 'previous music':
                             device.previous()
                 else:
                     for device in self.speakers:
-                        if utils.get_state(self, device.player_name) == 'PLAYING':
+                        if get_state(self, device.player_name) == 'PLAYING':
                             if command == 'next music':
                                 device.next()
                             elif command == 'previous music':
@@ -398,10 +399,10 @@ class SonosController(MycroftSkill):
 
     def on_settings_changed(self):
         self._setup()
-        utils.authentication(self)
+        authentication(self)
         self._entity()
-        utils.discovery(self)
-        utils.subscribed_services(self)
+        discovery(self)
+        subscribed_services(self)
 
 
 def create_skill():
