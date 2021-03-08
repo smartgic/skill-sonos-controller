@@ -15,7 +15,7 @@ class SonosController(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
 
-        self.speakers = []
+        
         self.services = []
         self.service = None
         self.nato_dict = None
@@ -24,6 +24,7 @@ class SonosController(MycroftSkill):
         """
         Register some default values to empty initialized variables
         """
+        self.speakers = []
         # By default the Music Library service is used
         self.service = self.settings.get('default_source', 'Music Library')
         self.code = self.settings.get('link_code')
