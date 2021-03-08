@@ -46,13 +46,16 @@ def authentication(self):
 
 def discovery(self):
     """Discover Sonos devices registered on the local network and
-    add the speakers to a list.
+    add the them to a list.
     https://tinyurl.com/kahwd11y
     """
+    self.log.debug("===== {}".format(self.speakers))
     try:
         self.speakers = discover(timeout=10, allow_network_scan=True)
     except exceptions.SoCoException as err:
         self.log.error(err)
+
+    self.log.debug(">>>>>>>>>> {}".format(self.speakers))
 
     if not self.speakers:
         self.log.warning('unable to find sonos devices')
@@ -60,6 +63,8 @@ def discovery(self):
     else:
         self.log.info(
             '{} device(s) found'.format(len(self.speakers)))
+
+    self.log.debug("<<<<<<<<<<<<<< {}".format(self.speakers))
 
 
 def get_state(self, speaker):
