@@ -55,7 +55,7 @@ def discovery(self):
     except exceptions.SoCoException as err:
         self.log.error(err)
 
-    self.log.debug('========= {}'.format(self.speaker))
+    self.log.debug('========= {}'.format(self.speakers))
 
     if not self.speakers:
         self.log.warning('unable to find sonos devices')
