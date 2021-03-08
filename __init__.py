@@ -392,6 +392,7 @@ class SonosController(MycroftSkill):
         self.register_entity_file('command.entity')
 
     def initialize(self):
+        discovery(self)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
 
