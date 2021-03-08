@@ -199,7 +199,7 @@ def check_service(self, service):
     return None
 
 
-def run_command(self, command, speaker=None, state='playing'):
+def run_command(self, command, speaker=None, state='playing', extras=None):
     """Execute command on Sonos device, if no speaker is spoken then
     the function will check for all the speakers that are playing
     music.
@@ -210,17 +210,22 @@ def run_command(self, command, speaker=None, state='playing'):
     :type speaker: string, optional
     :param state: Current state on the speaker
     :type state: string, optional
+    :param extras: Add extra values to the command
+    :type extras: string, optional
     :raises SoCoException: Raise SoCoException
     """
     device_name = None
     if speaker:
         device_name = check_speaker(self, speaker)
 
+    if command == 'volume' and extras:
+        eval_string = 'device.{} {}'.format(command, extras)
+
     try:
         if speaker:
             device = by_name(device_name)
             if get_state(self, device.player_name) == state.upper():
-                eval('device.{}()'.format(command))
+                eval(eval_string)
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
