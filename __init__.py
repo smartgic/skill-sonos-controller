@@ -271,10 +271,18 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.command.intent')
     def handle_command(self, message):
+        """Handle the commands to pass to Sonos devices triggered by intents
+
+        The list of the available commands is registered withing the
+        command.entity file.
+
+        Command could be run with or without speaker mention.
+        """
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
         device_name = None
         if speaker:
+            # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
 
         if command == 'pause':
