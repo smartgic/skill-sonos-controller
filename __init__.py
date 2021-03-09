@@ -274,6 +274,8 @@ class SonosController(MycroftSkill):
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
 
+        self.log.debug("||||||||||||||||| {}".format(speaker))
+
         if command == 'pause':
             run_command(self, 'pause', speaker)
         elif command == 'stop music':
