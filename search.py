@@ -34,7 +34,7 @@ def search(self, service, speaker, category, playlist=None, album=None,
 
 
 def search_type(self, data):
-    self.log.debug("=====search_type")
+    self.log.debug("=====   ")
     if data['category'] == 'playlists':
         search_playlist(self, data)
     # elif data['category'] == 'albums':
@@ -52,7 +52,7 @@ def search_playlist(self, data):
     device = by_name(data['speaker'])
     device.clear_queue()
 
-    if data['service'] == 'Music Library':
+    if data['service'] == 'music library':
         playlists = {}
         for playlist in data['provider'].get_playlists(
                 search_term=data['playlist'],
