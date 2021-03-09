@@ -170,13 +170,15 @@ def search_track(self, data):
     try:
         picked = None
         title = None
+        tracks = {}
 
         # Clear the current content playing
         device = by_name(data['speaker'])
         device.clear_queue()
         if data['service'] == 'music library':
+            # If artist has been specify then we are using the
+            # search_track() method.
             if data['artist']:
-                tracks = {}
                 for track in data['provider'].search_track(
                         artist=data['artist'],
                         track=data['track']):
@@ -192,7 +194,6 @@ def search_track(self, data):
                         'track': data['track'], 'artist': data['artist']})
                     return
             else:
-                tracks = {}
                 for track in data['provider'].get_tracks(
                         search_term=data['track'],
                         complete_result=True):
@@ -220,6 +221,6 @@ def search_track(self, data):
 
         self.speak_dialog('sonos.track', data={
             'track': title, 'service': data['service'],
-            'speaker': data['speaker']})
+            'speaker': data['speaker'], 'artists': data['artist']})
     except exceptions.SoCoException as err:
         self.log.error(err)
