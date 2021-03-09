@@ -222,9 +222,9 @@ def run_command(self, command, speaker, state='playing', extras=None):
 
             if get_state(self, device.player_name) == state.upper():
                 if command == 'vol-up':
-                    volume(self, 'up', speaker, extras)
+                    volume(self, 'up', device, extras)
                 elif command == 'vol-down':
-                    volume(self, 'down', speaker, extras)
+                    volume(self, 'down', device, extras)
                 eval('device.{}()'.format(command))
         else:
             for device in self.speakers:
