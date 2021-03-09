@@ -101,7 +101,7 @@ def get_category(self, service, category):
         provider = None
         available_categories = None
 
-        if service == 'Music Library':
+        if service == 'music library':
             provider = MusicLibrary()
             available_categories = SUPPORTED_LIBRARY_CATEGORIES
         else:
