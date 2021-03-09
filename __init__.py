@@ -242,7 +242,7 @@ class SonosController(MycroftSkill):
         elif command == 'stop music':
             run_command(self, 'stop', device_name)
         elif command == 'restart music' or command == 'resume music':
-            run_command(self, 'play', device_name, 'stopped')
+            run_command(self, 'play', device_name, 'PAUSED_PLAYBACK')
         elif (
             command == 'louder' or command == 'volume up' or
             command == 'turn up volume' or command == 'much louder'
