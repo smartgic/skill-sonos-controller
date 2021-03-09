@@ -77,9 +77,10 @@ class SonosController(MycroftSkill):
         if message.data.get('service'):
             service = check_service(self, message.data.get('service'))
 
+        self.log.debug(">>>>>>>>>>>> {}".format(speaker))
         search(self, service, speaker, 'playlists', playlist=playlist)
 
-    @intent_handler('sonos.album.intent')
+    @ intent_handler('sonos.album.intent')
     def handle_album(self, message):
         service = self.service
         if message.data.get('service'):
@@ -138,7 +139,7 @@ class SonosController(MycroftSkill):
                     self.speak_dialog('error.category', data={
                         'category': album})
 
-    @intent_handler('sonos.track.intent')
+    @ intent_handler('sonos.track.intent')
     def handle_track(self, message):
         service = self.service
         artist = None
@@ -221,7 +222,7 @@ class SonosController(MycroftSkill):
                     self.speak_dialog('error.category', data={
                         'category': 'tracks'})
 
-    @intent_handler('sonos.command.intent')
+    @ intent_handler('sonos.command.intent')
     def handle_command(self, message):
         """Handle the commands to pass to Sonos devices triggered by intents
 
