@@ -214,10 +214,9 @@ def run_command(self, command, speaker, state='playing', extras=None):
     :type extras: string, optional
     :raises SoCoException: Raise SoCoException
     """
-    device_name = None
     try:
         if speaker:
-            device = by_name(device_name)
+            device = by_name(speaker)
             if get_state(self, device.player_name) == state.upper():
                 eval('device.{}()'.format(command))
         else:
@@ -241,10 +240,9 @@ def volume(self, way, value, speaker):
     :type speaker: string
     :raises SoCoException: Raise SoCoException
     """
-    device_name = None
     try:
         if speaker:
-            device = by_name(device_name)
+            device = by_name(speaker)
             if get_state(self, device.player_name) == 'PLAYING':
                 if way == 'up':
                     device.volume += value
