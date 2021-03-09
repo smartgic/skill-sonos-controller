@@ -60,7 +60,8 @@ def search_type(self, data):
         search_playlist(self, data)
     elif data['category'] == 'albums':
         search_album(self, data)
-    # elif data['category'] == 'tracks'
+    elif data['category'] == 'tracks':
+        search_track(self, data)
     # else:
 
 
@@ -153,6 +154,72 @@ def search_album(self, data):
 
         self.speak_dialog('sonos.album', data={
             'album': title, 'service': data['service'],
+            'speaker': data['speaker']})
+    except exceptions.SoCoException as err:
+        self.log.error(err)
+
+
+def search_track(self, data):
+    """Search for track into Music Library and Music Services.
+
+    :param data: Dict with all the required data
+    :type dict: string
+    :return:
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        picked = None
+        title = None
+
+        # Clear the current content playing
+        device = by_name(data['speaker'])
+        device.clear_queue()
+        if data['service'] == 'music library':
+            if data['artist']:
+                tracks = {}
+                for track in data['provider'].search_track(
+                        artist=data['artist'],
+                        track=data['track']):
+                    tracks[
+                        track.to_dict()['title']] = track.to_dict()[
+                        'resources'][0]['uri']
+                if tracks:
+                    picked = choice(list(tracks.keys()))
+                    device.add_uri_to_queue(tracks[picked])
+                    title = picked
+                else:
+                    self.speak_dialog('error.track', data={
+                        'track': data['track'], 'artist': data['artist']})
+                    return
+            else:
+                tracks = {}
+                for track in data['provider'].get_tracks(
+                        search_term=data['track'],
+                        complete_result=True):
+                    tracks[
+                        track.to_dict()['title']
+                    ] = track.to_dict()[
+                        'resources'][0]['uri']
+                if tracks:
+                    picked = choice(list(tracks.keys()))
+                    device.add_uri_to_queue(tracks[picked])
+                    title = picked
+                else:
+                    self.speak_dialog('error.track', data={
+                        'track': data['track']})
+                    return
+        else:
+            tracks = data['provider'].search(
+                'tracks', data['track'])
+            picked = choice(tracks)
+            device.add_to_queue(picked)
+            title = picked.title
+
+        # Play the picked track
+        device.play_from_queue(0)
+
+        self.speak_dialog('sonos.track', data={
+            'track': title, 'service': data['service'],
             'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)

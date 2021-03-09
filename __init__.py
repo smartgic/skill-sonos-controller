@@ -93,84 +93,14 @@ class SonosController(MycroftSkill):
     def handle_track(self, message):
         service = self.service
         artist = None
+        track = message.data.get('track')
+        speaker = message.data.get('speaker')
         if message.data.get('service'):
             service = check_service(self, message.data.get('service'))
         if message.data.get('artist'):
             artist = message.data.get('artist')
-        track = message.data.get('track')
-        speaker = message.data.get('speaker')
-        if (
-            self.services and service in self.services or
-            service == 'Music Library'
-        ):
-            device_name = check_speaker(self, speaker)
-            if device_name:
-                check_category = get_category(self, service, 'tracks')
-                if check_category:
-                    try:
-                        picked = None
-                        title = None
-                        device = by_name(device_name)
-                        device.clear_queue()
-                        if service == 'Music Library':
-                            if artist:
-                                trks = {}
-                                for trk in check_category.search_track(
-                                        artist=artist,
-                                        track=track):
-                                    trks[
-                                        trk.to_dict()['title']
-                                    ] = trk.to_dict()[
-                                        'resources'][0]['uri']
-                                if trks:
-                                    picked = choice(list(trks.keys()))
-                                    device.add_uri_to_queue(trks[picked])
-                                    title = picked
-                                else:
-                                    self.log.warning('track not found')
-                                    self.speak_dialog('error.track', data={
-                                        'track': track, 'artist': artist})
-                                    return
-                            else:
-                                trks = {}
-                                for trk in check_category.get_tracks(
-                                        search_term=track,
-                                        complete_result=True):
-                                    trks[
-                                        trk.to_dict()['title']
-                                    ] = trk.to_dict()[
-                                        'resources'][0]['uri']
-                                if trks:
-                                    picked = choice(list(trks.keys()))
-                                    device.add_uri_to_queue(trks[picked])
-                                    title = picked
-                                else:
-                                    self.log.warning('track not found')
-                                    self.speak_dialog('error.track', data={
-                                        'track': track})
-                                    return
-                        else:
-                            trks = check_category.search(
-                                'tracks', track)
-                            picked = choice(trks)
-                            device.add_to_queue(picked)
-                            title = picked.title
 
-                        device.play_from_queue(0)
-
-                        self.log.debug(
-                            '{} from {} on {} started'.format(
-                                picked, service, speaker))
-                        self.speak_dialog('sonos.track', data={
-                            'track': title, 'service': service,
-                            'speaker': speaker})
-                    except exceptions.SoCoException as e:
-                        self.log.error(e)
-                else:
-                    self.log.warning(
-                        'there is no tracks category for this service')
-                    self.speak_dialog('error.category', data={
-                        'category': 'tracks'})
+        search(self, service, speaker, 'tracks', artist=artist, track=track)
 
     @ intent_handler('sonos.command.intent')
     def handle_command(self, message):
