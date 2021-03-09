@@ -265,8 +265,6 @@ def get_track(self, speaker):
                 self.speak('{} by {}'.format(
                     speaker.get_current_track_info()['title'],
                     speaker.get_current_track_info()['artist']))
-            else:
-                self.speak_dialog('error.playing')
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
@@ -275,9 +273,5 @@ def get_track(self, speaker):
                             device.get_current_track_info()['title'],
                             device.get_current_track_info()['artist'],
                             device.player_name))
-                    else:
-                        self.speak_dialog('warning.playing')
-                else:
-                    self.speak_dialog('warning.playing')
-    except exceptions.SoCoException as e:
-        self.log.error(e)
+    except exceptions.SoCoException as err:
+        self.log.error(err)
