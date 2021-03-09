@@ -229,3 +229,39 @@ def run_command(self, command, speaker=None, state='playing', extras=None):
                     eval('device.{}()'.format(command))
     except exceptions.SoCoException as e:
         self.log.error(e)
+
+
+def volume(self, way, value, speaker=None):
+    """Manage volume on Sonos devices, if no speaker is spoken then
+    the function will check for all the speakers that are playing
+    music.
+
+    :param way: Which way the turn the volume
+    :type way: string
+    :param value: Value to increase or decrease
+    :type value: int
+    :param speaker: Which speaker to apply the command
+    :type speaker: string, optional
+    :raises SoCoException: Raise SoCoException
+    """
+    device_name = None
+    if speaker:
+        device_name = check_speaker(self, speaker)
+
+    try:
+        if speaker:
+            device = by_name(device_name)
+            if get_state(self, device.player_name) == 'PLAYING':
+                if way == 'up':
+                    device.volume += value
+                else:
+                    device.volume -= value
+        else:
+            for device in self.speakers:
+                if get_state(self, device.player_name) == 'PLAYING':
+                    if way == 'up':
+                        device.volume += value
+                    else:
+                        device.volume -= value
+    except exceptions.SoCoException as e:
+        self.log.error(e)
