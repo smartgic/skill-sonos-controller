@@ -241,7 +241,7 @@ def volume(self, way, value, speaker):
     :type speaker: string
     :raises SoCoException: Raise SoCoException
     """
-    device_name = Noness
+    device_name = None
     try:
         if speaker:
             device = by_name(device_name)

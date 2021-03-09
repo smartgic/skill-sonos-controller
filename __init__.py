@@ -273,9 +273,6 @@ class SonosController(MycroftSkill):
     def handle_command(self, message):
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
-        device_name = None
-        if speaker:
-            device_name = check_speaker(self, speaker)
 
         if command == 'pause':
             run_command(self, 'pause', speaker)
@@ -299,30 +296,30 @@ class SonosController(MycroftSkill):
             if command == 'much quieter':
                 value = 30
             volume('down', value, speaker)
-        elif command == 'what is playing':
-            try:
-                if speaker:
-                    device = by_name(device_name)
-                    if get_state(self, device.player_name) == 'PLAYING':
-                        self.speak('{} by {}'.format(
-                            device.get_current_track_info()['title'],
-                            device.get_current_track_info()['artist']))
-                    else:
-                        self.speak_dialog('error.playing')
-                else:
-                    for device in self.speakers:
-                        if get_state(self, device.player_name) == 'PLAYING':
-                            if device.get_current_track_info()['title']:
-                                self.speak('{} by {} on {}'.format(
-                                    device.get_current_track_info()['title'],
-                                    device.get_current_track_info()['artist'],
-                                    device.player_name))
-                            else:
-                                self.speak_dialog('warning.playing')
-                        else:
-                            self.speak_dialog('warning.playing')
-            except exceptions.SoCoException as e:
-                self.log.error(e)
+        # elif command == 'what is playing':
+        #     try:
+        #         if speaker:
+        #             device = by_name(device_name)
+        #             if get_state(self, device.player_name) == 'PLAYING':
+        #                 self.speak('{} by {}'.format(
+        #                     device.get_current_track_info()['title'],
+        #                     device.get_current_track_info()['artist']))
+        #             else:
+        #                 self.speak_dialog('error.playing')
+        #         else:
+        #             for device in self.speakers:
+        #                 if get_state(self, device.player_name) == 'PLAYING':
+        #                     if device.get_current_track_info()['title']:
+        #                         self.speak('{} by {} on {}'.format(
+        #                             device.get_current_track_info()['title'],
+        #                             device.get_current_track_info()['artist'],
+        #                             device.player_name))
+        #                     else:
+        #                         self.speak_dialog('warning.playing')
+        #                 else:
+        #                     self.speak_dialog('warning.playing')
+        #     except exceptions.SoCoException as e:
+        #         self.log.error(e)
         elif command == 'next music' or command == 'previous music':
             cmd = 'next'
             if command == 'previous music':
