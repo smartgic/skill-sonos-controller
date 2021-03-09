@@ -6,16 +6,11 @@ from .utils import get_category, check_speaker
 
 def search(self, service, speaker, category, playlist=None, album=None,
            artist=None, track=None):
-    self.log.debug("||||||||||||||||||| {}".format(service))
-    self.log.debug("||||||||||||||||||| {}".format(speaker))
-
     if service in map(str.lower, set(self.services)):
         device_name = check_speaker(self, speaker)
-        self.log.debug("++++++++++++++++{}".format(device_name))
 
         if device_name:
             provider = get_category(self, service.title(), category)
-            self.log.debug("==================== {}".format(provider))
             if provider:
                 # Build data dictionnary
                 data = {}
@@ -34,7 +29,6 @@ def search(self, service, speaker, category, playlist=None, album=None,
 
 
 def search_type(self, data):
-    self.log.debug("=====   ")
     if data['category'] == 'playlists':
         search_playlist(self, data)
     # elif data['category'] == 'albums':
@@ -47,13 +41,10 @@ def search_playlist(self, data):
     picked = None
     title = None
 
-    self.log.debug('===== {}'.format(data))
-
     device = by_name(data['speaker'])
     device.clear_queue()
 
     if data['service'] == 'music library':
-        self.log.debug('~~~~~~ in music library')
 
         playlists = {}
         for playlist in data['provider'].get_playlists(
@@ -70,7 +61,6 @@ def search_playlist(self, data):
                 'playlist': data['playlist']})
             return
     else:
-        self.log.debug('~~~~~~ in music service')
         playlists = data['provider'].search('playlists', data['playlist'])
         picked = choice(playlists)
         device.add_to_queue(picked)

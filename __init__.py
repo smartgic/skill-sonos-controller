@@ -77,7 +77,6 @@ class SonosController(MycroftSkill):
         if message.data.get('service'):
             service = check_service(self, message.data.get('service'))
 
-        self.log.debug(">>>>>>>>>>>> {}".format(speaker))
         search(self, service, speaker, 'playlists', playlist=playlist)
 
     @ intent_handler('sonos.album.intent')
