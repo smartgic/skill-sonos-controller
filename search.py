@@ -14,7 +14,7 @@ def search(self, service, speaker, category, playlist=None, album=None,
         self.log.debug("++++++++++++++++{}".format(device_name))
 
         if device_name:
-            provider = get_category(self, service, category)
+            provider = get_category(self, service.title(), category)
             self.log.debug("==================== {}".format(provider))
             if provider:
                 # Build data dictionnary
