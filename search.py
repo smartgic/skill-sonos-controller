@@ -53,6 +53,8 @@ def search_playlist(self, data):
     device.clear_queue()
 
     if data['service'] == 'music library':
+        self.log.debug('~~~~~~ in music library')
+
         playlists = {}
         for playlist in data['provider'].get_playlists(
                 search_term=data['playlist'],
@@ -68,6 +70,7 @@ def search_playlist(self, data):
                 'playlist': data['playlist']})
             return
     else:
+        self.log.debug('~~~~~~ in music service')
         playlists = data['provider'].search('playlists', data['playlist'])
         picked = choice(playlists)
         device.add_to_queue(picked)
