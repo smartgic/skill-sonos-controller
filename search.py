@@ -139,7 +139,7 @@ def search_album(self, data):
                 title = picked
             else:
                 self.speak_dialog('error.album', data={
-                    'album': album})
+                    'album': data['album']})
                 return
         else:
             albums = data['provider'].search('albums', data['album'])
