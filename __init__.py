@@ -298,6 +298,7 @@ class SonosController(MycroftSkill):
             value = 10
             if command == 'much quieter':
                 value = 30
+            run_command(self, 'vol-down', device_name, extras=value)
 
         # elif command == 'what is playing':
         #     try:

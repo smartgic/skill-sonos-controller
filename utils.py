@@ -202,7 +202,7 @@ def check_service(self, service):
 def run_command(self, command, speaker, state='playing', extras=None):
     """Execute command on Sonos device, if no speaker is spoken then
     the function will check for all the speakers that are playing
-    music.
+    music. Specific command is used for volume management.
 
     :param command: Command to execute, defaults to playing
     :type command: string
@@ -216,23 +216,25 @@ def run_command(self, command, speaker, state='playing', extras=None):
     """
     try:
         if speaker:
-            self.log.debug('========== {}'.format(speaker))
             device = by_name(speaker)
-            self.log.debug('========== {}'.format(device))
-
             if get_state(self, device.player_name) == state.upper():
                 if command == 'vol-up':
-                    volume(self, 'up', device, extras)
+                    volume(self, command, device, extras)
                 elif command == 'vol-down':
-                    volume(self, 'down', device, extras)
+                    volume(self, command, device, extras)
                 else:
                     eval('device.{}()'.format(command))
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
-                    eval('device.{}()'.format(command))
-    except exceptions.SoCoException as e:
-        self.log.error(e)
+                    if command == 'vol-up':
+                        volume(self, command, device, extras)
+                    elif command == 'vol-down':
+                        volume(self, command, device, extras)
+                    else:
+                        eval('device.{}()'.format(command))
+    except exceptions.SoCoException as err:
+        self.log.error(err)
 
 
 def volume(self, way, speaker, value):
@@ -242,19 +244,16 @@ def volume(self, way, speaker, value):
 
     :param way: Which way the turn the volume
     :type way: string
+    :param speaker: Which device to manage the volume
+    :type speaker: string
     :param value: Value to increase or decrease
     :type value: int
-    :param speaker: Which device to manage the volume
-    :type speakdeviceer: string
     :raises SoCoException: Raise SoCoException
     """
-    self.log.debug('========== {}'.format(speaker))
-    self.log.debug('========== {}'.format(value))
-    self.log.debug('========== {}'.format(way))
     try:
-        if way == 'up':
+        if way == 'vol-up':
             speaker.volume += value
-        else:
+        elif way == 'vol-down':
             speaker.volume -= value
-    except exceptions.SoCoException as e:
-        self.log.error(e)
+    except exceptions.SoCoException as err:
+        self.log.error(err)
