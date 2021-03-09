@@ -53,7 +53,7 @@ def search_type(self, data):
     """This is a meta function that will act as proxy to redirect the
     query to the right function.
 
-    :param data: Dict with all the required data 
+    :param data: Dict with all the required data
     :type dict: string
     """
     if data['category'] == 'playlists':
@@ -105,6 +105,53 @@ def search_playlist(self, data):
 
         self.speak_dialog('sonos.playlist', data={
             'playlist': title, 'service': data['service'],
+            'speaker': data['speaker']})
+    except exceptions.SoCoException as err:
+        self.log.error(err)
+
+
+def search_album(self, data):
+    """Search for album into Music Library and Music Services.
+
+    :param data: Dict with all the required data
+    :type dict: string
+    :return:
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        picked = None
+        title = None
+
+        # Clear the current content playing
+        device = by_name(data['speaker'])
+        device.clear_queue()
+
+        if data['service'] == 'music library':
+            albums = {}
+            for album in data['provider'].get_albums(
+                    search_term=data['album'],
+                    complete_result=True):
+                albums[album.to_dict()['title']] = album.to_dict()[
+                    'resources'][0]['uri']
+            if albums:
+                picked = choice(list(albums.keys()))
+                device.add_uri_to_queue(albums[picked])
+                title = picked
+            else:
+                self.speak_dialog('error.album', data={
+                    'album': album})
+                return
+        else:
+            albums = data['provider'].search('albums', data['album'])
+            picked = choice(albums)
+            device.add_to_queue(picked)
+            title = picked.title
+
+        # Play the picked album
+        device.play_from_queue(0)
+
+        self.speak_dialog('sonos.album', data={
+            'album': title, 'service': data['service'],
             'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)

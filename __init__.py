@@ -82,61 +82,12 @@ class SonosController(MycroftSkill):
     @ intent_handler('sonos.album.intent')
     def handle_album(self, message):
         service = self.service
-        if message.data.get('service'):
-            service = check_service(self, message.data.get('service'))
         album = message.data.get('album')
         speaker = message.data.get('speaker')
-        if (
-            self.services and service in self.services or
-            service == 'Music Library'
-        ):
-            device_name = check_speaker(self, speaker)
-            if device_name:
-                check_category = get_category(self, service, 'albums')
-                if check_category:
-                    try:
-                        picked = None
-                        title = None
-                        device = by_name(device_name)
-                        device.clear_queue()
-                        if service == 'Music Library':
-                            albs = {}
-                            for alb in check_category.get_albums(
-                                    search_term=album,
-                                    complete_result=True):
-                                albs[alb.to_dict()['title']] = alb.to_dict()[
-                                    'resources'][0]['uri']
-                            if albs:
-                                picked = choice(list(albs.keys()))
-                                device.add_uri_to_queue(albs[picked])
-                                title = picked
-                            else:
-                                self.log.warning('album not found')
-                                self.speak_dialog('error.album', data={
-                                                  'album': album})
-                                return
-                        else:
-                            albs = check_category.search(
-                                'albums', album)
-                            picked = choice(albs)
-                            device.add_to_queue(picked)
-                            title = picked.title
+        if message.data.get('service'):
+            service = check_service(self, message.data.get('service'))
 
-                        device.play_from_queue(0)
-
-                        self.log.debug(
-                            '{} album from {} on {} started'.format(
-                                picked, service, speaker))
-                        self.speak_dialog('sonos.album', data={
-                            'album': title, 'service': service,
-                            'speaker': speaker})
-                    except exceptions.SoCoException as e:
-                        self.log.error(e)
-                else:
-                    self.log.warning(
-                        'there is no album category for this service')
-                    self.speak_dialog('error.category', data={
-                        'category': album})
+        search(self, service, speaker, 'albums', album=album)
 
     @ intent_handler('sonos.track.intent')
     def handle_track(self, message):
