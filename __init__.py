@@ -287,18 +287,18 @@ class SonosController(MycroftSkill):
             command == 'louder' or command == 'volume up' or
             command == 'turn up volume' or command == 'much louder'
         ):
-            volume = 10
+            value = 10
             if command == 'much louder':
-                volume = 30
-            volume('up', volume, speaker)
+                value = 30
+            volume('up', value, speaker)
         elif (
             command == 'volume down' or command == 'quieter' or
             command == 'turn down volume' or command == 'much quieter'
         ):
-            volume = 10
+            value = 10
             if command == 'much quieter':
-                volume = 30
-            volume('down', volume, speaker)
+                value = 30
+            volume('down', value, speaker)
         elif command == 'what is playing':
             try:
                 if speaker:
