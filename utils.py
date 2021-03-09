@@ -216,6 +216,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
     """
     try:
         if speaker:
+            self.log.debug('========== {}'.format(speaker))
             # device = by_name(speaker)
             if get_state(self, speaker.player_name) == state.upper():
                 if command == 'vol-up':
