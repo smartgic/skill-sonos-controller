@@ -243,6 +243,7 @@ def set_volume(self, way, value, speaker):
     try:
         if speaker:
             device = by_name(speaker)
+            self.log.debug('============== {}'.format(device))
             if get_state(self, device.player_name) == 'PLAYING':
                 if way == 'up':
                     device.volume += value
