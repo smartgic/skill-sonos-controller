@@ -6,6 +6,7 @@ from urllib.parse import unquote
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
     run_command, get_track
+from .search import search
 
 
 class SonosController(MycroftSkill):
@@ -71,61 +72,12 @@ class SonosController(MycroftSkill):
     @intent_handler('sonos.playlist.intent')
     def handle_playlist(self, message):
         service = self.service
-        if message.data.get('service'):
-            service = check_service(self, message.data.get('service'))
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
-        if (
-            self.services and service in self.services or
-            service == 'Music Library'
-        ):
-            device_name = check_speaker(self, speaker)
-            if device_name:
-                check_category = get_category(self, service, 'playlists')
-                if check_category:
-                    try:
-                        picked = None
-                        title = None
-                        device = by_name(device_name)
-                        device.clear_queue()
-                        if service == 'Music Library':
-                            pls = {}
-                            for pl in check_category.get_playlists(
-                                    search_term=playlist,
-                                    complete_result=True):
-                                pls[pl.to_dict()['title']] = pl.to_dict()[
-                                    'resources'][0]['uri']
-                            if pls:
-                                picked = choice(list(pls.keys()))
-                                device.add_uri_to_queue(pls[picked])
-                                title = picked
-                            else:
-                                self.log.warning('playlist not found')
-                                self.speak_dialog('error.playlist', data={
-                                                  'playlist': playlist})
-                                return
-                        else:
-                            pls = check_category.search(
-                                'playlists', playlist)
-                            picked = choice(pls)
-                            device.add_to_queue(picked)
-                            title = picked.title
+        if message.data.get('service'):
+            service = check_service(self, message.data.get('service'))
 
-                        device.play_from_queue(0)
-
-                        self.log.debug(
-                            '{} playlist from {} on {} started'.format(
-                                picked, service, speaker))
-                        self.speak_dialog('sonos.playlist', data={
-                            'playlist': title, 'service': service,
-                            'speaker': speaker})
-                    except exceptions.SoCoException as e:
-                        self.log.error(e)
-                else:
-                    self.log.warning(
-                        'there is no playlist category for this service')
-                    self.speak_dialog('error.category', data={
-                        'category': playlist})
+        search(self, service, speaker, 'playlists', playlist=playlist)
 
     @intent_handler('sonos.album.intent')
     def handle_album(self, message):
