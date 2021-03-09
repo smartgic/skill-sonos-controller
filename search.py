@@ -40,6 +40,8 @@ def search_playlist(self, data):
     picked = None
     title = None
 
+    self.log.debug('===== {}'.format(data))
+
     device = by_name(data['speaker'])
     device.clear_queue()
 
