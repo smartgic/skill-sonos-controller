@@ -10,6 +10,7 @@ def search(self, service, speaker, category, playlist=None, album=None,
         device_name = check_speaker(self, speaker)
         if device_name:
             provider = get_category(self, service, category)
+            self.log.debug("==================== {}".format(provider))
             if provider:
                 # Build data dictionnary
                 data = {}
@@ -28,6 +29,7 @@ def search(self, service, speaker, category, playlist=None, album=None,
 
 
 def search_type(self, data):
+    self.log.debug("=====search_type")
     if data['category'] == 'playlists':
         search_playlist(self, data)
     # elif data['category'] == 'albums':
