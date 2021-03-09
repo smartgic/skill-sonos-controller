@@ -182,7 +182,7 @@ def check_service(self, service):
     """
     self.log.debug("---------------------------------- {}".format(service))
     self.log.debug("############# {}".format(
-        map(str.lower, set(SUPPORTED_SERVICES))))
+        SUPPORTED_SERVICES))
     if service in map(str.lower, set(SUPPORTED_SERVICES)):
         self.log.debug("///////////////////// {}".format(service))
         for subscription in self.services:
