@@ -297,7 +297,9 @@ class SonosController(MycroftSkill):
             value = 10
             if command == 'much quieter':
                 value = 30
+            self.log.debug(">>>>>>>>>>>>>>>>>>>> {}".format(speaker))
             set_volume(self, 'down', value, speaker)
+            self.log.debug("<<<<<<<<<<<<<<<<<<<<< {}".format(speaker))
         # elif command == 'what is playing':
         #     try:
         #         if speaker:
