@@ -216,12 +216,11 @@ def run_command(self, command, speaker, state='playing', extras=None):
     """
     try:
         if speaker:
-            device = by_name(speaker)
-            if get_state(self, device.player_name) == state.upper():
+            if get_state(self, speaker.player_name) == state.upper():
                 if command == 'vol-up':
-                    volume(self, command, device, extras)
+                    volume(self, command, speaker, extras)
                 elif command == 'vol-down':
-                    volume(self, command, device, extras)
+                    volume(self, command, speaker, extras)
                 else:
                     eval('device.{}()'.format(command))
         else:
@@ -257,3 +256,28 @@ def volume(self, way, speaker, value):
             speaker.volume -= value
     except exceptions.SoCoException as err:
         self.log.error(err)
+
+
+def get_track(self, speaker):
+    try:
+        if speaker:
+            if get_state(self, speaker.player_name) == 'PLAYING':
+                self.speak('{} by {}'.format(
+                    speaker.get_current_track_info()['title'],
+                    speaker.get_current_track_info()['artist']))
+            else:
+                self.speak_dialog('error.playing')
+        else:
+            for device in self.speakers:
+                if get_state(self, device.player_name) == 'PLAYING':
+                    if device.get_current_track_info()['title']:
+                        self.speak('{} by {} on {}'.format(
+                            device.get_current_track_info()['title'],
+                            device.get_current_track_info()['artist'],
+                            device.player_name))
+                    else:
+                        self.speak_dialog('warning.playing')
+                else:
+                    self.speak_dialog('warning.playing')
+    except exceptions.SoCoException as e:
+        self.log.error(e)

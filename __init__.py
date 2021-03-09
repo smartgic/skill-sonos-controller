@@ -5,7 +5,7 @@ from random import choice
 from urllib.parse import unquote
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
-    run_command
+    run_command, get_track
 
 
 class SonosController(MycroftSkill):
@@ -299,31 +299,8 @@ class SonosController(MycroftSkill):
             if command == 'much quieter':
                 value = 30
             run_command(self, 'vol-down', device_name, extras=value)
-
-        # elif command == 'what is playing':
-        #     try:
-        #         if speaker:
-        #             device = by_name(device_name)
-        #             if get_state(self, device.player_name) == 'PLAYING':
-        #                 self.speak('{} by {}'.format(
-        #                     device.get_current_track_info()['title'],
-        #                     device.get_current_track_info()['artist']))
-        #             else:
-        #                 self.speak_dialog('error.playing')
-        #         else:
-        #             for device in self.speakers:
-        #                 if get_state(self, device.player_name) == 'PLAYING':
-        #                     if device.get_current_track_info()['title']:
-        #                         self.speak('{} by {} on {}'.format(
-        #                             device.get_current_track_info()['title'],
-        #                             device.get_current_track_info()['artist'],
-        #                             device.player_name))
-        #                     else:
-        #                         self.speak_dialog('warning.playing')
-        #                 else:
-        #                     self.speak_dialog('warning.playing')
-        #     except exceptions.SoCoException as e:
-        #         self.log.error(e)
+        elif command == 'what is playing':
+            get_track(self, device_name)
         elif command == 'next music' or command == 'previous music':
             cmd = 'next'
             if command == 'previous music':
