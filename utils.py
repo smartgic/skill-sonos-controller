@@ -240,7 +240,8 @@ def set_volume(self, way, value, speaker):
     :type speaker: string
     :raises SoCoException: Raise SoCoException
     """
-    self.log.debug('============== {}'.format(speaker))
+    device = check_speaker(self, speaker)
+    self.log.debug('============== {}'.format(device))
     try:
         if speaker:
             device = check_speaker(self, speaker)
