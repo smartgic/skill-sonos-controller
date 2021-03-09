@@ -268,7 +268,8 @@ def get_track(self, speaker):
     """
     try:
         if speaker:
-            if get_state(self, speaker.player_name) == 'PLAYING':
+            device = by_name(speaker)
+            if get_state(self, device.player_name) == 'PLAYING':
                 self.speak('{} by {}'.format(
                     speaker.get_current_track_info()['title'],
                     speaker.get_current_track_info()['artist']))
