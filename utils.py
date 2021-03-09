@@ -180,6 +180,7 @@ def check_service(self, service):
     :rtype: str
     :raises SoCoException: Raise SoCoException
     """
+    self.log.debug("---------------------------------- {}".format(service))
     if service in map(str.lower, set(SUPPORTED_SERVICES)):
         for subscription in self.services:
             if service in subscription.lower():
