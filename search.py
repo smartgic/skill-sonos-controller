@@ -52,7 +52,7 @@ def search_playlist(self, data):
     device = by_name(data['speaker'])
     device.clear_queue()
 
-    if data['service'] == 'music library':
+    if data['service'] == 'Music Library':
         self.log.debug('~~~~~~ in music library')
 
         playlists = {}
