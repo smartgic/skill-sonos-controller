@@ -273,15 +273,16 @@ class SonosController(MycroftSkill):
     def handle_command(self, message):
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
-
-        self.log.debug("||||||||||||||||| {}".format(speaker))
+        device_name = None
+        if speaker:
+            device_name = check_speaker(self, speaker)
 
         if command == 'pause':
-            run_command(self, 'pause', speaker)
+            run_command(self, 'pause', device_name)
         elif command == 'stop music':
-            run_command(self, 'stop', speaker)
+            run_command(self, 'stop', device_name)
         elif command == 'restart music' or command == 'resume music':
-            run_command(self, 'stop', speaker, 'stopped')
+            run_command(self, 'stop', device_name, 'stopped')
         elif (
             command == 'louder' or command == 'volume up' or
             command == 'turn up volume' or command == 'much louder'
@@ -289,7 +290,7 @@ class SonosController(MycroftSkill):
             value = 10
             if command == 'much louder':
                 value = 30
-            run_command(self, 'vol-up', speaker, extras=value)
+            run_command(self, 'vol-up', device_name, extras=value)
         elif (
             command == 'volume down' or command == 'quieter' or
             command == 'turn down volume' or command == 'much quieter'
@@ -326,7 +327,7 @@ class SonosController(MycroftSkill):
             cmd = 'next'
             if command == 'previous music':
                 cmd = 'previous'
-            run_command(self, cmd, speaker)
+            run_command(self, cmd, device_name)
 
     def _entity(self):
         """Register the Padatious entities

@@ -216,12 +216,12 @@ def run_command(self, command, speaker, state='playing', extras=None):
     """
     try:
         if speaker:
-            device = by_name(speaker)
-            if get_state(self, device.player_name) == state.upper():
+            # device = by_name(speaker)
+            if get_state(self, speaker.player_name) == state.upper():
                 if command == 'vol-up':
-                    volume(self, 'up', device, extras)
+                    volume(self, 'up', speaker, extras)
                 elif command == 'vol-down':
-                    volume(self, 'down', device, extras)
+                    volume(self, 'down', speaker, extras)
                 eval('device.{}()'.format(command))
         else:
             for device in self.speakers:
@@ -231,7 +231,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
         self.log.error(e)
 
 
-def volume(self, way, device, value):
+def volume(self, way, speaker, value):
     """Manage volume on Sonos devices, if no speaker is spoken then
     the function will check for all the speakers that are playing
     music.
@@ -246,8 +246,8 @@ def volume(self, way, device, value):
     """
     try:
         if way == 'up':
-            device.volume += value
+            speaker.volume += value
         else:
-            device.volume -= value
+            speaker.volume -= value
     except exceptions.SoCoException as e:
         self.log.error(e)
