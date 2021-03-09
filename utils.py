@@ -240,10 +240,11 @@ def set_volume(self, way, value, speaker):
     :type speaker: string
     :raises SoCoException: Raise SoCoException
     """
+    self.log.debug('============== {}'.format(speaker))
     try:
         if speaker:
             device = by_name(speaker)
-            self.log.debug('============== {}'.format(device))
+            self.log.debug('============== {}'.format(speaker))
             if get_state(self, device.player_name) == 'PLAYING':
                 if way == 'up':
                     device.volume += value
