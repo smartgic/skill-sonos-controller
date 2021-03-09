@@ -247,6 +247,9 @@ def volume(self, way, speaker, value):
     :type speakdeviceer: string
     :raises SoCoException: Raise SoCoException
     """
+    self.log.debug('========== {}'.format(speaker))
+    self.log.debug('========== {}'.format(volume))
+    self.log.debug('========== {}'.format(way))
     try:
         if way == 'up':
             speaker.volume += value
