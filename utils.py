@@ -218,6 +218,10 @@ def run_command(self, command, speaker, state='playing', extras=None):
         if speaker:
             device = by_name(speaker)
             if get_state(self, device.player_name) == state.upper():
+                if command == 'vol-up':
+                    volume(self, 'up', device, extras)
+                elif command == 'vol-down':
+                    volume(self, 'down', device, extras)
                 eval('device.{}()'.format(command))
         else:
             for device in self.speakers:
@@ -227,7 +231,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
         self.log.error(e)
 
 
-def set_volume(self, way, value, speaker):
+def volume(self, way, device, value):
     """Manage volume on Sonos devices, if no speaker is spoken then
     the function will check for all the speakers that are playing
     music.
@@ -236,27 +240,14 @@ def set_volume(self, way, value, speaker):
     :type way: string
     :param value: Value to increase or decrease
     :type value: int
-    :param speaker: Which speaker to manage the volume
-    :type speaker: string
+    :param speaker: Which device to manage the volume
+    :type speakdeviceer: string
     :raises SoCoException: Raise SoCoException
     """
-    device = check_speaker(self, speaker)
-    self.log.debug('============== {}'.format(device))
     try:
-        if speaker:
-            device = check_speaker(self, speaker)
-            self.log.debug('============== {}'.format(device))
-            if get_state(self, device.player_name) == 'PLAYING':
-                if way == 'up':
-                    device.volume += value
-                else:
-                    device.volume -= value
+        if way == 'up':
+            device.volume += value
         else:
-            for device in self.speakers:
-                if get_state(self, device.player_name) == 'PLAYING':
-                    if way == 'up':
-                        device.volume += value
-                    else:
-                        device.volume -= value
+            device.volume -= value
     except exceptions.SoCoException as e:
         self.log.error(e)
