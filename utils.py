@@ -216,11 +216,12 @@ def run_command(self, command, speaker, state='playing', extras=None):
     """
     try:
         if speaker:
-            if get_state(self, speaker.player_name) == state.upper():
+            device = by_name(speaker)
+            if get_state(self, device.player_name) == state.upper():
                 if command == 'vol-up':
-                    volume(self, command, speaker, extras)
+                    volume(self, command, device, extras)
                 elif command == 'vol-down':
-                    volume(self, command, speaker, extras)
+                    volume(self, command, device, extras)
                 else:
                     eval('device.{}()'.format(command))
         else:
@@ -259,6 +260,12 @@ def volume(self, way, speaker, value):
 
 
 def get_track(self, speaker):
+    """Retrieve current playing track on speakers.
+
+    :param speaker: Which device to manage the volume
+    :type speaker: string
+    :raises SoCoException: Raise SoCoException
+    """
     try:
         if speaker:
             if get_state(self, speaker.player_name) == 'PLAYING':
