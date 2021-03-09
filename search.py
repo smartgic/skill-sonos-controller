@@ -58,7 +58,8 @@ def search_type(self, data):
     """
     if data['category'] == 'playlists':
         search_playlist(self, data)
-    # elif data['category'] == 'albums':
+    elif data['category'] == 'albums':
+        search_album(self, data)
     # elif data['category'] == 'tracks'
     # else:
 
