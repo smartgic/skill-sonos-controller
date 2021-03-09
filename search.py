@@ -8,6 +8,8 @@ def search(self, service, speaker, category, playlist=None, album=None,
            artist=None, track=None):
     if service in self.services:
         device_name = check_speaker(self, speaker)
+        self.log.debug("++++++++++++++++{}".format(device_name))
+
         if device_name:
             provider = get_category(self, service, category)
             self.log.debug("==================== {}".format(provider))
