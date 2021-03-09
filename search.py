@@ -14,7 +14,7 @@ def search(self, service, speaker, category, playlist=None, album=None,
                 # Build data dictionnary
                 data = {}
                 data['service'] = service
-                data['speaker'] = speaker
+                data['speaker'] = device_name
                 data['category'] = category
                 data['provider'] = provider
                 data['playlist'] = playlist
