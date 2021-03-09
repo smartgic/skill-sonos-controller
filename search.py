@@ -221,6 +221,6 @@ def search_track(self, data):
 
         self.speak_dialog('sonos.track', data={
             'track': title, 'service': data['service'],
-            'speaker': data['speaker'], 'artists': data['artist']})
+            'speaker': data['speaker'], 'artist': data['artist']})
     except exceptions.SoCoException as err:
         self.log.error(err)
