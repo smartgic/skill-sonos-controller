@@ -225,7 +225,8 @@ def run_command(self, command, speaker, state='playing', extras=None):
                     volume(self, 'up', device, extras)
                 elif command == 'vol-down':
                     volume(self, 'down', device, extras)
-                eval('device.{}()'.format(command))
+                else:
+                    eval('device.{}()'.format(command))
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
@@ -248,7 +249,7 @@ def volume(self, way, speaker, value):
     :raises SoCoException: Raise SoCoException
     """
     self.log.debug('========== {}'.format(speaker))
-    self.log.debug('========== {}'.format(volume))
+    self.log.debug('========== {}'.format(value))
     self.log.debug('========== {}'.format(way))
     try:
         if way == 'up':
