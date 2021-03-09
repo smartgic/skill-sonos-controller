@@ -5,7 +5,7 @@ from random import choice
 from urllib.parse import unquote
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
-    run_command, volume
+    run_command, set_volume
 
 
 class SonosController(MycroftSkill):
@@ -287,7 +287,7 @@ class SonosController(MycroftSkill):
             value = 10
             if command == 'much louder':
                 value = 30
-            volume(self, 'up', value, speaker)
+            set_volume(self, 'up', value, speaker)
         elif (
             command == 'volume down' or command == 'quieter' or
             command == 'turn down volume' or command == 'much quieter'
@@ -295,7 +295,7 @@ class SonosController(MycroftSkill):
             value = 10
             if command == 'much quieter':
                 value = 30
-            volume(self, 'down', value, speaker)
+            set_volume(self, 'down', value, speaker)
         # elif command == 'what is playing':
         #     try:
         #         if speaker:

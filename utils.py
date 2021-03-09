@@ -227,7 +227,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
         self.log.error(e)
 
 
-def volume(self, way, value, speaker):
+def set_volume(self, way, value, speaker):
     """Manage volume on Sonos devices, if no speaker is spoken then
     the function will check for all the speakers that are playing
     music.
