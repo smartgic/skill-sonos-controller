@@ -75,8 +75,8 @@ Once you successfully logged to Spotify, enter the same code as provided before 
 
 ## Credits
 
-#Smart'Gic
-#SoCo
+- Smart'Gic
+- SoCo
 
 ## Category
 
