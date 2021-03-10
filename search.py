@@ -228,7 +228,8 @@ def search_track(self, data):
                                     device.add_to_queue(picked)
                                     title = picked.title
                                     found = True
-                                    self.log.debug('found')
+                                    self.log.debug(
+                                        '================ {}'.format(item_id))
                                     break
                                 else:
                                     self.speak_dialog('error.track', data={
