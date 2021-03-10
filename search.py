@@ -243,8 +243,13 @@ def search_track(self, data):
         # Play the picked track
         device.play_from_queue(0)
 
-        self.speak_dialog('sonos.track', data={
-            'track': title, 'service': data['service'],
-            'speaker': data['speaker'], 'artist': data['artist']})
+        if data['artist']:
+            self.speak_dialog('sonos.trackartist', data={
+                'track': title, 'service': data['service'],
+                'speaker': data['speaker'], 'artist': data['artist']})
+        else:
+            self.speak_dialog('sonos.track', data={
+                'track': title, 'service': data['service'],
+                'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)
