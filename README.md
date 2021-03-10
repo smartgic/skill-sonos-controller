@@ -20,9 +20,9 @@ Before using a music service, **make sure that you linked** your service account
 ## Examples
 
 * "play i got a feeling on living room"
-* "play i got a feeling by black eyed peace on living room"
+* "play i got a feeling by black eyed peas on living room"
 * "play i got a feeling from spotify on living room"
-* "play i got a feeling by black eyed peace from spotify on living room"
+* "play i got a feeling by black eyed peas from spotify on living room"
 * "play soundtrack playlist on dining room"
 * "play soundtrack playlist from spotify on dining room"
 * "play soundtrack album on dining room"
