@@ -215,7 +215,6 @@ def search_track(self, data):
             tracks = data['provider'].search('tracks', data['track'])
             if data['artist']:
                 found = False
-                fail = False
                 for track in tracks:
                     item_id = unquote(
                         unquote(re.sub('^0fffffff', '', track.item_id)))
@@ -228,17 +227,14 @@ def search_track(self, data):
                                     title = track.title
                                     found = True
                                     break
-                                # else:
-                                #     self.speak_dialog('error.track', data={
-                                #         'track': data['track'],
-                                #         'artist': data['artist']})
-                                #     fail = True
-                                #     self.log.debug('not found')
-                                #     break
-                        if found or fail:
+                        if found:
                             break
-                    if found or fail:
+                    if found:
                         break
+                else:
+                    self.speak_dialog('error.track', data={
+                        'track': data['track'],
+                        'artist': data['artist']})
             else:
                 picked = choice(tracks)
                 device.add_to_queue(picked)
