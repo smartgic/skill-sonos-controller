@@ -215,6 +215,7 @@ def search_track(self, data):
             tracks = data['provider'].search('tracks', data['track'])
             if data['artist']:
                 found = False
+                fail = False
                 for track in tracks:
                     item_id = unquote(
                         unquote(re.sub('^0fffffff', '', track.item_id)))
@@ -232,9 +233,11 @@ def search_track(self, data):
                                     self.speak_dialog('error.track', data={
                                         'track': data['track'],
                                         'artist': data['artist']})
-                        if found:
+                                    fail = True
+                                    break
+                        if found or fail:
                             break
-                    if found:
+                    if found or fail:
                         break
             else:
                 tracks = data['provider'].search('tracks', data['track'])
