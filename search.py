@@ -239,6 +239,7 @@ def search_track(self, data):
                             break
                     if found or fail:
                         break
+                return
             else:
                 tracks = data['provider'].search('tracks', data['track'])
                 picked = choice(tracks)
