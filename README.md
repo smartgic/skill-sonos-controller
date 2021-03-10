@@ -13,6 +13,10 @@ This skill interacts with your Sonos devices and allows you to play music from d
 * Local library
 * Spotify *(account required)*
 
+Before using a music service, **make sure that you linked** your service account to your Sonos devices by using the Sonos application:
+
+<img src='docs/sonos-app.png' width='450'/>
+
 ## Examples
 
 * "play i got a feeling on living room"
