@@ -236,7 +236,6 @@ def search_track(self, data):
                         'track': data['track'],
                         'artist': data['artist']})
             else:
-                self.log.debug('============= {}'.format(tracks))
                 if tracks:
                     picked = choice(tracks)
                     device.add_to_queue(picked)
