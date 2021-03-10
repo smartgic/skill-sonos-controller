@@ -237,7 +237,7 @@ def search_track(self, data):
                         'track': data['track'],
                         'artist': data['artist']})
             else:
-                if tracks:
+                if len(tracks) > 0:
                     picked = choice(tracks)
                     device.add_to_queue(picked)
                     title = picked.title
