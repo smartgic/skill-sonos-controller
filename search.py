@@ -1,9 +1,11 @@
+"""This file contains functions related to the searching items
+"""
 import re
 from random import choice
+from urllib.parse import unquote
 from soco import exceptions
 from soco.discovery import by_name
 from .utils import get_category, check_speaker
-from urllib.parse import unquote
 
 
 def search(self, service, speaker, category, playlist=None, album=None,
@@ -56,7 +58,7 @@ def search_type(self, data):
     query to the right function.
 
     :param data: Dict with all the required data
-    :type dict: string
+    :type data: dict
     """
     if data['category'] == 'playlists':
         search_playlist(self, data)
@@ -70,7 +72,7 @@ def search_playlist(self, data):
     """Search for playlist into Music Library and Music Services.
 
     :param data: Dict with all the required data
-    :type dict: string
+    :type data: dict
     :return:
     :raises SoCoException: Raise SoCoException
     """
@@ -117,7 +119,7 @@ def search_album(self, data):
     """Search for album into Music Library and Music Services.
 
     :param data: Dict with all the required data
-    :type dict: string
+    :type data: dict
     :return:
     :raises SoCoException: Raise SoCoException
     """
@@ -164,7 +166,7 @@ def search_track(self, data):
     """Search for track into Music Library and Music Services.
 
     :param data: Dict with all the required data
-    :type dict: string
+    :type data: dict 
     :return:
     :raises SoCoException: Raise SoCoException
     """

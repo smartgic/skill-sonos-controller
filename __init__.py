@@ -1,3 +1,5 @@
+"""Sonos controller entrypoint skill
+"""
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
@@ -6,7 +8,13 @@ from .search import search
 
 
 class SonosController(MycroftSkill):
+    """This is the place where all the magic happens for the Sonos
+    controller skill.
+    """
+
     def __init__(self):
+        """Constructor method
+        """
         MycroftSkill.__init__(self)
 
         # Initialize variables with empty or None values
@@ -14,6 +22,8 @@ class SonosController(MycroftSkill):
         self.services = []
         self.service = None
         self.nato_dict = None
+        self.settings_change_callback = None
+        self.code = None
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
@@ -61,12 +71,20 @@ class SonosController(MycroftSkill):
                 for service in self.services:
                     self.speak(service)
             return self.services
-        else:
-            self.log.warning('no subscription found for any music service')
-            self.speak_dialog('error.service')
+
+        self.log.warning('no subscription found for any music service')
+        self.speak_dialog('error.service')
+
+        return None
 
     @intent_handler('sonos.playlist.intent')
     def handle_playlist(self, message):
+        """Handle the playlist integration which include the search and
+        the dispatch on the Sonos speakers(s).
+
+        :param message: List of registered utterances
+        :type message: dict
+        """
         service = self.service
         playlist = message.data.get('playlist')
         speaker = message.data.get('speaker')
@@ -77,6 +95,12 @@ class SonosController(MycroftSkill):
 
     @ intent_handler('sonos.album.intent')
     def handle_album(self, message):
+        """Handle the album integration which include the search and
+        the dispatch on the Sonos speakers(s).
+
+        :param message: List of registered utterances
+        :type message: dict
+        """
         service = self.service
         album = message.data.get('album')
         speaker = message.data.get('speaker')
@@ -87,6 +111,12 @@ class SonosController(MycroftSkill):
 
     @ intent_handler('sonos.track.intent')
     def handle_track(self, message):
+        """Handle the track integration which include the search and
+        the dispatch on the Sonos speakers(s).
+
+        :param message: List of registered utterances
+        :type message: dict
+        """
         service = self.service
         artist = None
         track = message.data.get('track')
@@ -105,7 +135,8 @@ class SonosController(MycroftSkill):
         The list of the available commands is registered withing the
         command.entity file.
 
-        Command could be run with or without speaker mention.
+        :param message: List of registered utterances
+        :type message: dict
         """
         command = message.data.get('command')
         speaker = message.data.get('speaker', False)
@@ -118,27 +149,23 @@ class SonosController(MycroftSkill):
             run_command(self, 'pause', device_name)
         elif command == 'stop music':
             run_command(self, 'stop', device_name)
-        elif command == 'restart music' or command == 'resume music':
+        elif command in ('restart music', 'resume music'):
             run_command(self, 'play', device_name, 'PAUSED_PLAYBACK')
-        elif (
-            command == 'louder' or command == 'volume up' or
-            command == 'turn up volume' or command == 'much louder'
-        ):
+        elif command in ('louder', 'volume up', 'turn up volume',
+                         'much louder'):
             value = 10
             if command == 'much louder':
                 value = 30
             run_command(self, 'vol-up', device_name, extras=value)
-        elif (
-            command == 'volume down' or command == 'quieter' or
-            command == 'turn down volume' or command == 'much quieter'
-        ):
+        elif command in ('volume down', 'quieter', 'turn down volume',
+                         'much quieter'):
             value = 10
             if command == 'much quieter':
                 value = 30
             run_command(self, 'vol-down', device_name, extras=value)
         elif command == 'what is playing':
             get_track(self, device_name)
-        elif command == 'next music' or command == 'previous music':
+        elif command in ('next music', 'previous music'):
             cmd = 'next'
             if command == 'previous music':
                 cmd = 'previous'
@@ -151,10 +178,19 @@ class SonosController(MycroftSkill):
         self.register_entity_file('command.entity')
 
     def initialize(self):
+        """The initialize method is called after the Skill is fully
+        constructed and registered with the system. It is used to perform
+        any final setup for the Skill including accessing Skill settings.
+        https://tinyurl.com/4pevkdhj
+        """
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
 
     def on_settings_changed(self):
+        """Each Mycroft device will check for updates to a users settings
+        regularly, and write these to the Skills settings.json.
+        https://tinyurl.com/f2bkymw
+        """
         self._setup()
         authentication(self)
         self._entity()
@@ -163,4 +199,6 @@ class SonosController(MycroftSkill):
 
 
 def create_skill():
+    """Main function to register the skill
+    """
     return SonosController()
