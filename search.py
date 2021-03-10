@@ -64,7 +64,6 @@ def search_type(self, data):
         search_album(self, data)
     elif data['category'] == 'tracks':
         search_track(self, data)
-    # else:
 
 
 def search_playlist(self, data):
