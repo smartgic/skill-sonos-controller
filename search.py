@@ -219,6 +219,7 @@ def search_track(self, data):
                 for track in tracks:
                     item_id = unquote(
                         unquote(re.sub('^0fffffff', '', track.item_id)))
+                    self.log.debug('================ {}'.format(item_id))
                     meta = data['provider'].get_media_metadata(item_id)
                     for key, value in meta.items():
                         if key == 'trackMetadata':
@@ -246,7 +247,6 @@ def search_track(self, data):
                         break
                 return
             else:
-                tracks = data['provider'].search('tracks', data['track'])
                 picked = choice(tracks)
                 device.add_to_queue(picked)
                 title = picked.title
