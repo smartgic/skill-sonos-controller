@@ -224,9 +224,8 @@ def search_track(self, data):
                         if key == 'trackMetadata':
                             for info in value.items():
                                 if info[1] == data['artist'].title():
-                                    picked = item_id
-                                    device.add_to_queue(track.item_id)
-                                    title = picked.title
+                                    device.add_to_queue(track)
+                                    title = track.title
                                     found = True
 
                                     break
