@@ -237,9 +237,14 @@ def search_track(self, data):
                         'track': data['track'],
                         'artist': data['artist']})
             else:
-                picked = choice(tracks)
-                device.add_to_queue(picked)
-                title = picked.title
+                if tracks:
+                    picked = choice(tracks)
+                    device.add_to_queue(picked)
+                    title = picked.title
+                else:
+                    self.speak_dialog('error.track', data={
+                        'track': data['track']})
+                    return
 
         # Play the picked track
         device.play_from_queue(0)

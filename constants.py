@@ -14,4 +14,5 @@ SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
                                 'genres', 'composers', 'tracks', 'share',
                                 'sonos_playlists', 'playlists']
 
+# Token file used by SoCo Python library
 TOKEN_FILE = '/.config/SoCo/token_store.json'
