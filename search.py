@@ -228,12 +228,14 @@ def search_track(self, data):
                                     device.add_to_queue(picked)
                                     title = picked.title
                                     found = True
+                                    self.log.debug('found')
                                     break
                                 else:
                                     self.speak_dialog('error.track', data={
                                         'track': data['track'],
                                         'artist': data['artist']})
                                     fail = True
+                                    self.log.debug('not found')
                                     break
                         if found or fail:
                             break
