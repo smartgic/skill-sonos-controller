@@ -232,12 +232,14 @@ def search_track(self, data):
                             break
                     if found:
                         break
+                    return
                 else:
                     self.speak_dialog('error.track', data={
                         'track': data['track'],
                         'artist': data['artist']})
+                    return
             else:
-                if len(tracks) > 0:
+                if tracks:
                     picked = choice(tracks)
                     device.add_to_queue(picked)
                     title = picked.title
