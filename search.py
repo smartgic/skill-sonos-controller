@@ -228,6 +228,10 @@ def search_track(self, data):
                                     title = picked.title
                                     found = True
                                     break
+                                else:
+                                    self.speak_dialog('error.track', data={
+                                        'track': data['track'],
+                                        'artist': data['artist']})
                         if found:
                             break
                     if found:
