@@ -223,13 +223,9 @@ def search_track(self, data):
                     for key, value in meta.items():
                         if key == 'trackMetadata':
                             for info in value.items():
-                                self.log.debug(
-                                    '================ {}'.format(info))
                                 if info[1] == data['artist'].title():
-                                    self.log.debug(
-                                        '================ {}'.format(item_id))
                                     picked = item_id
-                                    device.add_to_queue(item_id)
+                                    device.add_to_queue(track.item_id)
                                     title = picked.title
                                     found = True
 
