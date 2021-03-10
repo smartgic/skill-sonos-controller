@@ -211,7 +211,6 @@ def search_track(self, data):
                 else:
                     self.speak_dialog('error.track', data={
                         'track': data['track']})
-                    return
         else:
             tracks = data['provider'].search('tracks', data['track'])
             if data['artist']:
@@ -232,13 +231,12 @@ def search_track(self, data):
                             break
                     if found:
                         break
-                    return
                 else:
                     self.speak_dialog('error.track', data={
                         'track': data['track'],
                         'artist': data['artist']})
-                    return
             else:
+                self.log.debug('============= {}'.format(tracks))
                 if tracks:
                     picked = choice(tracks)
                     device.add_to_queue(picked)
@@ -246,7 +244,6 @@ def search_track(self, data):
                 else:
                     self.speak_dialog('error.track', data={
                         'track': data['track']})
-                    return
 
         # Play the picked track
         device.play_from_queue(0)
