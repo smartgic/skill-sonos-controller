@@ -219,7 +219,6 @@ def search_track(self, data):
                 for track in tracks:
                     item_id = unquote(
                         unquote(re.sub('^0fffffff', '', track.item_id)))
-                    self.log.debug('================ {}'.format(item_id))
                     meta = data['provider'].get_media_metadata(item_id)
                     for key, value in meta.items():
                         if key == 'trackMetadata':
@@ -228,19 +227,19 @@ def search_track(self, data):
                                     '================ {}'.format(info))
                                 if info[1] == data['artist'].title():
                                     picked = item_id
-                                    device.add_to_queue(picked)
+                                    device.add_to_queue(item_id)
                                     title = picked.title
                                     found = True
                                     self.log.debug(
-                                        '================ {}'.format(item_id))
+                                        '================ {}'.format(picked))
                                     break
-                                else:
-                                    self.speak_dialog('error.track', data={
-                                        'track': data['track'],
-                                        'artist': data['artist']})
-                                    fail = True
-                                    self.log.debug('not found')
-                                    break
+                                # else:
+                                #     self.speak_dialog('error.track', data={
+                                #         'track': data['track'],
+                                #         'artist': data['artist']})
+                                #     fail = True
+                                #     self.log.debug('not found')
+                                #     break
                         if found or fail:
                             break
                     if found or fail:
