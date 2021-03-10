@@ -227,7 +227,6 @@ def search_track(self, data):
                                     device.add_to_queue(track)
                                     title = track.title
                                     found = True
-
                                     break
                                 # else:
                                 #     self.speak_dialog('error.track', data={
@@ -240,7 +239,6 @@ def search_track(self, data):
                             break
                     if found or fail:
                         break
-                return
             else:
                 picked = choice(tracks)
                 device.add_to_queue(picked)
