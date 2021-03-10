@@ -1,7 +1,9 @@
+import re
 from random import choice
 from soco import exceptions
 from soco.discovery import by_name
 from .utils import get_category, check_speaker
+from urllib.parse import unquote
 
 
 def search(self, service, speaker, category, playlist=None, album=None,
@@ -210,11 +212,32 @@ def search_track(self, data):
                         'track': data['track']})
                     return
         else:
-            tracks = data['provider'].search(
-                'tracks', data['track'])
-            picked = choice(tracks)
-            device.add_to_queue(picked)
-            title = picked.title
+            tracks = data['provider'].search('tracks', data['track'])
+            if data['artist']:
+                found = False
+                for track in tracks:
+                    item_id = unquote(
+                        unquote(re.sub('^0fffffff', '', track.item_id)))
+                    meta = data['provider'].get_media_metadata(item_id)
+                    for key, value in meta.items():
+                        if key == 'trackMetadata':
+                            for info in value.items():
+                                if info[0] == 'artist':
+                                    if info[1] == data['artist'].title():
+                                        picked = item_id
+                                        device.add_to_queue(picked)
+                                        title = picked.title
+                                        found = True
+                                        break
+                        if found:
+                            break
+                    if found:
+                        break
+            else:
+                tracks = data['provider'].search('tracks', data['track'])
+                picked = choice(tracks)
+                device.add_to_queue(picked)
+                title = picked.title
 
         # Play the picked track
         device.play_from_queue(0)
