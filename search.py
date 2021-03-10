@@ -244,6 +244,7 @@ def search_track(self, data):
                 else:
                     self.speak_dialog('error.track', data={
                         'track': data['track']})
+                    return
 
         # Play the picked track
         device.play_from_queue(0)
