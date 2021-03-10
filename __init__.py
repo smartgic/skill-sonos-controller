@@ -1,8 +1,4 @@
 from mycroft import MycroftSkill, intent_handler
-from soco.discovery import by_name
-from soco import exceptions
-from random import choice
-from urllib.parse import unquote
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
     run_command, get_track
