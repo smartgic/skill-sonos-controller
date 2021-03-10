@@ -227,7 +227,7 @@ def search_track(self, data):
                                     '================ {}'.format(info))
                                 if info[1] == data['artist'].title():
                                     self.log.debug(
-                                        '================ {}'.format(picked))
+                                        '================ {}'.format(item_id))
                                     picked = item_id
                                     device.add_to_queue(item_id)
                                     title = picked.title
