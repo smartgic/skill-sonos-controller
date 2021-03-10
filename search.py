@@ -226,12 +226,13 @@ def search_track(self, data):
                                 self.log.debug(
                                     '================ {}'.format(info))
                                 if info[1] == data['artist'].title():
+                                    self.log.debug(
+                                        '================ {}'.format(picked))
                                     picked = item_id
                                     device.add_to_queue(item_id)
                                     title = picked.title
                                     found = True
-                                    self.log.debug(
-                                        '================ {}'.format(picked))
+
                                     break
                                 # else:
                                 #     self.speak_dialog('error.track', data={
