@@ -1,9 +1,9 @@
 beaucoup plus fort,much louder
 beaucoup moins fort,much quieter
 reprend la musique,resume music
-désactive le mode aléatoire,shuffle off
-active le mode aléatoire,shuffle on
-arrête la musique,stop music
+desactive le mode aleatoire,shuffle off
+active le mode aleatoire,shuffle on
+arrete la musique,stop music
 diminue le volume,volume down
 augmente le volume,volume up
 quelle est la musique en cours de lecture,what is playing
@@ -11,5 +11,5 @@ plus fort,louder
 moins fort,quieter
 pause,pause
 joue,play
-musique précédente,previous music
+musique precedente,previous music
 musique suivante,next music
