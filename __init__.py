@@ -138,8 +138,7 @@ class SonosController(MycroftSkill):
         :param message: List of registered utterances
         :type message: dict
         """
-        action = message.data.get('command')
-        command = self.translate_namedvalues(action)
+        command = self.translate_namedvalues(message.data.get('command'))
         speaker = message.data.get('speaker', False)
         device_name = None
         if speaker:
