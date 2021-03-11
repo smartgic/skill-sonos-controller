@@ -145,6 +145,8 @@ class SonosController(MycroftSkill):
             # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
 
+        self.log.sebug('============== {}'.format(command))
+
         if command == 'pause':
             run_command(self, 'pause', device_name)
         elif command == 'stop music':
