@@ -6,6 +6,8 @@ active le mode aléatoire,shuffle on
 arrête,stop music
 diminue le volume,volume down
 augmente le volume,volume up
+baisse le son,volume down
+monte le son,volume up
 quelle est la musique en cours de lecture,what is playing
 plus fort,louder
 moins fort,quieter
