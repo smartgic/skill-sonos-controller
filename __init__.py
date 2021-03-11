@@ -177,9 +177,10 @@ class SonosController(MycroftSkill):
             run_command(self, cmd, device_name)
 
     def _entity(self):
-        """Register the Padatious entitiy
+        """Register the Padatious entitiies
         """
         self.register_entity_file('service.entity')
+        self.register_entity_file('command.entity')
 
     def initialize(self):
         """The initialize method is called after the Skill is fully
