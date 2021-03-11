@@ -138,14 +138,15 @@ class SonosController(MycroftSkill):
         :param message: List of registered utterances
         :type message: dict
         """
-        command = self.translate_namedvalues(message.data.get('command'))
+        command = message.data.get('command')
         speaker = message.data.get('speaker', False)
         device_name = None
         if speaker:
             # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
 
-        self.log.debug('============== {}'.format(command))
+        translate = self.translate_namedvalues('command')
+        self.log.debug('============== {}'.format(translate))
 
         if command == 'pause':
             run_command(self, 'pause', device_name)
