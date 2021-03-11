@@ -1,0 +1,4 @@
+joue {track} sur {speaker}
+joue {track} (de | par) {artist} sur {speaker}
+joue {track} depuis {service} sur {speaker}
+joue {track} (de | par) {artist} depuis {service} sur {speaker}
