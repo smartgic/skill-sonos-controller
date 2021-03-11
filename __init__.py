@@ -150,12 +150,8 @@ class SonosController(MycroftSkill):
         self.log.debug(translation)
         command = None
         for vocal, translate in translation.items():
-            self.log.debug('============= {}'.format(vocal))
-            self.log.debug('============= {}'.format(translate))
             if vocal == get_command:
                 command = translate
-
-        self.log.debug('============= {}'.format(command))
 
         if command == 'pause':
             run_command(self, 'pause', device_name)
@@ -185,7 +181,6 @@ class SonosController(MycroftSkill):
         """Register the Padatious entitiies
         """
         self.register_entity_file('service.entity')
-        # self.register_entity_file('command.entity')
 
     def initialize(self):
         """The initialize method is called after the Skill is fully
