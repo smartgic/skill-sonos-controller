@@ -138,34 +138,32 @@ class SonosController(MycroftSkill):
         :param message: List of registered utterances
         :type message: dict
         """
-        command = message.data.get('command')
+        get_command = message.data.get('command')
         speaker = message.data.get('speaker', False)
         device_name = None
         if speaker:
             # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
 
-        translation = self.translate_namedvalues('command')
-
+        # Translate command values from spoken language to English
+        translation = self.translate_namedvalues('commands')
+        command = None
         for vocal, translate in translation.items():
-            self.log.debug('============== {}'.format(vocal))
-            if vocal == command:
-                self.log.debug('+++++++++++++ {}'.format(translate))
+            if vocal == get_command:
+                command = translate
 
         if command == 'pause':
             run_command(self, 'pause', device_name)
         elif command == 'stop music':
             run_command(self, 'stop', device_name)
-        elif command in ('restart music', 'resume music'):
+        elif command == 'resume music':
             run_command(self, 'play', device_name, 'PAUSED_PLAYBACK')
-        elif command in ('louder', 'volume up', 'turn up volume',
-                         'much louder'):
+        elif command in ('louder', 'volume up', 'much louder'):
             value = 10
             if command == 'much louder':
                 value = 30
             run_command(self, 'vol-up', device_name, extras=value)
-        elif command in ('volume down', 'quieter', 'turn down volume',
-                         'much quieter'):
+        elif command in ('volume down', 'quieter', 'much quieter'):
             value = 10
             if command == 'much quieter':
                 value = 30
@@ -179,10 +177,9 @@ class SonosController(MycroftSkill):
             run_command(self, cmd, device_name)
 
     def _entity(self):
-        """Register the Padatious entities
+        """Register the Padatious entitiy
         """
         self.register_entity_file('service.entity')
-        self.register_entity_file('command.entity')
 
     def initialize(self):
         """The initialize method is called after the Skill is fully
