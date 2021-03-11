@@ -154,7 +154,7 @@ class SonosController(MycroftSkill):
             if vocal == get_command:
                 command = translate
 
-        self.log.debug('========== {}'.format(translation))
+        self.log.debug('========== {}'.format(get_command))
         self.log.debug('++++++++++ {}'.format(command))
 
         if command == 'pause':
