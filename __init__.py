@@ -147,6 +147,7 @@ class SonosController(MycroftSkill):
 
         # Translate command values from spoken language to English
         translation = self.translate_namedvalues('commands')
+        self.log.debug(translation)
         command = None
         for vocal, translate in translation.items():
             self.log.debug('============= {}'.format(vocal))
