@@ -270,16 +270,18 @@ def get_track(self, speaker):
         if speaker:
             device = by_name(speaker)
             if get_state(self, device.player_name) == 'PLAYING':
-                self.speak('{} by {}'.format(
-                    device.get_current_track_info()['title'],
-                    device.get_current_track_info()['artist']))
+                self.speak_dialog('sonos.playing', data={
+                    'title': device.get_current_track_info()['title'],
+                    'artist': device.get_current_track_info()['artist']})
+
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
                     if device.get_current_track_info()['title']:
-                        self.speak('{} by {} on {}'.format(
-                            device.get_current_track_info()['title'],
-                            device.get_current_track_info()['artist'],
-                            device.player_name))
+                        self.speak_dialog('sonos.playing.on', data={
+                            'title': device.get_current_track_info()['title'],
+                            'artist': device.get_current_track_info()[
+                                'artist'],
+                            'speaker': device.player_name})
     except exceptions.SoCoException as err:
         self.log.error(err)

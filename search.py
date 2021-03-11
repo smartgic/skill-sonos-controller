@@ -249,7 +249,7 @@ def search_track(self, data):
         device.play_from_queue(0)
 
         if data['artist']:
-            self.speak_dialog('sonos.trackartist', data={
+            self.speak_dialog('sonos.track.artist', data={
                 'track': title, 'service': data['service'],
                 'speaker': data['speaker'], 'artist': data['artist']})
         else:
