@@ -202,7 +202,7 @@ def check_service(self, service):
 def run_command(self, command, speaker, state='playing', extras=None):
     """Execute command on Sonos device, if no speaker is spoken then
     the function will check for all the speakers that are playing
-    music. Specific command is used for volume management.
+    music. Specific command is used for volume and play mode management.
 
     :param command: Command to execute, defaults to playing
     :type command: string
@@ -218,19 +218,21 @@ def run_command(self, command, speaker, state='playing', extras=None):
         if speaker:
             device = by_name(speaker)
             if get_state(self, device.player_name) == state.upper():
-                if command == 'vol-up':
+                if command in ('vol-up', 'vol-down'):
                     _volume(self, command, device, extras)
-                elif command == 'vol-down':
-                    _volume(self, command, device, extras)
+                elif command in ('repeat', 'shuffle', 'normal'):
+                    _mode(self, device, extras)
                 else:
                     eval('device.{}()'.format(command))
+        elif command == 'get-track':
+            _get_track(self, speaker)
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
-                    if command == 'vol-up':
+                    if command in ('vol-up', 'vol-down'):
                         _volume(self, command, device, extras)
-                    elif command == 'vol-down':
-                        _volume(self, command, device, extras)
+                    elif command in ('repeat', 'shuffle', 'normal'):
+                        _mode(self, device, extras)
                     else:
                         eval('device.{}()'.format(command))
     except exceptions.SoCoException as err:
@@ -259,7 +261,7 @@ def _volume(self, way, speaker, value):
         self.log.error(err)
 
 
-def get_track(self, speaker):
+def _get_track(self, speaker):
     """Retrieve current playing track on speakers.
 
     :param speaker: Which device to manage the volume
