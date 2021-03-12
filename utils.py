@@ -223,19 +223,18 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 elif command in ('repeat', 'shuffle', 'normal'):
                     _mode(self, device, extras)
                 else:
-                    self.log.debug('======= {}'.format(command))
                     eval('device.{}()'.format(command))
         elif command == 'get-track':
             _get_track(self, speaker)
         else:
-            for device in self.speakers:
-                if get_state(self, device.player_name) == state.upper():
+            for speaker in self.speakers:
+                device_name = check_speaker(self, speaker)
+                if get_state(self, device_name) == state.upper():
                     if command in ('vol-up', 'vol-down'):
                         _volume(self, command, device, extras)
                     elif command in ('repeat', 'shuffle', 'normal'):
                         _mode(self, device, extras)
                     else:
-                        self.log.debug('======= {}'.format(command))
                         eval('device.{}()'.format(command))
     except exceptions.SoCoException as err:
         self.log.error(err)
@@ -287,5 +286,20 @@ def _get_track(self, speaker):
                             'artist': device.get_current_track_info()[
                                 'artist'],
                             'speaker': device.player_name})
+    except exceptions.SoCoException as err:
+        self.log.error(err)
+
+
+def _mode(self, speaker, value):
+    """Manage play mode on Sonos devices.
+
+    :param speaker: Which device to manage the mode
+    :type speaker: string
+    :param value: Value to set the mode
+    :type value: string
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        speaker.play_mode = value.upper()
     except exceptions.SoCoException as err:
         self.log.error(err)
