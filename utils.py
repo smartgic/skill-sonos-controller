@@ -223,7 +223,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 elif command in ('repeat', 'shuffle', 'normal'):
                     _mode(self, device, extras)
                 else:
-                    self.log('======= {}'.format(command))
+                    self.log.debug('======= {}'.format(command))
                     eval('device.{}()'.format(command))
         elif command == 'get-track':
             _get_track(self, speaker)
@@ -235,7 +235,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                     elif command in ('repeat', 'shuffle', 'normal'):
                         _mode(self, device, extras)
                     else:
-                        self.log('======= {}'.format(command))
+                        self.log.debug('======= {}'.format(command))
                         eval('device.{}()'.format(command))
     except exceptions.SoCoException as err:
         self.log.error(err)
