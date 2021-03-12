@@ -166,7 +166,7 @@ def search_track(self, data):
     """Search for track into Music Library and Music Services.
 
     :param data: Dict with all the required data
-    :type data: dict 
+    :type data: dict
     :return:
     :raises SoCoException: Raise SoCoException
     """
