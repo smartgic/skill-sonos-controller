@@ -193,7 +193,7 @@ def search_track(self, data):
                     device.add_uri_to_queue(tracks[picked])
                     title = picked
                 else:
-                    self.speak_dialog('error.track', data={
+                    self.speak_dialog('error.track.artist', data={
                         'track': data['track'], 'artist': data['artist']})
                     return
             else:
@@ -232,7 +232,7 @@ def search_track(self, data):
                     if found:
                         break
                 else:
-                    self.speak_dialog('error.track', data={
+                    self.speak_dialog('error.track.artist', data={
                         'track': data['track'],
                         'artist': data['artist']})
             else:
