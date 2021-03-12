@@ -1,2 +1,4 @@
 pycodestyle:
   max-line-length: 79
+  ignore:
+    
