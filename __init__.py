@@ -181,7 +181,7 @@ class SonosController(MycroftSkill):
             if command in i:
                 if 'extras' in i[command]:
                     run_command(self, i[command]['command'],
-                                i[command]['device'], i['extras'])
+                                i[command]['device'], i[command]['extras'])
                 else:
                     run_command(self, i[command]['command'],
                                 i[command]['device'])
