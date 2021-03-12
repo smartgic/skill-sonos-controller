@@ -54,7 +54,6 @@ $ . mycroft-core/venv-activate.sh
 $ msm install https://github.com/smartgic/mycroft-sonos-controller-skill.git
 ```
 
-
 ## Configuration
 
 This skill utilizes the `settings.json` file which allows you to configure this skill via `home.mycroft.ai` after a few seconds of having the skill installed you should see something like below in the https://home.mycroft.ai/#/skill location:
