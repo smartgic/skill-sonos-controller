@@ -228,8 +228,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
             _get_track(self, speaker)
         else:
             for device in self.speakers:
-                device_name = check_speaker(self, device)
-                if get_state(self, device_name) == state.upper():
+                if get_state(self, device.player_name) == state.upper():
                     if command in ('vol-up', 'vol-down'):
                         _volume(self, command, device, extras)
                     elif command in ('repeat', 'shuffle', 'normal'):
