@@ -5,6 +5,7 @@ from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
     run_command, get_track
 from .search import search
+from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
 
 class SonosController(MycroftSkill):
@@ -152,29 +153,38 @@ class SonosController(MycroftSkill):
             if vocal == get_command:
                 command = translate
 
-        if command == 'pause':
-            run_command(self, 'pause', device_name)
-        elif command == 'stop music':
-            run_command(self, 'stop', device_name)
-        elif command == 'resume music':
-            run_command(self, 'play', device_name, 'PAUSED_PLAYBACK')
-        elif command in ('louder', 'volume up', 'much louder'):
-            value = 10
-            if command == 'much louder':
-                value = 30
-            run_command(self, 'vol-up', device_name, extras=value)
-        elif command in ('volume down', 'quieter', 'much quieter'):
-            value = 10
-            if command == 'much quieter':
-                value = 30
-            run_command(self, 'vol-down', device_name, extras=value)
-        elif command == 'what is playing':
-            get_track(self, device_name)
-        elif command in ('next music', 'previous music'):
-            cmd = 'next'
-            if command == 'previous music':
-                cmd = 'previous'
-            run_command(self, cmd, device_name)
+        commands = [
+            {'pause': {'command': 'pause', 'device': device_name}},
+            {'stop music': {'command': 'stop', 'device': device_name}},
+            {'resume music': {'command': 'stop',
+                              'device': device_name,
+                              'state': 'PAUSED_PLAYBACK'}},
+            {'louder': {'command': 'vol-up', 'device': device_name,
+                        'extras': DEFAULT_VOL_INCREMENT}},
+            {'volume up': {'command': 'vol-up', 'device': device_name,
+                           'extras': DEFAULT_VOL_INCREMENT}},
+            {'much louder': {'command': 'vol-up', 'device': device_name,
+                             'extras': LOUDER_QUIETER}},
+            {'volume down': {'command': 'vol-down', 'device': device_name,
+                             'extras': DEFAULT_VOL_INCREMENT}},
+            {'quieter': {'command': 'vol-down', 'device': device_name,
+                         'extras': DEFAULT_VOL_INCREMENT}},
+            {'much quieter': {'command': 'vol-up', 'device': device_name,
+                              'extras': LOUDER_QUIETER}},
+            {'what is playing': {'command': 'get-track',
+                                 'device': device_name}},
+            {'next music': {'command': 'next', 'device': device_name}},
+            {'previous music': {'command': 'previous', 'device': device_name}}
+        ]
+
+        for i in commands:
+            if command in i:
+                if 'extras' in i[command]:
+                    run_command(self, i[command]['command'],
+                                i[command]['device'], i['extras'])
+                else:
+                    run_command(self, i[command]['command'],
+                                i[command]['device'])
 
     def _entity(self):
         """Register the Padatious entitiies

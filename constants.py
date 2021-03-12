@@ -16,3 +16,7 @@ SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
 
 # Token file used by SoCo Python library
 TOKEN_FILE = '/.config/SoCo/token_store.json'
+
+# Volume values
+DEFAULT_VOL_INCREMENT = 10
+LOUDER_QUIETER = 30
