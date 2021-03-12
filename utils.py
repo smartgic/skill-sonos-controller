@@ -218,18 +218,22 @@ def run_command(self, command, speaker, state='playing', extras=None):
         if speaker:
             device = by_name(speaker)
             if get_state(self, device.player_name) == state.upper():
-                if command in ('vol-up', 'vol-down'):
+                if command == 'vol-up':
+                    _volume(self, command, device, extras)
+                elif command == 'vol-up':
                     _volume(self, command, device, extras)
                 elif command in ('repeat', 'shuffle', 'normal'):
                     _mode(self, device, extras)
                 else:
                     eval('device.{}()'.format(command))
-        # elif command == 'get-track':
-        #     _get_track(self, speaker)
+        elif command == 'get-track':
+            _get_track(self, speaker)
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
-                    if command in ('vol-up', 'vol-down'):
+                    if command == 'vol-up':
+                        _volume(self, command, device, extras)
+                    elif command == 'vol-up':
                         _volume(self, command, device, extras)
                     elif command in ('repeat', 'shuffle', 'normal'):
                         _mode(self, device, extras)
