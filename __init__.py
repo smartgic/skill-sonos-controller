@@ -3,7 +3,7 @@
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
-    run_command, get_track
+    run_command
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
