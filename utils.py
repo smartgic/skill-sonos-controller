@@ -23,7 +23,7 @@ def authentication(self):
     # This path is required by SoCo Python library and can't be changed
     token_file = os.getenv('HOME') + TOKEN_FILE
 
-    if self.service in REQUIRED_AUTHENTICATION.lower():
+    if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
         provider = MusicService(self.service)
 
         # self.code is an option from available fomr home.mycroft.ai
