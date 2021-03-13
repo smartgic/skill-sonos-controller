@@ -31,7 +31,7 @@ class SonosController(MycroftSkill):
         from home.mycroft.ai.
         """
         # By default the Music Library service is used
-        self.service = self.settings.get('default_source', 'Music Library')
+        self.service = self.settings.get('default_source', 'music library')
         self.code = self.settings.get('link_code')
         # Initiate NATO dict
         # https://en.wikipedia.org/wiki/NATO_phonetic_alphabet
