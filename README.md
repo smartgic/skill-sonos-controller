@@ -36,12 +36,14 @@ Before using a music service, **make sure that you linked** your service account
 * "volume up"
 * "quieter"
 * "louder"
-* "play"
+* "play"s
 * "pause"
 * "stop music"
 * "resume music"
 * "shuffle off"
 * "shuffle on"
+* "repeat off"
+* "repeat on"
 * "next music"
 * "previous music"
 
