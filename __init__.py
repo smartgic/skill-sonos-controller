@@ -94,7 +94,7 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'playlists', playlist=playlist)
 
-    @ intent_handler('sonos.album.intent')
+    @intent_handler('sonos.album.intent')
     def handle_album(self, message):
         """Handle the album integration which include the search and
         the dispatch on the Sonos speakers(s).
@@ -110,7 +110,7 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'albums', album=album)
 
-    @ intent_handler('sonos.track.intent')
+    @intent_handler('sonos.track.intent')
     def handle_track(self, message):
         """Handle the track integration which include the search and
         the dispatch on the Sonos speakers(s).
@@ -129,7 +129,7 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'tracks', artist=artist, track=track)
 
-    @ intent_handler('sonos.command.intent')
+    @intent_handler('sonos.command.intent')
     def handle_command(self, message):
         """Handle the commands to pass to Sonos devices triggered by intents
 
@@ -153,6 +153,7 @@ class SonosController(MycroftSkill):
             if vocal == get_command:
                 command = translate
 
+        # List of supported command with their arguments
         commands = [
             {'pause': {'command': 'pause', 'device': device_name}},
             {'stop music': {'command': 'stop', 'device': device_name}},
