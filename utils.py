@@ -24,7 +24,7 @@ def authentication(self):
     token_file = os.getenv('HOME') + TOKEN_FILE
 
     if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
-        provider = MusicService(self.service)
+        provider = MusicService(self.service.title())
 
         # self.code is an option from available fomr home.mycroft.ai
         if not os.path.isfile(token_file) and self.code != '':
