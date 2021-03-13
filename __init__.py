@@ -153,7 +153,8 @@ class SonosController(MycroftSkill):
             if vocal == get_command:
                 command = translate
 
-        # List of supported command with their arguments
+        # List of supported commands with their arguments handle by the
+        # run_command() function.
         commands = [
             {'pause': {'command': 'pause', 'device': device_name}},
             {'stop music': {'command': 'stop', 'device': device_name}},
@@ -175,7 +176,15 @@ class SonosController(MycroftSkill):
             {'what is playing': {'command': 'get-track',
                                  'device': device_name}},
             {'next music': {'command': 'next', 'device': device_name}},
-            {'previous music': {'command': 'previous', 'device': device_name}}
+            {'previous music': {'command': 'previous', 'device': device_name}},
+            {'shuffle on': {'command': 'mode',
+                            'device': device_name, 'extras': 'shuffle_no_repeat'}},
+            {'shuffle off': {'command': 'mode',
+                             'device': device_name, 'extras': 'normal'}},
+            {'repeat on': {'command': 'mode',
+                           'device': device_name, 'extras': 'repeat_all'}},
+            {'repeat off': {'command': 'mode',
+                            'device': device_name, 'extras': 'normal'}}
         ]
 
         for i in commands:

@@ -220,7 +220,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
             if get_state(self, device.player_name) == state.upper():
                 if command in ('vol-up', 'vol-down'):
                     _volume(self, command, device, extras)
-                elif command in ('repeat', 'shuffle', 'normal'):
+                elif command == 'mode':
                     _mode(self, device, extras)
                 else:
                     eval('device.{}()'.format(command))
@@ -231,7 +231,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 if get_state(self, device.player_name) == state.upper():
                     if command in ('vol-up', 'vol-down'):
                         _volume(self, command, device, extras)
-                    elif command in ('repeat', 'shuffle', 'normal'):
+                    elif command in 'mode':
                         _mode(self, device, extras)
                     else:
                         eval('device.{}()'.format(command))
