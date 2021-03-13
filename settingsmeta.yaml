@@ -6,7 +6,7 @@ skillMetadata:
           type: select
           label: Default source of music
           options: "Music Library|music library;Spotify|spotify"
-          value: "Choose a source"
+          value: "music library"
         - name: link_code
           type: text
           label: Link code
