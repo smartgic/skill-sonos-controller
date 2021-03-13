@@ -179,13 +179,10 @@ class SonosController(MycroftSkill):
 
         for i in commands:
             if command in i:
-                if 'extras' in i[command]:
-                    run_command(self, command=i[command]['command'],
-                                speaker=i[command]['device'],
-                                extras=i[command]['extras'])
-                else:
-                    run_command(self, command=i[command]['command'],
-                                speaker=i[command]['device'])
+                run_command(self, command=i[command]['command'],
+                            speaker=i[command]['device'],
+                            state=i[command].get('state', 'playing'),
+                            extras=i[command].get('extras', None))
 
     def _entity(self):
         """Register the Padatious entitiies
