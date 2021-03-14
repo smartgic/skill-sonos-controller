@@ -39,8 +39,8 @@ class SonosController(MycroftSkill):
 
         # Manage Sonos volume when wakeword is detected
         # https://tinyurl.com/244286w8
-        self.add_event("recognizer_loop:wakeword", self.volume_down)
-        self.add_event("recognizer_loop:audio_output_end", self.volume_up)
+        self.add_event("recognizer_loop:record_begin", self.volume_down)
+        self.add_event("recognizer_loop:record_end", self.volume_up)
 
     def volume_down(self):
         """Reduce volume on Sonos when "recognizer_loop:wakeword" is
@@ -50,7 +50,7 @@ class SonosController(MycroftSkill):
                     extras=DEFAULT_VOL_INCREMENT)
 
     def volume_up(self):
-        """Raise volume on Sonos when "recognizer_loop:audio_output_end" is
+        """Raise volume on Sonos when "recognizer_loop:record_end" is
         detected in the bus.
         """
         run_command(self, command='vol-up', speaker=None,
