@@ -11,3 +11,7 @@ skillMetadata:
           type: text
           label: Link code
           value: ""
+        - name: duck
+          type: checkbox
+          label: Reduce volume level temporarily when speaking
+          value: "true"

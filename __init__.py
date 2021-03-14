@@ -36,20 +36,22 @@ class SonosController(MycroftSkill):
         # Initiate NATO dict
         # https://en.wikipedia.org/wiki/NATO_phonetic_alphabet
         self.nato_dict = self.translate_namedvalues('codes')
+        self.duck = self.settings.get('duck')
 
-        # Manage Sonos volume when wakeword is detected
-        # https://tinyurl.com/244286w8
-        self.add_event("recognizer_loop:record_begin", self.volume_down)
-        self.add_event("recognizer_loop:record_end", self.volume_up)
+        if self.duck:
+            # Manage Sonos volume when wakeword is detected
+            # https://tinyurl.com/244286w8
+            self.add_event("recognizer_loop:record_begin", self._volume_down)
+            self.add_event("recognizer_loop:record_end", self._volume_up)
 
-    def volume_down(self):
+    def _volume_down(self):
         """Reduce volume on Sonos when "recognizer_loop:wakeword" is
         detected in the bus.
         """
         run_command(self, command='vol-down', speaker=None,
                     extras=DEFAULT_VOL_INCREMENT)
 
-    def volume_up(self):
+    def _volume_up(self):
         """Raise volume on Sonos when "recognizer_loop:record_end" is
         detected in the bus.
         """
