@@ -36,7 +36,6 @@ Before using a music service, **make sure that you linked** your service account
 * "volume up"
 * "quieter"
 * "louder"
-* "play"
 * "pause"
 * "stop music"
 * "resume music"
