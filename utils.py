@@ -35,6 +35,7 @@ def authentication(self):
                 self.log.error(err)
         elif not os.path.isfile(token_file):
             try:
+                # Only retrieve the code and not the register URL
                 _, link_code = provider.device_or_app_link_auth_part1()
                 # Map the code with NATO
                 data = {"slash": '. '.join(
