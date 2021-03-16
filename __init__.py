@@ -210,7 +210,9 @@ class SonosController(MycroftSkill):
         ]
 
         for i in commands:
+            self.log.debug('========== {}'.format(i))
             if command in i:
+                self.log.debug('+++++++++++ {}'.format(i))
                 run_command(self, command=i[command]['command'],
                             speaker=i[command].get('device', None),
                             state=i[command].get('state', 'playing'),
