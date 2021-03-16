@@ -178,10 +178,10 @@ class SonosController(MycroftSkill):
         # run_command() function.
         commands = [
             {'pause': {'command': 'pause', 'device': device_name}},
-            {'stop music': {'command': 'stop', 'device': device_name}},
-            {'resume music': {'command': 'play',
-                              'device': device_name,
-                              'state': 'PAUSED_PLAYBACK'}},
+            {'stop': {'command': 'stop', 'device': device_name}},
+            {'resume': {'command': 'play',
+                        'device': device_name,
+                        'state': 'PAUSED_PLAYBACK'}},
             {'louder': {'command': 'vol-up', 'device': device_name,
                         'extras': DEFAULT_VOL_INCREMENT}},
             {'volume up': {'command': 'vol-up', 'device': device_name,
