@@ -161,7 +161,7 @@ class SonosController(MycroftSkill):
         :type message: dict
         """
         get_command = message.data.get('command')
-        speaker = message.data.get('speaker', False)
+        speaker = message.data.get('speaker')
         device_name = None
         if speaker:
             # Check if the speaker exists before running the command
@@ -196,8 +196,8 @@ class SonosController(MycroftSkill):
                               'extras': LOUDER_QUIETER}},
             {'what is playing': {'command': 'get-track',
                                  'device': device_name}},
-            {'next music': {'command': 'next', 'device': device_name}},
-            {'previous music': {'command': 'previous', 'device': device_name}},
+            {'next': {'command': 'next', 'device': device_name}},
+            {'previous': {'command': 'previous', 'device': device_name}},
             {'shuffle on': {'command': 'mode',
                             'device': device_name,
                             'extras': 'shuffle_no_repeat'}},
@@ -210,10 +210,7 @@ class SonosController(MycroftSkill):
         ]
 
         for i in commands:
-            self.log.debug('========== {}'.format(i))
-            self.log.debug('+++++++++++ {}'.format(command))
             if command in i:
-                self.log.debug('+++++++++++ {}'.format(command))
                 run_command(self, command=i[command]['command'],
                             speaker=i[command].get('device', None),
                             state=i[command].get('state', 'playing'),
