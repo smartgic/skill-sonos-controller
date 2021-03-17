@@ -163,7 +163,9 @@ class SonosController(MycroftSkill):
         get_command = message.data.get('command')
         speaker = message.data.get('speaker')
         device_name = None
+        self.log.debug('-------- {}'.format(get_command))
         if speaker:
+            self.log.debug('====== {}'.format(speaker))
             # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
 
