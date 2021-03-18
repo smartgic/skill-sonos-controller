@@ -166,7 +166,6 @@ class SonosController(MycroftSkill):
         command = None
 
         if speaker:
-            self.log.debug('====== {}'.format(speaker))
             # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
 
@@ -205,10 +204,10 @@ class SonosController(MycroftSkill):
                             'extras': 'shuffle_no_repeat'}},
             {'shuffle off': {'command': 'mode',
                              'device': device_name, 'extras': 'normal'}},
-            {'repeat on': {'command': 'mode',
-                           'device': device_name, 'extras': 'repeat_all'}},
-            {'repeat off': {'command': 'mode',
-                            'device': device_name, 'extras': 'normal'}}
+            {'repeat mode on': {'command': 'mode',
+                                'device': device_name, 'extras': 'repeat_all'}},
+            {'repeat mode off': {'command': 'mode',
+                                 'device': device_name, 'extras': 'normal'}}
         ]
 
         for i in commands:
