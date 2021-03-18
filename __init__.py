@@ -165,15 +165,24 @@ class SonosController(MycroftSkill):
         device_name = None
         command = None
 
+        self.log.debug('==== Entering in handle_command() ====')
+        self.log.debug('==== get_command: {} ===='.format(get_command))
+        self.log.debug('==== speaker: {} ===='.format(speaker))
+        self.log.debug('==== message dict: {} ===='.format(message))
+
         if speaker:
+            self.log.debug('==== speaker is defined ====')
             # Check if the speaker exists before running the command
             device_name = check_speaker(self, speaker)
+            self.log.debug('==== device_name: {} ===='.format(device_name))
 
         # Translate command values from spoken language to English
         translation = self.translate_namedvalues('commands')
         for vocal, translate in translation.items():
             if vocal == get_command:
                 command = translate
+
+        self.log.debug('==== command: {} ===='.format(command))
 
         # List of supported commands with their arguments handle by the
         # run_command() function.
@@ -204,14 +213,16 @@ class SonosController(MycroftSkill):
                             'extras': 'shuffle_norepeat'}},
             {'shuffle off': {'command': 'mode',
                              'device': device_name, 'extras': 'normal'}},
-            {'repeat mode on': {'command': 'mode',
-                                'device': device_name, 'extras': 'repeat_all'}},
-            {'repeat mode off': {'command': 'mode',
-                                 'device': device_name, 'extras': 'normal'}}
+            {'repeat on': {'command': 'mode',
+                           'device': device_name, 'extras': 'repeat_all'}},
+            {'repeat off': {'command': 'mode',
+                            'device': device_name, 'extras': 'normal'}}
         ]
 
         for i in commands:
             if command in i:
+                self.log.debug('==== command found: {} ===='.format(command))
+                self.log.debug('==== commands dict: {} ===='.format(i))
                 # Execute the requested command based on provided parameters
                 run_command(self, command=i[command]['command'],
                             speaker=i[command]['device'],
