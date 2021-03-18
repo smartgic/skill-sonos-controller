@@ -201,7 +201,7 @@ class SonosController(MycroftSkill):
             {'previous': {'command': 'previous', 'device': device_name}},
             {'shuffle on': {'command': 'mode',
                             'device': device_name,
-                            'extras': 'shuffle_no_repeat'}},
+                            'extras': 'shuffle_norepeat'}},
             {'shuffle off': {'command': 'mode',
                              'device': device_name, 'extras': 'normal'}},
             {'repeat mode on': {'command': 'mode',
