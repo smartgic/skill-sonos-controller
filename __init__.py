@@ -150,7 +150,7 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'tracks', artist=artist, track=track)
 
-    @intent_handler('sonos.command.intent')
+    @intent_handler('sonos.command')
     def handle_command(self, message):
         """Handle the commands to pass to Sonos devices triggered by intents
 
