@@ -163,7 +163,8 @@ class SonosController(MycroftSkill):
         get_command = message.data.get('command')
         speaker = message.data.get('speaker')
         device_name = None
-        self.log.debug('-------- {}'.format(get_command))
+        command = None
+
         if speaker:
             self.log.debug('====== {}'.format(speaker))
             # Check if the speaker exists before running the command
@@ -171,7 +172,6 @@ class SonosController(MycroftSkill):
 
         # Translate command values from spoken language to English
         translation = self.translate_namedvalues('commands')
-        command = None
         for vocal, translate in translation.items():
             if vocal == get_command:
                 command = translate
@@ -213,6 +213,7 @@ class SonosController(MycroftSkill):
 
         for i in commands:
             if command in i:
+                # Execute the requested command based on provided parameters
                 run_command(self, command=i[command]['command'],
                             speaker=i[command]['device'],
                             state=i[command].get('state', 'playing'),
@@ -222,6 +223,7 @@ class SonosController(MycroftSkill):
         """Register the Padatious entitiies
         """
         self.register_entity_file('service.entity')
+        self.register_entity_file('command.entity')
 
     def initialize(self):
         """The initialize method is called after the Skill is fully
