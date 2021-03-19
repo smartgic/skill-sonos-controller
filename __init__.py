@@ -260,6 +260,7 @@ class SonosController(MycroftSkill):
         device_name = None
         if speaker:
             device_name = check_speaker(self, speaker)
+        self.log.debug('====== {}'.format(speaker))
         run_command(self, command='get-track', speaker=device_name)
 
     def _entity(self):
