@@ -256,7 +256,8 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.what.is.playing.intent')
     def handle_what_is_playing(self, message):
-        speaker = message.data.get('speaker', None)
+        speaker = message.data.get('speaker')
+        self.log.debug('====== {}'.format(speaker))
         get_track(self, speaker)
 
     def _entity(self):
