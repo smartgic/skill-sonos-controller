@@ -204,8 +204,6 @@ class SonosController(MycroftSkill):
                          'extras': DEFAULT_VOL_INCREMENT}},
             {'much quieter': {'command': 'vol-down', 'device': device_name,
                               'extras': LOUDER_QUIETER}},
-            {'what is playing': {'command': 'get-track',
-                                 'device': device_name}},
             {'next': {'command': 'next', 'device': device_name}},
             {'previous': {'command': 'previous', 'device': device_name}},
             {'shuffle on': {'command': 'mode',
