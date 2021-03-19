@@ -303,3 +303,10 @@ def _mode(self, speaker, value):
         speaker.play_mode = value.upper()
     except exceptions.SoCoException as err:
         self.log.error(err)
+
+
+def translation(self, utterances):
+    for vocal, translate in self.translation.items():
+        if vocal == utterances:
+            return translate
+        return False

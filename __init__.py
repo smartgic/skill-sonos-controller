@@ -3,7 +3,7 @@
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
-    run_command
+    run_command, translation
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
@@ -25,6 +25,7 @@ class SonosController(MycroftSkill):
         self.nato_dict = None
         self.settings_change_callback = None
         self.code = None
+        self.translation = None
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
@@ -43,6 +44,9 @@ class SonosController(MycroftSkill):
             # https://tinyurl.com/244286w8
             self.add_event("recognizer_loop:record_begin", self._volume_down)
             self.add_event("recognizer_loop:record_end", self._volume_up)
+
+        # Translate command values from spoken language to English
+        self.translation = self.translate_namedvalues('commands')
 
     def _volume_down(self):
         """Reduce volume on Sonos when "recognizer_loop:wakeword" is
@@ -206,15 +210,6 @@ class SonosController(MycroftSkill):
     #                           'extras': LOUDER_QUIETER}},
     #         {'next': {'command': 'next', 'device': device_name}},
     #         {'previous': {'command': 'previous', 'device': device_name}},
-    #         {'shuffle on': {'command': 'mode',
-    #                         'device': device_name,
-    #                         'extras': 'shuffle_norepeat'}},
-    #         {'shuffle off': {'command': 'mode',
-    #                          'device': device_name, 'extras': 'normal'}},
-    #         {'repeat on': {'command': 'mode',
-    #                        'device': device_name, 'extras': 'repeat_all'}},
-    #         {'repeat off': {'command': 'mode',
-    #                         'device': device_name, 'extras': 'normal'}}
     #     ]
 
     #     for i in commands:
@@ -227,15 +222,33 @@ class SonosController(MycroftSkill):
     #                         state=i[command].get('state', 'playing'),
     #                         extras=i[command].get('extras', None))
 
+    @intent_handler('sonos.shuffle.intent')
+    def handle_shuffle(self, message):
+        speaker = message.data.get('speaker')
+        mode = 'normal'
+
+        device_name = None
+        if speaker:
+            device_name = check_speaker(self, speaker)
+
+        state = None
+        state = translation(self, message.data.get('state'))
+        if state == 'enable':
+            mode = 'shuffle_norepeat'
+
+        run_command(self, command='mode', speaker=device_name, extras=mode)
+
     @intent_handler('sonos.repeat.intent')
     def handle_repeat(self, message):
         speaker = message.data.get('speaker')
-        state = message.data.get('state')
         mode = 'normal'
-        device_name = None
 
+        device_name = None
         if speaker:
             device_name = check_speaker(self, speaker)
+
+        state = None
+        state = translation(self, message.data.get('state'))
         if state == 'enable':
             mode = 'repeat_all'
 

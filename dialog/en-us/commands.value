@@ -15,3 +15,6 @@ pause,pause
 play,play
 previous,previous
 next,next
+
+enable,enable
+disable,disable
