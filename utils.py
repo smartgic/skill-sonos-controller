@@ -225,8 +225,6 @@ def run_command(self, command, speaker, state='playing', extras=None):
                     _mode(self, device, extras)
                 else:
                     eval('device.{}()'.format(command))
-        elif command == 'get-track':
-            _get_track(self, speaker)
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
@@ -262,7 +260,7 @@ def _volume(self, way, speaker, value):
         self.log.error(err)
 
 
-def _get_track(self, speaker):
+def get_track(self, speaker):
     """Retrieve current playing track on speakers.
 
     :param speaker: Which device to manage the volume

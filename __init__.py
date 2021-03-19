@@ -3,7 +3,7 @@
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
-    run_command, translation
+    run_command, translation, get_track
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
@@ -256,12 +256,8 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.what.is.playing.intent')
     def handle_what_is_playing(self, message):
-        speaker = message.data.get('speaker')
-        device_name = None
-        if speaker:
-            device_name = check_speaker(self, speaker)
-        self.log.debug('====== {}'.format(speaker))
-        run_command(self, command='get-track', speaker=device_name)
+        speaker = message.data.get('speaker', None)
+        get_track(self, speaker)
 
     def _entity(self):
         """Register the Padatious entitiies
