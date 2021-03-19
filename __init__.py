@@ -150,82 +150,82 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'tracks', artist=artist, track=track)
 
-    @intent_handler('sonos.command.intent')
-    def handle_command(self, message):
-        """Handle the commands to pass to Sonos devices triggered by intents
+    # @intent_handler('sonos.command.intent')
+    # def handle_command(self, message):
+    #     """Handle the commands to pass to Sonos devices triggered by intents
 
-        The list of the available commands is registered withing the
-        command.entity file.
+    #     The list of the available commands is registered withing the
+    #     command.entity file.
 
-        :param message: List of registered utterances
-        :type message: dict
-        """
-        get_command = message.data.get('command')
-        speaker = message.data.get('speaker')
-        device_name = None
-        command = None
+    #     :param message: List of registered utterances
+    #     :type message: dict
+    #     """
+    #     get_command = message.data.get('command')
+    #     speaker = message.data.get('speaker')
+    #     device_name = None
+    #     command = None
 
-        self.log.debug('==== Entering in handle_command() ====')
-        self.log.debug('==== get_command: {} ===='.format(get_command))
-        self.log.debug('==== speaker: {} ===='.format(speaker))
-        self.log.debug('==== message dict: {} ===='.format(message))
+    #     self.log.debug('==== Entering in handle_command() ====')
+    #     self.log.debug('==== get_command: {} ===='.format(get_command))
+    #     self.log.debug('==== speaker: {} ===='.format(speaker))
+    #     self.log.debug('==== message dict: {} ===='.format(message))
 
-        if speaker:
-            self.log.debug('==== speaker is defined ====')
-            # Check if the speaker exists before running the command
-            device_name = check_speaker(self, speaker)
-            self.log.debug('==== device_name: {} ===='.format(device_name))
+    #     if speaker:
+    #         self.log.debug('==== speaker is defined ====')
+    #         # Check if the speaker exists before running the command
+    #         device_name = check_speaker(self, speaker)
+    #         self.log.debug('==== device_name: {} ===='.format(device_name))
 
-        # Translate command values from spoken language to English
-        translation = self.translate_namedvalues('commands')
-        for vocal, translate in translation.items():
-            if vocal == get_command:
-                command = translate
+    #     # Translate command values from spoken language to English
+    #     translation = self.translate_namedvalues('commands')
+    #     for vocal, translate in translation.items():
+    #         if vocal == get_command:
+    #             command = translate
 
-        self.log.debug('==== command: {} ===='.format(command))
+    #     self.log.debug('==== command: {} ===='.format(command))
 
-        # List of supported commands with their arguments handle by the
-        # run_command() function.
-        commands = [
-            {'pause': {'command': 'pause', 'device': device_name}},
-            {'stop': {'command': 'stop', 'device': device_name}},
-            {'resume': {'command': 'play',
-                        'device': device_name,
-                        'state': 'PAUSED_PLAYBACK'}},
-            {'louder': {'command': 'vol-up', 'device': device_name,
-                        'extras': DEFAULT_VOL_INCREMENT}},
-            {'volume up': {'command': 'vol-up', 'device': device_name,
-                           'extras': DEFAULT_VOL_INCREMENT}},
-            {'much louder': {'command': 'vol-up', 'device': device_name,
-                             'extras': LOUDER_QUIETER}},
-            {'volume down': {'command': 'vol-down', 'device': device_name,
-                             'extras': DEFAULT_VOL_INCREMENT}},
-            {'quieter': {'command': 'vol-down', 'device': device_name,
-                         'extras': DEFAULT_VOL_INCREMENT}},
-            {'much quieter': {'command': 'vol-down', 'device': device_name,
-                              'extras': LOUDER_QUIETER}},
-            {'next': {'command': 'next', 'device': device_name}},
-            {'previous': {'command': 'previous', 'device': device_name}},
-            {'shuffle on': {'command': 'mode',
-                            'device': device_name,
-                            'extras': 'shuffle_norepeat'}},
-            {'shuffle off': {'command': 'mode',
-                             'device': device_name, 'extras': 'normal'}},
-            {'repeat on': {'command': 'mode',
-                           'device': device_name, 'extras': 'repeat_all'}},
-            {'repeat off': {'command': 'mode',
-                            'device': device_name, 'extras': 'normal'}}
-        ]
+    #     # List of supported commands with their arguments handle by the
+    #     # run_command() function.
+    #     commands = [
+    #         {'pause': {'command': 'pause', 'device': device_name}},
+    #         {'stop': {'command': 'stop', 'device': device_name}},
+    #         {'resume': {'command': 'play',
+    #                     'device': device_name,
+    #                     'state': 'PAUSED_PLAYBACK'}},
+    #         {'louder': {'command': 'vol-up', 'device': device_name,
+    #                     'extras': DEFAULT_VOL_INCREMENT}},
+    #         {'volume up': {'command': 'vol-up', 'device': device_name,
+    #                        'extras': DEFAULT_VOL_INCREMENT}},
+    #         {'much louder': {'command': 'vol-up', 'device': device_name,
+    #                          'extras': LOUDER_QUIETER}},
+    #         {'volume down': {'command': 'vol-down', 'device': device_name,
+    #                          'extras': DEFAULT_VOL_INCREMENT}},
+    #         {'quieter': {'command': 'vol-down', 'device': device_name,
+    #                      'extras': DEFAULT_VOL_INCREMENT}},
+    #         {'much quieter': {'command': 'vol-down', 'device': device_name,
+    #                           'extras': LOUDER_QUIETER}},
+    #         {'next': {'command': 'next', 'device': device_name}},
+    #         {'previous': {'command': 'previous', 'device': device_name}},
+    #         {'shuffle on': {'command': 'mode',
+    #                         'device': device_name,
+    #                         'extras': 'shuffle_norepeat'}},
+    #         {'shuffle off': {'command': 'mode',
+    #                          'device': device_name, 'extras': 'normal'}},
+    #         {'repeat on': {'command': 'mode',
+    #                        'device': device_name, 'extras': 'repeat_all'}},
+    #         {'repeat off': {'command': 'mode',
+    #                         'device': device_name, 'extras': 'normal'}}
+    #     ]
 
-        for i in commands:
-            if command in i:
-                self.log.debug('==== command found: {} ===='.format(command))
-                self.log.debug('==== commands dict: {} ===='.format(i))
-                # Execute the requested command based on provided parameters
-                run_command(self, command=i[command]['command'],
-                            speaker=i[command]['device'],
-                            state=i[command].get('state', 'playing'),
-                            extras=i[command].get('extras', None))
+    #     for i in commands:
+    #         if command in i:
+    #             self.log.debug('==== command found: {} ===='.format(command))
+    #             self.log.debug('==== commands dict: {} ===='.format(i))
+    #             # Execute the requested command based on provided parameters
+    #             run_command(self, command=i[command]['command'],
+    #                         speaker=i[command]['device'],
+    #                         state=i[command].get('state', 'playing'),
+    #                         extras=i[command].get('extras', None))
 
     @intent_handler('sonos.what.is.playing.intent')
     def handle_what_is_playing(self, message):
