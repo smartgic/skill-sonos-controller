@@ -25,6 +25,7 @@ class SonosController(MycroftSkill):
         self.nato_dict = None
         self.settings_change_callback = None
         self.code = None
+        self.duck = None
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
@@ -42,12 +43,12 @@ class SonosController(MycroftSkill):
             # Manage Sonos volume when wakeword is detected
             # https://tinyurl.com/244286w8
             self.add_event("recognizer_loop:record_begin",
-                           self.handle_volume_down)
+                           self._handle_volume_down)
             self.add_event("recognizer_loop:record_end",
-                           self.handle_volume_up)
+                           self._handle_volume_up)
 
     @intent_handler('sonos.discovery.intent')
-    def handle_speaker_discovery(self):
+    def _handle_speaker_discovery(self):
         """Handle the Sonos devices discovery triggered by intents
 
         It's only used by the user to get the device names, the main discovery
@@ -63,7 +64,7 @@ class SonosController(MycroftSkill):
                     self.speak(speaker.player_name.lower())
 
     @intent_handler('sonos.service.intent')
-    def handle_subscribed_services(self):
+    def _handle_subscribed_services(self):
         """Handle the subscribed services listing triggerd by intents
 
         It's only used by the user to get the service that are subscribed by
@@ -88,7 +89,7 @@ class SonosController(MycroftSkill):
         return None
 
     @intent_handler('sonos.playlist.intent')
-    def handle_playlist(self, message):
+    def _handle_playlist(self, message):
         """Handle the playlist integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -104,7 +105,7 @@ class SonosController(MycroftSkill):
         search(self, service, speaker, 'playlists', playlist=playlist)
 
     @intent_handler('sonos.album.intent')
-    def handle_album(self, message):
+    def _handle_album(self, message):
         """Handle the album integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -120,7 +121,7 @@ class SonosController(MycroftSkill):
         search(self, service, speaker, 'albums', album=album)
 
     @intent_handler('sonos.track.intent')
-    def handle_track(self, message):
+    def _handle_track(self, message):
         """Handle the track integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -139,7 +140,7 @@ class SonosController(MycroftSkill):
         search(self, service, speaker, 'tracks', artist=artist, track=track)
 
     @intent_handler('sonos.pause.music.intent')
-    def handle_pause_music(self, message):
+    def _handle_pause_music(self, message):
         """Handle pause music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -149,7 +150,7 @@ class SonosController(MycroftSkill):
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.stop.music.intent')
-    def handle_stop_music(self, message):
+    def _handle_stop_music(self, message):
         """Handle stop music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -159,7 +160,7 @@ class SonosController(MycroftSkill):
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.resume.music.intent')
-    def handle_resume_music(self, message):
+    def _handle_resume_music(self, message):
         """Handle resume music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -170,7 +171,7 @@ class SonosController(MycroftSkill):
                     state='PAUSED_PLAYBACK')
 
     @intent_handler('sonos.next.music.intent')
-    def handle_next_music(self, message):
+    def _handle_next_music(self, message):
         """Handle next music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -180,7 +181,7 @@ class SonosController(MycroftSkill):
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.previous.music.intent')
-    def handle_previous_music(self, message):
+    def _handle_previous_music(self, message):
         """Handle previous music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -190,7 +191,7 @@ class SonosController(MycroftSkill):
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.volume.up.intent')
-    def handle_volume_up(self, message):
+    def _handle_volume_up(self, message):
         """Handle volume up command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -201,7 +202,7 @@ class SonosController(MycroftSkill):
                     extras=DEFAULT_VOL_INCREMENT)
 
     @intent_handler('sonos.volume.down.intent')
-    def handle_volume_down(self, message):
+    def _handle_volume_down(self, message):
         """Handle volume down command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -212,7 +213,7 @@ class SonosController(MycroftSkill):
                     extras=DEFAULT_VOL_INCREMENT)
 
     @intent_handler('sonos.volume.louder.intent')
-    def handle_volume_louder(self, message):
+    def _handle_volume_louder(self, message):
         """Handle volume louder command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -223,7 +224,7 @@ class SonosController(MycroftSkill):
                     extras=LOUDER_QUIETER)
 
     @intent_handler('sonos.volume.quieter.intent')
-    def handle_volume_quieter(self, message):
+    def _handle_volume_quieter(self, message):
         """Handle volume quieter command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -234,7 +235,7 @@ class SonosController(MycroftSkill):
                     extras=LOUDER_QUIETER)
 
     @intent_handler('sonos.shuffle.on.intent')
-    def handle_shuffle_on(self, message):
+    def _handle_shuffle_on(self, message):
         """Handle shuffe mode on command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -245,7 +246,7 @@ class SonosController(MycroftSkill):
                     extras='shuffle_norepeat')
 
     @intent_handler('sonos.shuffle.off.intent')
-    def handle_shuffle_off(self, message):
+    def _handle_shuffle_off(self, message):
         """Handle shuffe mode off command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -256,7 +257,7 @@ class SonosController(MycroftSkill):
                     extras='normal')
 
     @intent_handler('sonos.repeat.on.intent')
-    def handle_repeat_on(self, message):
+    def _handle_repeat_on(self, message):
         """Handle repeat mode on command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -267,7 +268,7 @@ class SonosController(MycroftSkill):
                     extras='repeat_all')
 
     @intent_handler('sonos.repeat.off.intent')
-    def handle_repeat_off(self, message):
+    def _handle_repeat_off(self, message):
         """Handle repeat mode off command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -278,7 +279,7 @@ class SonosController(MycroftSkill):
                     extras='normal')
 
     @intent_handler('sonos.what.is.playing.intent')
-    def handle_what_is_playing(self, message):
+    def _handle_what_is_playing(self, message):
         """Handle what is playing command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
