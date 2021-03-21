@@ -145,7 +145,7 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
-        run_command(self, command='stop',
+        run_command(self, command='pause',
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.stop.music.intent')
