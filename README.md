@@ -30,8 +30,8 @@ Before using a music service, **make sure that you linked** your service account
 * "discover sonos devices"
 * "what is playing"
 * "what are my music services"
-* "much louder"
-* "much quieter"
+* "volume louder"
+* "volume quieter"
 * "volume down"
 * "volume up"
 * "quieter"
@@ -88,3 +88,4 @@ Once you successfully logged to Spotify, enter the same code as provided before 
 #sound
 #smarthome
 #spotify
+#deezer
