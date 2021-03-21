@@ -257,8 +257,10 @@ class SonosController(MycroftSkill):
     @intent_handler('sonos.what.is.playing.intent')
     def handle_what_is_playing(self, message):
         speaker = message.data.get('speaker')
-        self.log.debug('====== {}'.format(speaker))
-        get_track(self, speaker)
+        device_name = None
+        if speaker:
+            device_name = check_speaker(self, speaker)
+        get_track(self, device_name)
 
     def _entity(self):
         """Register the Padatious entitiies
