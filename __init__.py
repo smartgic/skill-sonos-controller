@@ -140,80 +140,150 @@ class SonosController(MycroftSkill):
 
     @intent_handler('sonos.pause.music.intent')
     def handle_pause_music(self, message):
+        """Handle pause music command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='stop',
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.stop.music.intent')
     def handle_stop_music(self, message):
+        """Handle stop music command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='stop',
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.resume.music.intent')
     def handle_resume_music(self, message):
+        """Handle resume music command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='play',
                     speaker=message.data.get('speaker'),
                     state='PAUSED_PLAYBACK')
 
     @intent_handler('sonos.next.music.intent')
     def handle_next_music(self, message):
+        """Handle next music command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='next',
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.previous.music.intent')
     def handle_previous_music(self, message):
+        """Handle previous music command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='previous',
                     speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.volume.up.intent')
     def handle_volume_up(self, message):
+        """Handle volume up command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='vol-up',
                     speaker=message.data.get('speaker'),
                     extras=DEFAULT_VOL_INCREMENT)
 
     @intent_handler('sonos.volume.down.intent')
     def handle_volume_down(self, message):
+        """Handle volume down command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='vol-down',
                     speaker=message.data.get('speaker'),
                     extras=DEFAULT_VOL_INCREMENT)
 
     @intent_handler('sonos.volume.louder.intent')
     def handle_volume_louder(self, message):
+        """Handle volume louder command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='vol-up',
                     speaker=message.data.get('speaker'),
                     extras=LOUDER_QUIETER)
 
     @intent_handler('sonos.volume.quieter.intent')
     def handle_volume_quieter(self, message):
+        """Handle volume quieter command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='vol-down',
                     speaker=message.data.get('speaker'),
                     extras=LOUDER_QUIETER)
 
     @intent_handler('sonos.shuffle.on.intent')
     def handle_shuffle_on(self, message):
+        """Handle shuffe mode on command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='mode',
                     speaker=message.data.get('speaker'),
                     extras='shuffle_norepeat')
 
     @intent_handler('sonos.shuffle.off.intent')
     def handle_shuffle_off(self, message):
+        """Handle shuffe mode off command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='mode',
                     speaker=message.data.get('speaker'),
                     extras='normal')
 
     @intent_handler('sonos.repeat.on.intent')
     def handle_repeat_on(self, message):
+        """Handle repeat mode on command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='mode',
                     speaker=message.data.get('speaker'),
                     extras='repeat_all')
 
     @intent_handler('sonos.repeat.off.intent')
     def handle_repeat_off(self, message):
+        """Handle repeat mode off command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         run_command(self, command='mode',
                     speaker=message.data.get('speaker'),
                     extras='normal')
 
     @intent_handler('sonos.what.is.playing.intent')
     def handle_what_is_playing(self, message):
+        """Handle what is playing command on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
         get_track(self, message.data.get('speaker'))
 
     def _entity(self):
