@@ -3,7 +3,7 @@
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, get_state, \
     get_category, subscribed_services, check_speaker, check_service, \
-    run_command, translation, get_track
+    run_command, get_translation, get_track
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
@@ -25,7 +25,6 @@ class SonosController(MycroftSkill):
         self.nato_dict = None
         self.settings_change_callback = None
         self.code = None
-        self.translation = None
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
@@ -42,25 +41,10 @@ class SonosController(MycroftSkill):
         if self.duck:
             # Manage Sonos volume when wakeword is detected
             # https://tinyurl.com/244286w8
-            self.add_event("recognizer_loop:record_begin", self._volume_down)
-            self.add_event("recognizer_loop:record_end", self._volume_up)
-
-        # Translate command values from spoken language to English
-        self.translation = self.translate_namedvalues('commands')
-
-    def _volume_down(self):
-        """Reduce volume on Sonos when "recognizer_loop:wakeword" is
-        detected in the bus.
-        """
-        run_command(self, command='vol-down', speaker=None,
-                    extras=DEFAULT_VOL_INCREMENT)
-
-    def _volume_up(self):
-        """Raise volume on Sonos when "recognizer_loop:record_end" is
-        detected in the bus.
-        """
-        run_command(self, command='vol-up', speaker=None,
-                    extras=DEFAULT_VOL_INCREMENT)
+            self.add_event("recognizer_loop:record_begin",
+                           self.handle_volume_down)
+            self.add_event("recognizer_loop:record_end",
+                           self.handle_volume_up)
 
     @intent_handler('sonos.discovery.intent')
     def handle_speaker_discovery(self):
@@ -154,113 +138,83 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'tracks', artist=artist, track=track)
 
-    # @intent_handler('sonos.command.intent')
-    # def handle_command(self, message):
-    #     """Handle the commands to pass to Sonos devices triggered by intents
+    @intent_handler('sonos.pause.music.intent')
+    def handle_pause_music(self, message):
+        run_command(self, command='stop',
+                    speaker=message.data.get('speaker'))
 
-    #     The list of the available commands is registered withing the
-    #     command.entity file.
+    @intent_handler('sonos.stop.music.intent')
+    def handle_stop_music(self, message):
+        run_command(self, command='stop',
+                    speaker=message.data.get('speaker'))
 
-    #     :param message: List of registered utterances
-    #     :type message: dict
-    #     """
-    #     get_command = message.data.get('command')
-    #     speaker = message.data.get('speaker')
-    #     device_name = None
-    #     command = None
+    @intent_handler('sonos.resume.music.intent')
+    def handle_resume_music(self, message):
+        run_command(self, command='play',
+                    speaker=message.data.get('speaker'),
+                    state='PAUSED_PLAYBACK')
 
-    #     self.log.debug('==== Entering in handle_command() ====')
-    #     self.log.debug('==== get_command: {} ===='.format(get_command))
-    #     self.log.debug('==== speaker: {} ===='.format(speaker))
-    #     self.log.debug('==== message dict: {} ===='.format(message))
+    @intent_handler('sonos.next.music.intent')
+    def handle_next_music(self, message):
+        run_command(self, command='next',
+                    speaker=message.data.get('speaker'))
 
-    #     if speaker:
-    #         self.log.debug('==== speaker is defined ====')
-    #         # Check if the speaker exists before running the command
-    #         device_name = check_speaker(self, speaker)
-    #         self.log.debug('==== device_name: {} ===='.format(device_name))
+    @intent_handler('sonos.previous.music.intent')
+    def handle_previous_music(self, message):
+        run_command(self, command='previous',
+                    speaker=message.data.get('speaker'))
 
-    #     # Translate command values from spoken language to English
-    #     translation = self.translate_namedvalues('commands')
-    #     for vocal, translate in translation.items():
-    #         if vocal == get_command:
-    #             command = translate
+    @intent_handler('sonos.volume.up.intent')
+    def handle_volume_up(self, message):
+        run_command(self, command='vol-up',
+                    speaker=message.data.get('speaker'),
+                    extras=DEFAULT_VOL_INCREMENT)
 
-    #     self.log.debug('==== command: {} ===='.format(command))
+    @intent_handler('sonos.volume.down.intent')
+    def handle_volume_down(self, message):
+        run_command(self, command='vol-down',
+                    speaker=message.data.get('speaker'),
+                    extras=DEFAULT_VOL_INCREMENT)
 
-    #     # List of supported commands with their arguments handle by the
-    #     # run_command() function.
-    #     commands = [
-    #         {'pause': {'command': 'pause', 'device': device_name}},
-    #         {'stop': {'command': 'stop', 'device': device_name}},
-    #         {'resume': {'command': 'play',
-    #                     'device': device_name,
-    #                     'state': 'PAUSED_PLAYBACK'}},
-    #         {'louder': {'command': 'vol-up', 'device': device_name,
-    #                     'extras': DEFAULT_VOL_INCREMENT}},
-    #         {'volume up': {'command': 'vol-up', 'device': device_name,
-    #                        'extras': DEFAULT_VOL_INCREMENT}},
-    #         {'much louder': {'command': 'vol-up', 'device': device_name,
-    #                          'extras': LOUDER_QUIETER}},
-    #         {'volume down': {'command': 'vol-down', 'device': device_name,
-    #                          'extras': DEFAULT_VOL_INCREMENT}},
-    #         {'quieter': {'command': 'vol-down', 'device': device_name,
-    #                      'extras': DEFAULT_VOL_INCREMENT}},
-    #         {'much quieter': {'command': 'vol-down', 'device': device_name,
-    #                           'extras': LOUDER_QUIETER}},
-    #         {'next': {'command': 'next', 'device': device_name}},
-    #         {'previous': {'command': 'previous', 'device': device_name}},
-    #     ]
+    @intent_handler('sonos.volume.louder.intent')
+    def handle_volume_louder(self, message):
+        run_command(self, command='vol-up',
+                    speaker=message.data.get('speaker'),
+                    extras=LOUDER_QUIETER)
 
-    #     for i in commands:
-    #         if command in i:
-    #             self.log.debug('==== command found: {} ===='.format(command))
-    #             self.log.debug('==== commands dict: {} ===='.format(i))
-    #             # Execute the requested command based on provided parameters
-    #             run_command(self, command=i[command]['command'],
-    #                         speaker=i[command]['device'],
-    #                         state=i[command].get('state', 'playing'),
-    #                         extras=i[command].get('extras', None))
+    @intent_handler('sonos.volume.quieter.intent')
+    def handle_volume_quieter(self, message):
+        run_command(self, command='vol-down',
+                    speaker=message.data.get('speaker'),
+                    extras=LOUDER_QUIETER)
 
-    @intent_handler('sonos.shuffle.intent')
-    def handle_shuffle(self, message):
-        speaker = message.data.get('speaker')
-        mode = 'normal'
+    @intent_handler('sonos.shuffle.on.intent')
+    def handle_shuffle_on(self, message):
+        run_command(self, command='mode',
+                    speaker=message.data.get('speaker'),
+                    extras='shuffle_norepeat')
 
-        device_name = None
-        if speaker:
-            device_name = check_speaker(self, speaker)
+    @intent_handler('sonos.shuffle.off.intent')
+    def handle_shuffle_off(self, message):
+        run_command(self, command='mode',
+                    speaker=message.data.get('speaker'),
+                    extras='normal')
 
-        state = None
-        state = translation(self, message.data.get('state'))
-        if state == 'enable':
-            mode = 'shuffle_norepeat'
+    @intent_handler('sonos.repeat.on.intent')
+    def handle_repeat_on(self, message):
+        run_command(self, command='mode',
+                    speaker=message.data.get('speaker'),
+                    extras='repeat_all')
 
-        run_command(self, command='mode', speaker=device_name, extras=mode)
-
-    @intent_handler('sonos.repeat.intent')
-    def handle_repeat(self, message):
-        speaker = message.data.get('speaker')
-        mode = 'normal'
-
-        device_name = None
-        if speaker:
-            device_name = check_speaker(self, speaker)
-
-        state = None
-        state = translation(self, message.data.get('state'))
-        if state == 'enable':
-            mode = 'repeat_all'
-
-        run_command(self, command='mode', speaker=device_name, extras=mode)
+    @intent_handler('sonos.repeat.off.intent')
+    def handle_repeat_off(self, message):
+        run_command(self, command='mode',
+                    speaker=message.data.get('speaker'),
+                    extras='normal')
 
     @intent_handler('sonos.what.is.playing.intent')
     def handle_what_is_playing(self, message):
-        speaker = message.data.get('speaker')
-        device_name = None
-        if speaker:
-            device_name = check_speaker(self, speaker)
-        get_track(self, device_name)
+        get_track(self, message.data.get('speaker'))
 
     def _entity(self):
         """Register the Padatious entitiies

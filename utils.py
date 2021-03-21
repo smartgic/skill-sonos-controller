@@ -217,7 +217,8 @@ def run_command(self, command, speaker, state='playing', extras=None):
     """
     try:
         if speaker:
-            device = by_name(speaker)
+            device_name = check_speaker(self, speaker)
+            device = by_name(device_name)
             if get_state(self, device.player_name) == state.upper():
                 if command in ('vol-up', 'vol-down'):
                     _volume(self, command, device, extras)
@@ -269,7 +270,8 @@ def get_track(self, speaker):
     """
     try:
         if speaker:
-            device = by_name(speaker)
+            device_name = check_speaker(self, speaker)
+            device = by_name(device_name)
             if get_state(self, device.player_name) == 'PLAYING':
                 self.speak_dialog('sonos.playing', data={
                     'title': device.get_current_track_info()['title'],
@@ -301,10 +303,3 @@ def _mode(self, speaker, value):
         speaker.play_mode = value.upper()
     except exceptions.SoCoException as err:
         self.log.error(err)
-
-
-def translation(self, utterances):
-    for vocal, translate in self.translation.items():
-        if vocal == utterances:
-            return translate
-        return False
