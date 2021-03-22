@@ -12,6 +12,7 @@ Control Sonos speakers with music services support such as Spotify
 This skill interacts with your Sonos devices and allows you to play music from different music sources such as:
 * Local library
 * Spotify *(account required)*
+* Deezer *(soon, account required)*
 
 Before using a music service, **make sure that you linked** your service account to your Sonos devices by using the Sonos application:
 
@@ -32,7 +33,7 @@ Before using a music service, **make sure that you linked** your service account
 * "what are my music services"
 * "volume louder"
 * "volume quieter"
-* "volume down"
+* "volume down on living room"
 * "volume up"
 * "quieter"
 * "louder"
@@ -41,8 +42,8 @@ Before using a music service, **make sure that you linked** your service account
 * "resume music"
 * "shuffle off"
 * "shuffle on"
-* "repeat off"
-* "repeat on"
+* "disable repeat mode"
+* "enable repeat mode"
 * "next music"
 * "previous music"
 
