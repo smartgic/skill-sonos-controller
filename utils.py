@@ -39,6 +39,7 @@ def authentication(self):
                 # Only retrieve the code and not the register URL
                 url, link_code = provider.device_or_app_link_auth_part1()
                 payload = {'link': url, 'extras': {'code': link_code}}
+                self.log.debug('=========== {}'.format(payload))
                 req = requests.post(URL_SHORTENER, json=payload)
                 url_shorted = req.json()['link']
 
