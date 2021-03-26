@@ -22,4 +22,4 @@ DEFAULT_VOL_INCREMENT = 10
 LOUDER_QUIETER = 30
 
 # Link to the URL shortener
-URL_SHORTENER = 'https://sonos.smartgic.io/create'
+URL_SHORTENER = 'https://sonos.smartgic.io'
