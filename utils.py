@@ -3,12 +3,13 @@ and are called by the handle_* methods from __init__.py
 """
 
 import os
+import requests
 from soco import exceptions
 from soco import discover
 from soco.discovery import by_name
 from soco.music_library import MusicLibrary
 from soco.music_services import MusicService
-from .constants import SUPPORTED_LIBRARY_CATEGORIES, \
+from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
 
 
@@ -36,11 +37,15 @@ def authentication(self):
         elif not os.path.isfile(token_file):
             try:
                 # Only retrieve the code and not the register URL
-                _, link_code = provider.device_or_app_link_auth_part1()
+                url, link_code = provider.device_or_app_link_auth_part1()
+                payload = {'link': url, 'extras': {'code': link_code}}
+                req = requests.post(URL_SHORTENER, json=payload)
+                url_shorted = req.json()['link']
+
                 # Map the code with NATO
                 data = {"slash": '. '.join(
-                    map(self.nato_dict.get, link_code)) + '.'}
-                self.log.info('sonos link code: {}'.format(link_code))
+                    map(self.nato_dict.get, url_shorted)) + '.'}
+                self.log.info('sonos link code: {}'.format(url_shorted))
                 self.speak_dialog('sonos.link_code', data={
                     'link_code': data})
             except exceptions.SoCoException as err:
