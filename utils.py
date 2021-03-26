@@ -16,29 +16,29 @@ def authentication(self):
     """Some music services require an authentication.
     SoCo is currently looking to bring back the music service which will make
     this function disappears in the future.
-    https://github.com/SoCo/SoCo/pull/763s
+    https://github.com/SoCo/SoCo/pull/763
 
     :raises SoCoException: Raise SoCoException
     """
-    # This path is required by SoCo Python library and can't be changed
+    # This path is required by SoCo Python library and can't be changed.
     token_file = os.getenv('HOME') + TOKEN_FILE
 
     if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
         provider = MusicService(self.service.title())
 
-        # self.code is an option from available fomr home.mycroft.ai
         if not os.path.isfile(token_file) and self.code != '':
             try:
                 # Retrieve the link code base on the URL code configured
-                # on home.mycroft.ai
+                # on home.mycroft.ai.
                 url_path = '{}/json/{}'.format(URL_SHORTENER, self.code)
                 req = requests.get(url_path)
                 link_code = req.json()['extras']['code']
 
-                # SoCo part2 authentication
+                # SoCo part2 authentication mechanism.
                 provider.device_or_app_link_auth_part2(link_code)
 
-                # Delete the shortened URL from the database.
+                # Delete the shortened URL from the database once the
+                # authentication is successfully done.
                 req = requests.delete(URL_SHORTENER + '/' + self.code)
 
                 self.speak_dialog('sonos.authenticated')
