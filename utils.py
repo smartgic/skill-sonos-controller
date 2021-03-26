@@ -30,7 +30,11 @@ def authentication(self):
         # self.code is an option from available fomr home.mycroft.ai
         if not os.path.isfile(token_file) and self.code != '':
             try:
-                provider.device_or_app_link_auth_part2(self.code)
+                url_path = '{}/json/{}'.format(URL_SHORTENER, self.code)
+                req = requests.get(url_path)
+                link_code = req.json()['extras']['code']
+                provider.device_or_app_link_auth_part2(link_code)
+                req = requests.delete(URL_SHORTENER + '/' + self.code)
                 self.speak_dialog('sonos.authenticated')
             except exceptions.SoCoException as err:
                 self.log.error(err)
@@ -39,7 +43,7 @@ def authentication(self):
                 # Only retrieve the code and not the register URL
                 url, link_code = provider.device_or_app_link_auth_part1()
                 payload = {'link': url, 'extras': {'code': link_code}}
-                req = requests.post(URL_SHORTENER, json=payload)
+                req = requests.post(URL_SHORTENER + '/create', json=payload)
                 url_shorted = req.json()['link']
 
                 # Map the code with NATO
