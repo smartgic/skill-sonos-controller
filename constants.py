@@ -22,4 +22,8 @@ DEFAULT_VOL_INCREMENT = 10
 LOUDER_QUIETER = 30
 
 # Link to the URL shortener
+# This constant is only used by utils.authentication() method to
+# provide support for the music services authentication.
+# These services generate URL that are too long to be spoken by Mycrof
+# which is why an URL shortener service is used.
 URL_SHORTENER = 'https://sonos.smartgic.io'
