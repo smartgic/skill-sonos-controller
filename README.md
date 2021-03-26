@@ -12,7 +12,7 @@ Control Sonos speakers with music services support such as Spotify
 This skill interacts with your Sonos devices and allows you to play music from different music sources such as:
 * Local library
 * Spotify *(account required)*
-* Deezer *(soon, account required)*
+* Deezer *(account required)*
 
 Before using a music service, **make sure that you linked** your service account to your Sonos devices by using the Sonos application:
 
