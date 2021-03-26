@@ -9,7 +9,7 @@ from soco import discover
 from soco.discovery import by_name
 from soco.music_library import MusicLibrary
 from soco.music_services import MusicService
-from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER \
+from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
 
 
