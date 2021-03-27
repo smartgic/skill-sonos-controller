@@ -30,7 +30,7 @@ def authentication(self):
             try:
                 # Retrieve the link code based on the URL code configured
                 # on home.mycroft.ai.
-                req = requests.get(URL_SHORTENER + '/info/' + self.code)
+                req = requests.get(URL_SHORTENER + '/' + self.code + '/info')
                 if 'extras' not in req.json():
                     self.speak_dialog('error.code', data={
                                       'code': self.code})
