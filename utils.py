@@ -30,7 +30,7 @@ def authentication(self):
             try:
                 # Retrieve the link code base on the URL code configured
                 # on home.mycroft.ai.
-                req = requests.get(URL_SHORTENER + '/' + self.code)
+                req = requests.get(URL_SHORTENER + '/info/' + self.code)
                 link_code = req.json()['extras']['code']
 
                 # SoCo part2 authentication mechanism.
