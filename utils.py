@@ -28,9 +28,13 @@ def authentication(self):
 
         if not os.path.isfile(token_file) and self.code != '':
             try:
-                # Retrieve the link code base on the URL code configured
+                # Retrieve the link code based on the URL code configured
                 # on home.mycroft.ai.
                 req = requests.get(URL_SHORTENER + '/info/' + self.code)
+                if 'extras' not in req.json():
+                    self.speak_dialog('error.code', data={
+                                      'code': self.code})
+                    return
                 link_code = req.json()['extras']['code']
 
                 # SoCo part2 authentication mechanism.
