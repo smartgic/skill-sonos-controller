@@ -133,31 +133,82 @@ def search_album(self, data):
 
         if data['service'] == 'music library':
             albums = {}
-            for album in data['provider'].get_albums(
-                    search_term=data['album'],
-                    complete_result=True):
-                albums[album.to_dict()['title']] = album.to_dict()[
-                    'resources'][0]['uri']
-            if albums:
-                picked = choice(list(albums.keys()))
-                device.add_uri_to_queue(albums[picked])
-                title = picked
+            # If artist has been specify then we are using the
+            # get_album_artists() method with subcategories argument.
+            if data['artist']:
+                for album in data['provider'].get_album_artists(
+                        search_term=data['album'],
+                        subcategories=[data['artist']],
+                        complete_result=True):
+                    albums[album.to_dict()['title']] = album.to_dict()[
+                        'resources'][0]['uri']
+                if albums:
+                    picked = choice(list(albums.keys()))
+                    device.add_uri_to_queue(albums[picked])
+                    title = picked
+                else:
+                    self.speak_dialog('error.album.artist', data={
+                        'album': data['album'], 'artist': data['artists']})
+                    return
             else:
-                self.speak_dialog('error.album', data={
-                    'album': data['album']})
-                return
+                for album in data['provider'].get_albums(
+                        search_term=data['album'],
+                        complete_result=True):
+                    albums[album.to_dict()['title']] = album.to_dict()[
+                        'resources'][0]['uri']
+                if albums:
+                    picked = choice(list(albums.keys()))
+                    device.add_uri_to_queue(albums[picked])
+                    title = picked
+                else:
+                    self.speak_dialog('error.album', data={
+                        'album': data['album']})
+                    return
         else:
             albums = data['provider'].search('albums', data['album'])
-            picked = choice(albums)
-            device.add_to_queue(picked)
-            title = picked.title
+            if data['artist']:
+                found = False
+                for album in albums:
+                    item_id = unquote(
+                        unquote(re.sub('^0fffffff', '', album.item_id)))
+                    meta = data['provider'].get_extended_metadata(item_id)
+                    for key, value in meta.items():
+                        if key == 'mediaCollection':
+                            for info in value.items():
+                                if info[1] == data['artist'].title():
+                                    device.add_to_queue(album)
+                                    title = album.title
+                                    found = True
+                                    break
+                        if found:
+                            break
+                    if found:
+                        break
+                else:
+                    self.speak_dialog('error.album.artist', data={
+                        'album': data['album'],
+                        'artist': data['artist']})
+            else:
+                if albums:
+                    picked = choice(albums)
+                    device.add_to_queue(picked)
+                    title = picked.title
+                else:
+                    self.speak_dialog('error.album', data={
+                        'album': data['album']})
+                    return
 
         # Play the picked album
         device.play_from_queue(0)
 
-        self.speak_dialog('sonos.album', data={
-            'album': title, 'service': data['service'],
-            'speaker': data['speaker']})
+        if data['artist']:
+            self.speak_dialog('sonos.album.artist', data={
+                'album': title, 'service': data['service'],
+                'speaker': data['speaker'], 'artist': data['artist']})
+        else:
+            self.speak_dialog('sonos.album', data={
+                'album': title, 'service': data['service'],
+                'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)
 
@@ -178,6 +229,7 @@ def search_track(self, data):
         # Clear the current content playing
         device = by_name(data['speaker'])
         device.clear_queue()
+
         if data['service'] == 'music library':
             # If artist has been specify then we are using the
             # search_track() method.

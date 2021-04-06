@@ -1,2 +1,4 @@
 joue l'album {album} (sur) {speaker}
+joue l'album {album} (de | par) {artist} (sur) {speaker}
 joue l'album {album} depuis {service} (sur) {speaker}
+joue l'album {album} (de | par) {artist} depuis {service} (sur) {speaker}

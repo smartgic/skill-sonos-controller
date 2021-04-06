@@ -27,6 +27,8 @@ Before using a music service, **make sure that you linked** your service account
 * "play soundtrack playlist on dining room"
 * "play soundtrack playlist from spotify on dining room"
 * "play soundtrack album on dining room"
+* "play back to front album by lionel richie on dining room"
+* "play back to front album by lionel richie from spotify on dining room"
 * "play soundtrack album from spotify on dining room"
 * "discover sonos devices"
 * "what is playing"
