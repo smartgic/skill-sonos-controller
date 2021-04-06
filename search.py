@@ -136,7 +136,6 @@ def search_album(self, data):
             # If artist has been specify then we are using the
             # get_album_artists() method with subcategories argument.
             if data['artist']:
-                self.log.debug('========== {}'.format(data['artist']))
                 for album in data['provider'].get_album_artists(
                         search_term=data['album'],
                         subcategories=[data['artist']],
@@ -168,7 +167,6 @@ def search_album(self, data):
         else:
             albums = data['provider'].search('albums', data['album'])
             if data['artist']:
-                self.log.debug('========== {}'.format(data['artist']))
                 found = False
                 for album in albums:
                     item_id = unquote(

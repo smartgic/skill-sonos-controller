@@ -113,12 +113,15 @@ class SonosController(MycroftSkill):
         :type message: dict
         """
         service = self.service
+        artist = None
         album = message.data.get('album')
         speaker = message.data.get('speaker')
         if message.data.get('service'):
             service = check_service(self, message.data.get('service'))
+        if message.data.get('artist'):
+            artist = message.data.get('artist')
 
-        search(self, service, speaker, 'albums', album=album)
+        search(self, service, speaker, 'albums', artist=artist, album=album)
 
     @intent_handler('sonos.track.intent')
     def _handle_track(self, message):
