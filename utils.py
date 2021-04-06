@@ -256,7 +256,11 @@ def run_command(self, command, speaker, state='playing', extras=None):
                     elif command in 'mode':
                         _mode(self, device, extras)
                     else:
-                        eval('device.{}()'.format(command))
+                        if len(device.group.members) > 1:
+                            coordinator = device.group.coordinator
+                            eval('{}.{}()'.format(coordinator, command))
+                        else:
+                            eval('device.{}()'.format(command))
     except exceptions.SoCoException as err:
         self.log.error(err)
 
