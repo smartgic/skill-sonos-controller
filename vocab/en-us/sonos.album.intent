@@ -1,4 +1,4 @@
 play {album} album (on | in) {speaker}
 play {album} album from {service} (on | in) {speaker}
-play {album} by {artist} (on | in) {speaker}
-play {album} by {artist} from {service} (on | in) {speaker}
+play {album} album by {artist} (on | in) {speaker}
+play {album} album by {artist} from {service} (on | in) {speaker}
