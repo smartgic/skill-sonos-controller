@@ -259,7 +259,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                         if len(device.group.members) > 1:
                             coordinator = device.group.coordinator.player_name
                             if coordinator != device.player_name:
-                                eval('{}.{}()'.format(coordinator, command))
+                                eval('device.{}()'.format(command))
                         else:
                             eval('device.{}()'.format(command))
     except exceptions.SoCoException as err:
