@@ -256,6 +256,11 @@ def run_command(self, command, speaker, state='playing', extras=None):
                     elif command in 'mode':
                         _mode(self, device, extras)
                     else:
+                        """If the speaker if part of a group them we are
+                        retrieving the coordinator one. This will avoid
+                        the "can only be called/used on the coordinator"
+                        error message.
+                        """
                         if len(device.group.members) > 1:
                             coordinator = device.group.coordinator.player_name
                             if coordinator == device.player_name:
