@@ -30,7 +30,7 @@ class SonosController(MycroftSkill):
         # Override SoCo logging level to match Mycroft configuration
         config = Configuration.get(remote=False)
         logging.getLogger(__name__).setLevel(config.get('log_level', 'INFO'))
-        self.log.debug(config.get('log_level'))
+        self.log.info(config.get('log_level'))
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
