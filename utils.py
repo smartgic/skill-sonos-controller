@@ -13,8 +13,6 @@ from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
 
 
-logging.getLogger('soco').setLevel(logging.INFO)
-
 def authentication(self):
     """Some music services require an authentication.
     SoCo is currently looking to bring back the music service which will make
@@ -79,6 +77,7 @@ def discovery(self):
 
     :raises SoCoException: Raise SoCoException
     """
+    logging.getLogger('soco').setLevel(logging.INFO)
     try:
         self.speakers = discover()
     except exceptions.SoCoException as err:
