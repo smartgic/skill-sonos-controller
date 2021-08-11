@@ -16,7 +16,8 @@ from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
 
 # Override SoCo logging level to match Mycroft configuration
 config = Configuration.get(remote=False)
-logging.getLogger(__name__).setLevel(config.get('log_level', 'INFO'))
+#logging.getLogger(__name__).setLevel(config.get('log_level', 'INFO'))
+logging.basicConfig(level=logging.INFO)
 
 def authentication(self):
     """Some music services require an authentication.
