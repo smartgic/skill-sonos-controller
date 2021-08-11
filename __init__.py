@@ -1,18 +1,15 @@
 """Sonos controller entrypoint skill
 """
 from mycroft import MycroftSkill, intent_handler
-from .utils import authentication, discovery, get_state, \
-    get_category, subscribed_services, check_speaker, check_service, \
-    run_command, get_track
+from .utils import authentication, discovery, subscribed_services, \
+    check_service, run_command, get_track
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
-
 
 class SonosController(MycroftSkill):
     """This is the place where all the magic happens for the Sonos
     controller skill.
     """
-
     def __init__(self):
         """Constructor method
         """
