@@ -1,7 +1,6 @@
 """This file contains functions related to extra operations
 and are called by the handle_* methods from __init__.py
 """
-import logging
 import os
 import requests
 from soco import exceptions
@@ -77,7 +76,6 @@ def discovery(self):
 
     :raises SoCoException: Raise SoCoException
     """
-    logging.getLogger('soco').setLevel(logging.INFO)
     try:
         self.speakers = discover()
     except exceptions.SoCoException as err:
