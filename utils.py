@@ -16,7 +16,7 @@ from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
 
 # Override SoCo logging level to match Mycroft configuration
 config = Configuration.get(remote=False)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('soco')
 logger.setLevel(logging.INFO)
 
 def authentication(self):
