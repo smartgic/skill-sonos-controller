@@ -1,8 +1,6 @@
 """Sonos controller entrypoint skill
 """
-import logging
 from mycroft import MycroftSkill, intent_handler
-from mycroft.configuration import Configuration
 from .utils import authentication, discovery, subscribed_services, \
     check_service, run_command, get_track
 from .search import search
@@ -26,10 +24,6 @@ class SonosController(MycroftSkill):
         self.settings_change_callback = None
         self.code = None
         self.duck = None
-
-        # Override SoCo logging level to match Mycroft configuration
-        config = Configuration.get(remote=False)
-        logging.getLogger(__name__).setLevel(config.get('log_level', 'INFO'))
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
