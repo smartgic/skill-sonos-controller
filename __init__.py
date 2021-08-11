@@ -8,6 +8,7 @@ from .utils import authentication, discovery, subscribed_services, \
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
+logging.getLogger('soco').setLevel(logging.INFO)
 
 class SonosController(MycroftSkill):
     """This is the place where all the magic happens for the Sonos
@@ -29,7 +30,7 @@ class SonosController(MycroftSkill):
 
         # Override SoCo logging level to match Mycroft configuration
         config = Configuration.get(remote=False)
-        logging.getLogger('soco').setLevel(logging.INFO)
+
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
