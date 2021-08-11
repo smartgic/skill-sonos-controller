@@ -2,7 +2,6 @@
 """
 import logging
 from mycroft import MycroftSkill, intent_handler
-from mycroft.configuration import Configuration
 from .utils import authentication, discovery, subscribed_services, \
     check_service, run_command, get_track
 from .search import search
@@ -27,11 +26,9 @@ class SonosController(MycroftSkill):
         self.code = None
         self.duck = None
 
-        # Override SoCo logging level to match Mycroft configuration
-        config = Configuration.get(remote=False)
-        logging.getLogger('soco.discovery').setLevel(logging.INFO)
-        logging.getLogger('soco.services').setLevel(logging.INFO)
-
+        # Override SoCo logging level for discovery and services
+        logging.getLogger('soco.discovery').setLevel(logging.WARN)
+        logging.getLogger('soco.services').setLevel(logging.WARN)
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
