@@ -1,10 +1,8 @@
 """This file contains functions related to extra operations
 and are called by the handle_* methods from __init__.py
 """
-import logging
 import os
 import requests
-from mycroft.configuration import Configuration
 from soco import exceptions
 from soco import discover
 from soco.discovery import by_name
@@ -13,11 +11,6 @@ from soco.music_services import MusicService
 from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
 
-
-# Override SoCo logging level to match Mycroft configuration
-config = Configuration.get(remote=False)
-logger = logging.getLogger('soco')
-logger.setLevel(logging.INFO)
 
 def authentication(self):
     """Some music services require an authentication.
