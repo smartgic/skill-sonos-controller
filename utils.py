@@ -12,6 +12,20 @@ from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
 
 
+def ping(self):
+    """Check if URL shortener service is up and running. This will help to
+    better handle error in case the service is down. Check GitHub issue for
+    more information: https://tinyurl.com/57fp6dde
+
+    :raises ConnectionError: Raise ConnectionError
+    """
+    try:
+        if requests.get(URL_SHORTENER).status_code == 200:
+            return True
+    except requests.ConnectionError as err:
+        self.log.error(err)
+        return False
+
 def authentication(self):
     """Some music services require an authentication.
     SoCo is currently looking to bring back the music service which will make
@@ -26,7 +40,7 @@ def authentication(self):
     if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
         provider = MusicService(self.service.title())
 
-        if not os.path.isfile(token_file) and self.code != '':
+        if not os.path.isfile(token_file) and self.code != '' and ping(self):
             try:
                 # Retrieve the link code based on the URL code configured
                 # on home.mycroft.ai.
@@ -47,7 +61,7 @@ def authentication(self):
                 self.speak_dialog('sonos.authenticated')
             except exceptions.SoCoException as err:
                 self.log.error(err)
-        elif not os.path.isfile(token_file):
+        elif not os.path.isfile(token_file) and ping(self):
             try:
                 # Only retrieve the code and not the register URL
                 url, link_code = provider.device_or_app_link_auth_part1()
