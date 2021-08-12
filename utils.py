@@ -22,6 +22,8 @@ def ping(self):
     try:
         if requests.get(URL_SHORTENER).status_code == 200:
             return True
+        self.log.error('url shortener service is not reachable')
+        return False
     except requests.ConnectionError as err:
         self.log.error(err)
         return False
