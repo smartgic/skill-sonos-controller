@@ -1,0 +1,7 @@
+fai partire la playlist {playlist} (su | in ) ({speaker})
+fai partire da {service} la playlist {playlist} (su | in ) ({speaker})
+fai partire la playlist {playlist} da {service} (su | in ) ({speaker})
+riproduci (la | ) playlist {playlist} (su | in ) ({speaker})
+riproduci da {service} (la | ) playlist {playlist} (su | in ) ({speaker})
+riproduci (la | ) playlist {playlist} da {service} (su | in ) ({speaker})
+
