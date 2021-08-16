@@ -1,0 +1,4 @@
+riproduci l'album {album} (su | in) {speaker}
+riproduci l'album {album} da {service} (su | in) {speaker}
+riproduci l'album {album} di {artist} (su | in) {speaker}
+riproduci l'album {album} di {artist} da {service} (su | in) {speaker}
