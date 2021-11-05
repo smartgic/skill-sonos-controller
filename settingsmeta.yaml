@@ -15,3 +15,7 @@ skillMetadata:
           type: checkbox
           label: Reduce volume level temporarily when speaking
           value: "true"
+        - name: confirmation
+          type: checkbox
+          label: Receive playing confirmation
+          value: "true"

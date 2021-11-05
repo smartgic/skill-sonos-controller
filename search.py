@@ -108,9 +108,10 @@ def search_playlist(self, data):
         # Play the picked playlist
         device.play_from_queue(0)
 
-        self.speak_dialog('sonos.playlist', data={
-            'playlist': title, 'service': data['service'],
-            'speaker': data['speaker']})
+        if self.confirmation:
+            self.speak_dialog('sonos.playlist', data={
+                'playlist': title, 'service': data['service'],
+                'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)
 
@@ -201,14 +202,15 @@ def search_album(self, data):
         # Play the picked album
         device.play_from_queue(0)
 
-        if data['artist']:
-            self.speak_dialog('sonos.album.artist', data={
-                'album': title, 'service': data['service'],
-                'speaker': data['speaker'], 'artist': data['artist']})
-        else:
-            self.speak_dialog('sonos.album', data={
-                'album': title, 'service': data['service'],
-                'speaker': data['speaker']})
+        if self.confirmation:
+            if data['artist']:
+                self.speak_dialog('sonos.album.artist', data={
+                    'album': title, 'service': data['service'],
+                    'speaker': data['speaker'], 'artist': data['artist']})
+            else:
+                self.speak_dialog('sonos.album', data={
+                    'album': title, 'service': data['service'],
+                    'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)
 
@@ -300,13 +302,14 @@ def search_track(self, data):
         # Play the picked track
         device.play_from_queue(0)
 
-        if data['artist']:
-            self.speak_dialog('sonos.track.artist', data={
-                'track': title, 'service': data['service'],
-                'speaker': data['speaker'], 'artist': data['artist']})
-        else:
-            self.speak_dialog('sonos.track', data={
-                'track': title, 'service': data['service'],
-                'speaker': data['speaker']})
+        if self.confirmation:
+            if data['artist']:
+                self.speak_dialog('sonos.track.artist', data={
+                    'track': title, 'service': data['service'],
+                    'speaker': data['speaker'], 'artist': data['artist']})
+            else:
+                self.speak_dialog('sonos.track', data={
+                    'track': title, 'service': data['service'],
+                    'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)

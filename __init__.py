@@ -25,6 +25,7 @@ class SonosController(MycroftSkill):
         self.settings_change_callback = None
         self.code = None
         self.duck = None
+        self.confirmation = None
 
         # Override SoCo logging level for discovery and services
         logging.getLogger('soco.discovery').setLevel(logging.WARN)
@@ -41,6 +42,7 @@ class SonosController(MycroftSkill):
         # https://en.wikipedia.org/wiki/NATO_phonetic_alphabet
         self.nato_dict = self.translate_namedvalues('codes')
         self.duck = self.settings.get('duck')
+        self.confirmation = self.settings.get('confirmation')
 
         if self.duck:
             # Manage Sonos volume when wakeword is detected

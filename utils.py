@@ -28,6 +28,7 @@ def ping(self):
         self.log.error(err)
         return False
 
+
 def authentication(self):
     """Some music services require an authentication.
     SoCo is currently looking to bring back the music service which will make
