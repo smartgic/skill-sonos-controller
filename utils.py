@@ -266,8 +266,8 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 elif command == 'mode':
                     _mode(self, device, extras)
                 elif command in ('stop', 'pause'):
-                    if device.is_playing_tv or device.is_playing_line_in:
-                        return None
+                    if _valid_music_source(device):
+                        eval('device.{}()'.format(command))
                 else:
                     eval('device.{}()'.format(command))
         else:
@@ -277,9 +277,6 @@ def run_command(self, command, speaker, state='playing', extras=None):
                         _volume(self, command, device, extras)
                     elif command in 'mode':
                         _mode(self, device, extras)
-                    elif command in ('stop', 'pause'):
-                        if device.is_playing_tv or device.is_playing_line_in:
-                            return None
                     else:
                         """If the speaker if part of a group them we are
                         retrieving the coordinator one. This will avoid
@@ -289,9 +286,17 @@ def run_command(self, command, speaker, state='playing', extras=None):
                         if len(device.group.members) > 1:
                             coordinator = device.group.coordinator.player_name
                             if coordinator == device.player_name:
-                                eval('device.{}()'.format(command))
+                                if command in ('stop', 'pause'):
+                                    if _valid_music_source(device):
+                                        eval('device.{}()'.format(command))
+                                else:
+                                    eval('device.{}()'.format(command))
                         else:
-                            eval('device.{}()'.format(command))
+                            if command in ('stop', 'pause'):
+                                if _valid_music_source(device):
+                                    eval('device.{}()'.format(command))
+                            else:
+                                eval('device.{}()'.format(command))
     except exceptions.SoCoException as err:
         self.log.error(err)
 
@@ -345,6 +350,24 @@ def get_track(self, speaker):
                             'speaker': device.player_name})
     except exceptions.SoCoException as err:
         self.log.error(err)
+
+
+def _valid_music_source(self, speaker):
+    """Check the current music source of a speaker to avoid 701 error
+    type when running some commands.
+
+    :param speaker: Which device to retrieve the music source
+    :type speaker: string
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        if speaker.is_playing_tv or speaker.is_playing_line_in:
+            self.log.warning('unsupported action on {} speaker when music '
+                             'source is tv or line-in'.format(speaker))
+            return False
+    except exceptions.SoCoException as err:
+        self.log.error(err)
+    return True
 
 
 def _mode(self, speaker, value):
