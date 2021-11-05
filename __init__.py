@@ -166,8 +166,7 @@ class SonosController(MycroftSkill):
         :type message: object
         """
         run_command(self, command='pause',
-                    speaker=message.data.get('speaker'),
-                    state='PLAYING')
+                    speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.stop.music.intent')
     def _handle_stop_music(self, message):
@@ -177,8 +176,7 @@ class SonosController(MycroftSkill):
         :type message: object
         """
         run_command(self, command='stop',
-                    speaker=message.data.get('speaker'),
-                    state='PLAYING')
+                    speaker=message.data.get('speaker'))
 
     @intent_handler('sonos.resume.music.intent')
     def _handle_resume_music(self, message):
