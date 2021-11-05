@@ -257,6 +257,8 @@ def run_command(self, command, speaker, state='playing', extras=None):
     try:
         if speaker:
             device_name = check_speaker(self, speaker)
+            if not device_name:
+                return None
             device = by_name(device_name)
             if get_state(self, device.player_name) == state.upper():
                 if command in ('vol-up', 'vol-down'):
