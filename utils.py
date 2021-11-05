@@ -266,7 +266,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 elif command == 'mode':
                     _mode(self, device, extras)
                 elif command in ('stop', 'pause'):
-                    if _valid_music_source(device):
+                    if _valid_music_source(self, device):
                         eval('device.{}()'.format(command))
                 else:
                     eval('device.{}()'.format(command))
@@ -287,13 +287,13 @@ def run_command(self, command, speaker, state='playing', extras=None):
                             coordinator = device.group.coordinator.player_name
                             if coordinator == device.player_name:
                                 if command in ('stop', 'pause'):
-                                    if _valid_music_source(device):
+                                    if _valid_music_source(self, device):
                                         eval('device.{}()'.format(command))
                                 else:
                                     eval('device.{}()'.format(command))
                         else:
                             if command in ('stop', 'pause'):
-                                if _valid_music_source(device):
+                                if _valid_music_source(self, device):
                                     eval('device.{}()'.format(command))
                             else:
                                 eval('device.{}()'.format(command))
