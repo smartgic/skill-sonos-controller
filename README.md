@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img alt="Mycrof Sonos Controller Skill" src="src="docs/mycroft-sonos-logo.png" width="500px">
+  <img alt="Mycrof Sonos Controller Skill" src="docs/mycroft-sonos-logo.png" width="500px">
 </p>
 
 # Sonos Controller
