@@ -362,8 +362,9 @@ def _valid_music_source(self, speaker):
     """
     try:
         if speaker.is_playing_tv or speaker.is_playing_line_in:
-            self.log.warning('unsupported action on {} speaker when music '
-                             'source is tv or line-in'.format(speaker))
+            msg = ('unsupported action on {} speaker when music '
+                   'source is tv or line-in'.format(speaker.player_name))
+            self.log.warning(msg)
             return False
     except exceptions.SoCoException as err:
         self.log.error(err)
