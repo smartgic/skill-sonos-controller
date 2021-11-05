@@ -265,6 +265,9 @@ def run_command(self, command, speaker, state='playing', extras=None):
                     _volume(self, command, device, extras)
                 elif command == 'mode':
                     _mode(self, device, extras)
+                elif command in ('stop', 'pause'):
+                    if device.is_playing_tv or device.is_playing_line_in:
+                        return None
                 else:
                     eval('device.{}()'.format(command))
         else:
@@ -274,6 +277,9 @@ def run_command(self, command, speaker, state='playing', extras=None):
                         _volume(self, command, device, extras)
                     elif command in 'mode':
                         _mode(self, device, extras)
+                    elif command in ('stop', 'pause'):
+                        if device.is_playing_tv or device.is_playing_line_in:
+                            return None
                     else:
                         """If the speaker if part of a group them we are
                         retrieving the coordinator one. This will avoid
