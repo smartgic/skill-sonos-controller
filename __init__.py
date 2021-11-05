@@ -55,13 +55,13 @@ class SonosController(MycroftSkill):
         # Handle events sent by Mycroft playback skill
         # https://bit.ly/3nIGHw8
         self.add_event("mycroft.audio.service.next",
-                        self._handle_next_music)
+                       self._handle_next_music)
         self.add_event("mycroft.audio.service.prev",
-                        self._handle_previous_music)
+                       self._handle_previous_music)
         self.add_event("mycroft.audio.service.pause",
-                        self._handle_pause_music)
+                       self._handle_pause_music)
         self.add_event("mycroft.audio.service.resume",
-                        self._handle_resume_music)
+                       self._handle_resume_music)
 
     @intent_handler('sonos.discovery.intent')
     def _handle_speaker_discovery(self):
