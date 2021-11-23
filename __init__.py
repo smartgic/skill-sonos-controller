@@ -54,6 +54,8 @@ class SonosController(MycroftSkill):
 
         # Handle events sent by Mycroft playback skill
         # https://bit.ly/3nIGHw8
+        self.add_event("mycroft.audio.service.stop",
+                       self._handle_stop_music)
         self.add_event("mycroft.audio.service.next",
                        self._handle_next_music)
         self.add_event("mycroft.audio.service.prev",
