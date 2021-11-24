@@ -3,7 +3,7 @@
 import logging
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, subscribed_services, \
-    check_service, run_command, get_track_info
+    check_service, run_command, get_track_info, get_volume
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
@@ -26,6 +26,7 @@ class SonosController(MycroftSkill):
         self.code = None
         self.duck = None
         self.confirmation = None
+        self.current_volume = {}
 
         # Override SoCo logging level for discovery and services
         logging.getLogger('soco.discovery').setLevel(logging.WARN)
@@ -48,9 +49,9 @@ class SonosController(MycroftSkill):
             # Manage Sonos volume when wakeword is detected
             # https://tinyurl.com/244286w8
             self.add_event("recognizer_loop:record_begin",
-                           self._handle_volume_down)
+                           self._handle_duck_volume)
             self.add_event("recognizer_loop:record_end",
-                           self._handle_volume_up)
+                           self._handle_unduck_volume)
 
         # Handle events sent by Mycroft playback skill
         # https://bit.ly/3nIGHw8
@@ -254,6 +255,27 @@ class SonosController(MycroftSkill):
         run_command(self, command='vol-down',
                     speaker=message.data.get('speaker'),
                     extras=LOUDER_QUIETER)
+
+    def _handle_duck_volume(self, message):
+        """Handle the duck volume on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
+        get_volume(self)
+        run_command(self, command='vol-down',
+                    speaker=message.data.get('speaker'),
+                    extras=DEFAULT_VOL_INCREMENT)
+
+    def _handle_unduck_volume(self, message):
+        """Handle the unduck volume on Sonos speakers.
+
+        :param message: Contains the utterance, the variables, etc...
+        :type message: object
+        """
+        run_command(self, command='unduck',
+                    speaker=message.data.get('speaker'),
+                    extras=self.current_volume)
 
     @intent_handler('sonos.shuffle.on.intent')
     def _handle_shuffle_on(self, message):

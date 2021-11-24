@@ -265,7 +265,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 return None
             device = by_name(device_name)
             if get_state(self, device.player_name) == state.upper():
-                if command in ('vol-up', 'vol-down'):
+                if command in ('vol-up', 'vol-down', 'unduck'):
                     _volume(self, command, device, extras)
                 elif command == 'mode':
                     _mode(self, device, extras)
@@ -277,7 +277,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
-                    if command in ('vol-up', 'vol-down'):
+                    if command in ('vol-up', 'vol-down', 'unduck'):
                         _volume(self, command, device, extras)
                     elif command in 'mode':
                         _mode(self, device, extras)
@@ -323,6 +323,23 @@ def _volume(self, way, speaker, value):
             speaker.volume += value
         elif way == 'vol-down':
             speaker.volume -= value
+        else:
+            if len(self.current_volume) > 0:
+                speaker.volume = self.current_volume[speaker]['volume']
+                self.current_volume = {}
+    except exceptions.SoCoException as err:
+        self.log.error(err)
+
+
+def get_volume(self):
+    """Get current volume on all Sonos devices for a better handle of
+    duck/unduck.
+
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        for device in self.speakers:
+            self.current_volume[device] = device.volume
     except exceptions.SoCoException as err:
         self.log.error(err)
 
