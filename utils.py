@@ -195,6 +195,8 @@ def check_speaker(self, speaker):
     :raises SoCoException: Raise SoCoException
     """
     try:
+        # FIXME: A return should be set after the "if" but it requires
+        # more testing.
         for device in self.speakers:
             if speaker in device.player_name.lower():
                 if len(device.group.members) > 1:
@@ -337,6 +339,8 @@ def get_track_info(self, speaker, artist_only=False):
     try:
         if speaker:
             device_name = check_speaker(self, speaker)
+            if not device_name:
+                return None
             device = by_name(device_name)
             if get_state(self, device.player_name) == 'PLAYING':
                 if artist_only:
