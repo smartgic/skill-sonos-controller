@@ -349,6 +349,8 @@ def get_track_info(self, speaker, artist_only=False):
                     self.speak_dialog('sonos.playing', data={
                         'title': device.get_current_track_info()['title'],
                         'artist': device.get_current_track_info()['artist']})
+            else:
+                self.speak_dialog('sonos.nothing.playing')
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
@@ -366,6 +368,8 @@ def get_track_info(self, speaker, artist_only=False):
                                 'artist': device.get_current_track_info()[
                                     'artist'],
                                 'speaker': device.player_name})
+                else:
+                    self.speak_dialog('sonos.nothing.playing')
     except exceptions.SoCoException as err:
         self.log.error(err)
 
