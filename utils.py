@@ -338,7 +338,7 @@ def volume(self, way, speaker, value):
                 elif way == 'unduck':
                     if len(self.current_volume) > 0:
                         device.volume = self.current_volume[device]
-                self.current_volume = {}
+                    self.current_volume = {}
     except exceptions.SoCoException as err:
         self.log.error(err)
 
