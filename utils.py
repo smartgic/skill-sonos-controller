@@ -331,10 +331,11 @@ def get_track_info(self, speaker, artist_only=False):
     :param speaker: Which device to manage the volume
     :type speaker: string
     :param artist_only: Return only the artist
-    :type artist_only: bool, optional
+    :type artist_only: bool
     :raises SoCoException: Raise SoCoException
     """
     try:
+        self.log.inf(speaker + artist_only)
         if speaker:
             device_name = check_speaker(self, speaker)
             device = by_name(device_name)
