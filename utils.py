@@ -323,7 +323,7 @@ def _volume(self, way, speaker, value):
             speaker.volume += value
         elif way == 'vol-down':
             speaker.volume -= value
-        else:
+        elif way == 'unduck':
             if len(self.current_volume) > 0:
                 speaker.volume = self.current_volume[speaker]
                 self.current_volume = {}
@@ -332,8 +332,10 @@ def _volume(self, way, speaker, value):
 
 
 def get_volume(self):
-    """Get current volume on all Sonos devices for a better handle of
-    duck/unduck.
+    """Get current volume value on all Sonos devices.
+
+    This function is mainly used to handle the duck/unduck handler which
+    will provide a better experience by restoring the right volume value.
 
     :raises SoCoException: Raise SoCoException
     """
