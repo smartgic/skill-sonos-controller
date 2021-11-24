@@ -306,6 +306,7 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
+        self.log.info('=============== SONG')
         get_track_info(self, message)
 
     @intent_handler('sonos.which.artist.intent')
@@ -315,6 +316,7 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
+        self.log.info('=============== ARTIST')
         get_track_info(self, message)
 
     def _entity(self):

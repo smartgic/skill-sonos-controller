@@ -332,6 +332,7 @@ def get_track_info(self, message):
     :type message: dict
     :raises SoCoException: Raise SoCoException
     """
+    self.log.info('=============== in get_track_info')
     speaker = message.data.get('speaker')
     artist_only = None
     if message.data.get('singer'):
