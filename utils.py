@@ -333,9 +333,11 @@ def get_track_info(self, message):
     :raises SoCoException: Raise SoCoException
     """
     speaker = message.data.get('speaker')
-    artist_only = message.data.get('artist')
+    artist_only = None
     if message.data.get('singer'):
         artist_only = message.data.get('singer')
+    else:
+        artist_only = message.data.get('artist')
 
     try:
         if speaker:
