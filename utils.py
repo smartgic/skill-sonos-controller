@@ -325,7 +325,7 @@ def _volume(self, way, speaker, value):
             speaker.volume -= value
         else:
             if len(self.current_volume) > 0:
-                speaker.volume = self.current_volume[speaker]['volume']
+                speaker.volume = self.current_volume[speaker]
                 self.current_volume = {}
     except exceptions.SoCoException as err:
         self.log.error(err)
