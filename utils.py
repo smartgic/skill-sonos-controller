@@ -335,7 +335,8 @@ def get_track_info(self, speaker, artist_only=False):
     :raises SoCoException: Raise SoCoException
     """
     try:
-        self.log.info(speaker + artist_only)
+        self.log.info(speaker)
+        self.log.info(artist_only)
         if speaker:
             device_name = check_speaker(self, speaker)
             device = by_name(device_name)
