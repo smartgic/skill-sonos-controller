@@ -325,15 +325,18 @@ def _volume(self, way, speaker, value):
         self.log.error(err)
 
 
-def get_track_info(self, speaker, artist_only=False):
-    """Retrieve informatino about the current playing track on speakers.
+def get_track_info(self, message):
+    """Retrieve information about the current playing track on speakers.
 
-    :param speaker: Which device to manage the volume
-    :type speaker: string
-    :param artist_only: Return only the artist
-    :type artist_only: bool, optional
+    :param message: Dict with variable from the utterance
+    :type message: dict
     :raises SoCoException: Raise SoCoException
     """
+    speaker = message.data.get('speaker')
+    artist_only = message.data.get('artist')
+    if message.data.get('singer'):
+        artist_only = message.data.get('singer')
+
     try:
         if speaker:
             device_name = check_speaker(self, speaker)

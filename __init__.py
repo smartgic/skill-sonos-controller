@@ -3,7 +3,7 @@
 import logging
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, subscribed_services, \
-    check_service, run_command, get_track
+    check_service, run_command, get_track_info
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
@@ -300,13 +300,14 @@ class SonosController(MycroftSkill):
                     extras='normal')
 
     @intent_handler('sonos.what.is.playing.intent')
+    @intent_handler('sonos.which.artist.intent')
     def _handle_what_is_playing(self, message):
-        """Handle what is playing command on Sonos speakers.
+        """Handle what is playing and which artist command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
-        get_track(self, message.data.get('speaker'))
+        get_track_info(self, message)
 
     def _entity(self):
         """Register the Padatious entitiies
