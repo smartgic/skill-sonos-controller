@@ -273,6 +273,8 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
+        self.log.info('====== _handle_unduck_volume')
+        self.log.info(self.current_volume)
         volume(self, way='unduck',
                speaker=message.data.get('speaker'),
                value=self.current_volume)

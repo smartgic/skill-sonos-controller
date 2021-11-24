@@ -336,6 +336,8 @@ def volume(self, way, speaker, value):
                 elif way == 'vol-down':
                     device.volume -= value
                 elif way == 'unduck':
+                    self.log.info('====== volume')
+                    self.log.info(self.current_volume)
                     if len(self.current_volume) > 0:
                         device.volume = self.current_volume[device]
                     self.current_volume = {}
