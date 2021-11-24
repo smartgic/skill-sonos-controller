@@ -339,8 +339,7 @@ def volume(self, way, speaker, value):
                     self.log.info('====== volume')
                     self.log.info(self.current_volume)
                     if len(self.current_volume) > 0:
-                        device.volume = self.current_volume[device]
-                    # self.current_volume = {}
+                        device.volume = self.current_volume[device.player_name]
     except exceptions.SoCoException as err:
         self.log.error(err)
 
