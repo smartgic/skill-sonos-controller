@@ -370,6 +370,7 @@ def get_track_info(self, speaker, artist_only=False):
                                 'speaker': device.player_name})
                 else:
                     self.speak_dialog('sonos.nothing.playing')
+                    break
     except exceptions.SoCoException as err:
         self.log.error(err)
 
