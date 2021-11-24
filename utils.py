@@ -368,6 +368,7 @@ def get_track_info(self, speaker, artist_only=False):
     """
     try:
         if speaker:
+            self.log.debug('>>> get_track_info() function - speaker detected')
             device_name = check_speaker(self, speaker)
             if not device_name:
                 return None
@@ -382,8 +383,12 @@ def get_track_info(self, speaker, artist_only=False):
             else:
                 self.speak_dialog('sonos.nothing.playing')
         else:
+            self.log.debug(
+                '>>> get_track_info() function - speaker playing')
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
+                    self.log.debug(
+                        '>>> get_track_info() function - speaker not detected')
                     if artist_only:
                         if device.get_current_track_info()['artist']:
                             self.speak_dialog('sonos.playing.artist.on', data={
@@ -399,6 +404,8 @@ def get_track_info(self, speaker, artist_only=False):
                                     'artist'],
                                 'speaker': device.player_name})
                 else:
+                    self.log.debug(
+                        '>>> get_track_info() function - speaker not playing')                    
                     self.speak_dialog('sonos.nothing.playing')
                     break
     except exceptions.SoCoException as err:
