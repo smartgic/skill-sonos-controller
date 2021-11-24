@@ -307,18 +307,17 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
-        self.log.info('=============== SONG')
-        get_track_info(self, message)
+        speaker = None
+        if message.data.get('speaker'):
+            speaker = message.data.get('speaker')
 
-    # @intent_handler('sonos.which.artist.intent')
-    # def _handle_which_artist_playing(self, message):
-    #     """Handle which artist command on Sonos speakers.
+        artist_only = None
+        if message.data.get('singer'):
+            artist_only = message.data.get('singer')
+        else:
+            artist_only = message.data.get('artist')
 
-    #     :param message: Contains the utterance, the variables, etc...
-    #     :type message: object
-    #     """
-    #     self.log.info('=============== ARTIST')
-    #     get_track_info(self, message)
+        get_track_info(self, speaker, artist_only)
 
     def _entity(self):
         """Register the Padatious entitiies
