@@ -299,8 +299,7 @@ class SonosController(MycroftSkill):
                     speaker=message.data.get('speaker'),
                     extras='normal')
 
-    @intent_handler('sonos.what.is.playing.intent')
-    @intent_handler('sonos.which.artist.intent')
+    @intent_handler('sonos.what.is.playing.intent', 'sonos.which.artist.intent')
     def _handle_what_is_playing(self, message):
         """Handle what is playing and which artist command on Sonos speakers.
 
