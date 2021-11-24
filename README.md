@@ -36,6 +36,7 @@ Before using a music service, **make sure that you linked** your service account
 * "play soundtrack album from spotify on dining room"
 * "discover sonos devices"
 * "what is playing"
+* "which artist is playing"
 * "what are my music services"
 * "volume louder"
 * "volume quieter"

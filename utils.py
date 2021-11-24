@@ -323,11 +323,13 @@ def _volume(self, way, speaker, value):
         self.log.error(err)
 
 
-def get_track(self, speaker):
-    """Retrieve current playing track on speakers.
+def get_track_info(self, speaker, artist_only=False):
+    """Retrieve informatino about the current playing track on speakers.
 
     :param speaker: Which device to manage the volume
     :type speaker: string
+    :param artist_only: Return only the artist
+    :type artist_only: bool, optional
     :raises SoCoException: Raise SoCoException
     """
     try:
@@ -335,19 +337,28 @@ def get_track(self, speaker):
             device_name = check_speaker(self, speaker)
             device = by_name(device_name)
             if get_state(self, device.player_name) == 'PLAYING':
-                self.speak_dialog('sonos.playing', data={
-                    'title': device.get_current_track_info()['title'],
-                    'artist': device.get_current_track_info()['artist']})
-
+                if artist_only:
+                    self.speak(device.get_current_track_info()['artist'])
+                else:
+                    self.speak_dialog('sonos.playing', data={
+                        'title': device.get_current_track_info()['title'],
+                        'artist': device.get_current_track_info()['artist']})
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
-                    if device.get_current_track_info()['title']:
-                        self.speak_dialog('sonos.playing.on', data={
-                            'title': device.get_current_track_info()['title'],
-                            'artist': device.get_current_track_info()[
-                                'artist'],
-                            'speaker': device.player_name})
+                    if artist_only:
+                        if device.get_current_track_info()['title']:
+                            self.speak_dialog('sonos.playing.artist.on', data={
+                                'artist': device.get_current_track_info()[
+                                    'artist'],
+                                'speaker': device.player_name})
+                        else:
+                            self.speak_dialog('sonos.playing.artist.on', data={
+                                'title': device.get_current_track_info()[
+                                    'title'],
+                                'artist': device.get_current_track_info()[
+                                    'artist'],
+                                'speaker': device.player_name})
     except exceptions.SoCoException as err:
         self.log.error(err)
 
