@@ -270,9 +270,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
                 return None
             device = by_name(device_name)
             if get_state(self, device.player_name) == state.upper():
-                if command in ('vol-up', 'vol-down', 'unduck'):
-                    _volume(self, command, device, extras)
-                elif command == 'mode':
+                if command == 'mode':
                     _mode(self, device, extras)
                 elif command in ('stop', 'pause'):
                     if _valid_music_source(self, device):
@@ -282,9 +280,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
         else:
             for device in self.speakers:
                 if get_state(self, device.player_name) == state.upper():
-                    if command in ('vol-up', 'vol-down', 'unduck'):
-                        _volume(self, command, device, extras)
-                    elif command in 'mode':
+                    if command in 'mode':
                         _mode(self, device, extras)
                     else:
                         """If the speaker if part of a group them we are
@@ -310,7 +306,7 @@ def run_command(self, command, speaker, state='playing', extras=None):
         self.log.error(err)
 
 
-def _volume(self, way, speaker, value):
+def volume(self, way, speaker, value):
     """Manage volume on Sonos devices, if no speaker is spoken then
     the function will check for all the speakers that are playing
     music.
@@ -324,14 +320,29 @@ def _volume(self, way, speaker, value):
     :raises SoCoException: Raise SoCoException
     """
     try:
-        if way == 'vol-up':
-            speaker.volume += value
-        elif way == 'vol-down':
-            speaker.volume -= value
-        elif way == 'unduck':
-            if len(self.current_volume) > 0:
-                speaker.volume = self.current_volume[speaker]
-                self.current_volume = {}
+        if speaker:
+            device_name = check_speaker(self, speaker, True)
+            if not device_name:
+                return None
+            device = by_name(device_name)
+            if way == 'vol-up':
+                device.volume += value
+            elif way == 'vol-down':
+                device.volume -= value
+            elif way == 'unduck':
+                if len(self.current_volume) > 0:
+                    device.volume = self.current_volume[device]
+                    self.current_volume = {}
+        else:
+            for device in self.speakers:
+                if way == 'vol-up':
+                    device.volume += value
+                elif way == 'vol-down':
+                    device.volume -= value
+                elif way == 'unduck':
+                    if len(self.current_volume) > 0:
+                        device.volume = self.current_volume[device]
+            self.current_volume = {}
     except exceptions.SoCoException as err:
         self.log.error(err)
 
