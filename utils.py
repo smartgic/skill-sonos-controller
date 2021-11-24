@@ -340,6 +340,8 @@ def get_track_info(self, message):
     else:
         artist_only = message.data.get('artist')
 
+    self.log.info('===============' + speaker)
+    self.log.info('===============' + artist_only)
     try:
         if speaker:
             device_name = check_speaker(self, speaker)
