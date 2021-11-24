@@ -351,12 +351,13 @@ def get_track_info(self, speaker, artist_only=False):
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
                     if artist_only:
-                        if device.get_current_track_info()['title']:
+                        if device.get_current_track_info()['artist']:
                             self.speak_dialog('sonos.playing.artist.on', data={
                                 'artist': device.get_current_track_info()[
                                     'artist'],
                                 'speaker': device.player_name})
-                        else:
+                    else:
+                        if device.get_current_track_info()['title']:
                             self.speak_dialog('sonos.playing.artist.on', data={
                                 'title': device.get_current_track_info()[
                                     'title'],
