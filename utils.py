@@ -207,7 +207,7 @@ def check_speaker(self, speaker, bypass_coordinator=False):
                     if len(device.group.members) > 1:
                         coordinator = device.group.coordinator
                         return coordinator.player_name
-                    return device.player_name
+                return device.player_name
     except exceptions.SoCoException as err:
         self.log.error(err)
 
