@@ -280,6 +280,7 @@ class SonosController(MycroftSkill):
         volume(self, way='unduck',
                speaker=message.data.get('speaker'),
                value=self.current_volume)
+        self.current_volume = {}
 
     @intent_handler('sonos.shuffle.on.intent')
     def _handle_shuffle_on(self, message):
