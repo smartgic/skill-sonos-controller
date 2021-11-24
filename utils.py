@@ -335,8 +335,6 @@ def get_track_info(self, speaker, artist_only=False):
     :raises SoCoException: Raise SoCoException
     """
     try:
-        self.log.info(speaker)
-        self.log.info(artist_only)
         if speaker:
             device_name = check_speaker(self, speaker)
             device = by_name(device_name)
@@ -358,7 +356,7 @@ def get_track_info(self, speaker, artist_only=False):
                                 'speaker': device.player_name})
                     else:
                         if device.get_current_track_info()['title']:
-                            self.speak_dialog('sonos.playing.artist.on', data={
+                            self.speak_dialog('sonos.playing.on', data={
                                 'title': device.get_current_track_info()[
                                     'title'],
                                 'artist': device.get_current_track_info()[
