@@ -181,7 +181,7 @@ def subscribed_services(self):
         self.log.error(err)
 
 
-def check_speaker(self, speaker):
+def check_speaker(self, speaker, bypass_coordinator=False):
     """Check if the speaker is part of the discovered speakers and checks
     if it's part of a group/zone.
     If the speaker is part of a group/zone then it retrieves the group
@@ -190,6 +190,10 @@ def check_speaker(self, speaker):
 
     :param speaker: Which speaker to looking for
     :type speaker: string
+    :param bypass_coordinator: If enabled and if a speaker is part of a group
+        then not only the coordinator of the group will be returned but all
+        the speakers.
+    :type bypass_coordinator: bool, optional
     :return: Speaker name
     :rtype: str
     :raises SoCoException: Raise SoCoException
@@ -199,10 +203,11 @@ def check_speaker(self, speaker):
         # more testing.
         for device in self.speakers:
             if speaker in device.player_name.lower():
-                if len(device.group.members) > 1:
-                    coordinator = device.group.coordinator
-                    return coordinator.player_name
-                return device.player_name
+                if not bypass_coordinator:
+                    if len(device.group.members) > 1:
+                        coordinator = device.group.coordinator
+                        return coordinator.player_name
+                    return device.player_name
     except exceptions.SoCoException as err:
         self.log.error(err)
 
