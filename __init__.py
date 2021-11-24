@@ -241,7 +241,7 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
-        volume(self, command='vol-up',
+        volume(self, way='vol-up',
                speaker=message.data.get('speaker'),
                value=LOUDER_QUIETER)
 
@@ -252,7 +252,7 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
-        volume(self, command='vol-down',
+        volume(self, way='vol-down',
                speaker=message.data.get('speaker'),
                value=LOUDER_QUIETER)
 
@@ -263,7 +263,7 @@ class SonosController(MycroftSkill):
         :type message: object
         """
         get_volume(self)
-        volume(self, command='vol-down',
+        volume(self, way='vol-down',
                speaker=message.data.get('speaker'),
                value=DEFAULT_VOL_INCREMENT)
 
@@ -273,7 +273,7 @@ class SonosController(MycroftSkill):
         :param message: Contains the utterance, the variables, etc...
         :type message: object
         """
-        volume(self, command='unduck',
+        volume(self, way='unduck',
                speaker=message.data.get('speaker'),
                value=self.current_volume)
 
