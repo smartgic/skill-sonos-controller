@@ -263,6 +263,8 @@ class SonosController(MycroftSkill):
         :type message: object
         """
         get_volume(self)
+        self.log.info('====== _handle_duck_volume')
+        self.log.info(self.current_volume)
         volume(self, way='vol-down',
                speaker=message.data.get('speaker'),
                value=DEFAULT_VOL_INCREMENT)
