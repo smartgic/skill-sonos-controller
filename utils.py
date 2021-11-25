@@ -388,9 +388,7 @@ def get_track_info(self, speaker, artist_only=False):
             self.log.debug(
                 '> get_track_info() - speaker not detected')
             for device in self.speakers:
-                self.log.info(get_state(self, device.player_name))
                 if get_state(self, device.player_name) == 'PLAYING':
-                    self.log.info('speaker not detected playing')
                     self.log.debug(
                         '> get_track_info() - speaker not detected playing')
                     if artist_only:
@@ -407,11 +405,9 @@ def get_track_info(self, speaker, artist_only=False):
                                 'artist': device.get_current_track_info()[
                                     'artist'],
                                 'speaker': device.player_name})
-                else:
-                    self.log.info('speaker not playing')
-                    self.log.debug(
-                        '> get_track_info() - speaker not playing')
-                    self.speak_dialog('sonos.nothing.playing')
+            self.log.debug(
+                '> get_track_info() - speaker not playing')
+            self.speak_dialog('sonos.nothing.playing')
     except exceptions.SoCoException as err:
         self.log.error(err)
 
