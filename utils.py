@@ -399,7 +399,6 @@ def get_track_info(self, speaker, artist_only=False):
                                 'artist': device.get_current_track_info()[
                                     'artist'],
                                 'speaker': device.player_name})
-                            return
                     else:
                         if device.get_current_track_info()['title']:
                             self.speak_dialog('sonos.playing.on', data={
@@ -408,7 +407,6 @@ def get_track_info(self, speaker, artist_only=False):
                                 'artist': device.get_current_track_info()[
                                     'artist'],
                                 'speaker': device.player_name})
-                            return
                 else:
                     self.log.debug(
                         '> get_track_info() - speaker not playing')
