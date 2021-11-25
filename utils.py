@@ -387,7 +387,7 @@ def get_track_info(self, speaker, artist_only=False):
         else:
             self.log.debug(
                 '> get_track_info() - speaker not detected')
-            nothing_playing = False
+            nothing_playing = True
             for device in self.speakers:
                 if get_state(self, device.player_name) == 'PLAYING':
                     self.log.debug(
@@ -406,8 +406,7 @@ def get_track_info(self, speaker, artist_only=False):
                                 'artist': device.get_current_track_info()[
                                     'artist'],
                                 'speaker': device.player_name})
-                else:
-                    nothing_playing = True
+                    nothing_playing = False
             if nothing_playing:
                 self.log.debug(
                     '> get_track_info() - speaker not playing')
