@@ -412,7 +412,7 @@ def get_track_info(self, speaker, artist_only=False):
                     self.log.debug(
                         '> get_track_info() - speaker not playing')
                     self.speak_dialog('sonos.nothing.playing')
-                    break
+                break
     except exceptions.SoCoException as err:
         self.log.error(err)
 
