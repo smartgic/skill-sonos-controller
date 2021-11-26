@@ -3,7 +3,8 @@
 import logging
 from mycroft import MycroftSkill, intent_handler
 from .utils import authentication, discovery, subscribed_services, \
-    check_service, run_command, get_track_info, volume, get_volume
+    check_service, run_command, get_track_info, volume, get_volume, \
+    speaker_info
 from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
@@ -81,6 +82,16 @@ class SonosController(MycroftSkill):
             if list_device == 'yes':
                 for speaker in self.speakers:
                     self.speak(speaker.player_name.lower())
+
+    @intent_handler('sonos.speaker.info.intent')
+    def _handle_speaker_info(self, message):
+        """Handle the Sonos devices information triggered by intents
+
+        It's only used by the user to get the device names, the main discovery
+        is automatically triggered during the skill initialization.
+        """
+        speaker_info(self, message.data.get('speaker'),
+                     message.data.get('detailed'))
 
     @intent_handler('sonos.service.intent')
     def _handle_subscribed_services(self):

@@ -447,3 +447,37 @@ def _mode(self, speaker, value):
         speaker.play_mode = value.upper()
     except exceptions.SoCoException as err:
         self.log.error(err)
+
+
+def speaker_info(self, speaker, detailed=False):
+    """Retrieve Sonos speaker information
+
+    :param speaker: Which device to manage the mode
+    :type speaker: string
+    :param detailed: Return detailed information
+    :type detailed: bool, optional
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        device_name = check_speaker(self, speaker, True)
+        if not device_name:
+            return None
+        device = by_name(device_name)
+        info = device.get_speaker_info()
+        if detailed:
+            self.speak_dialog('sonos.speaker.detailed.info', data={
+                              'model_name': info['model_name'].split(' ')[0],
+                              'model_number': info['model_number'],
+                              'version': info['display_version'],
+                              'uid': info['uid'],
+                              'serial_number': info['serial_number'],
+                              'software_version': info['software_version'],
+                              'hardware_version': info['hardware_version'],
+                              'mac_address': info['mac_address']})
+        else:
+            self.speak_dialog('sonos.speaker.info', data={
+                              'model_name': info['model_name'].split(' ')[0],
+                              'model_number': info['model_number'],
+                              'version': info['display_version']})
+    except exceptions.SoCoException as err:
+        self.log.error(err)

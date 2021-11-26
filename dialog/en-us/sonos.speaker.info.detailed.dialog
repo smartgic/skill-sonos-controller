@@ -1,0 +1,1 @@
+speaker model is {model_name}, model number is {model_number}, the version is {display_version}, U I D is {uid}, serial number is {serial_number}, software version is {software_version}, hardware version is {hardware_version} and the mac address is {mac_address}
