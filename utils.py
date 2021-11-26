@@ -53,9 +53,10 @@ def authentication(self):
                                       'code': self.code})
                     return
                 link_code = req.json()['extras']['code']
+                link_device_id = req.json()['extras']['device']
 
                 # SoCo part2 authentication mechanism.
-                provider.device_or_app_link_auth_part2(link_code)
+                provider.get_device_auth_token(link_code, link_device_id)
 
                 # Delete the shortened URL from the database once the
                 # authentication is successfully done.
@@ -67,7 +68,7 @@ def authentication(self):
         elif not os.path.isfile(token_file) and ping(self):
             try:
                 # Only retrieve the url, the code and the device ID.
-                url, code, device_id = provider.device_or_app_link_auth_part1()
+                url, code, device_id = provider.get_device_link_code()
 
                 # URL shortening the music service authentication URL.
                 # The skill will speak the URL code not the authentication
@@ -81,7 +82,6 @@ def authentication(self):
                 data = {"slash": '. '.join(
                     map(self.nato_dict.get, url_shorted)) + '.'}
                 self.log.info('sonos link code: {}'.format(url_shorted))
-                self.log.info('sonos link device id: {}'.format(url_shorted))
                 self.speak_dialog('sonos.link_code', data={
                     'code': data})
             except exceptions.SoCoException as err:
