@@ -468,7 +468,7 @@ def speaker_info(self, speaker, detailed=False):
             self.speak_dialog('sonos.speaker.detailed.info', data={
                               'model_name': info['model_name'].split(' ')[0],
                               'model_number': info['model_number'],
-                              'version': info['display_version'],
+                              'display_version': info['display_version'],
                               'uid': info['uid'],
                               'serial_number': info['serial_number'],
                               'software_version': info['software_version'],
@@ -478,6 +478,6 @@ def speaker_info(self, speaker, detailed=False):
             self.speak_dialog('sonos.speaker.info', data={
                               'model_name': info['model_name'].split(' ')[0],
                               'model_number': info['model_number'],
-                              'version': info['display_version']})
+                              'display_version': info['display_version']})
     except exceptions.SoCoException as err:
         self.log.error(err)
