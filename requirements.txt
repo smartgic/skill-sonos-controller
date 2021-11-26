@@ -1,1 +1,1 @@
-SoCo
+git+https://github.com/smartgic/SoCo.git
