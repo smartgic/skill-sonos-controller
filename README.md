@@ -53,8 +53,8 @@ Before using a music service, **make sure that you linked** your service account
 * "enable repeat mode"
 * "next music"
 * "previous music"
-* "give me information on dining room"
-* "gime me detailed information about library"
+* "give me information on dining room device"
+* "gime me detailed information about library speaker"
 
 ## Installation
 
