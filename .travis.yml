@@ -11,4 +11,4 @@ python:
   - "3.8"
   - "3.9"
 script:
-  - pep8 __init__.py
+  - pep8 __init__.py utils.py search.py constants.py
