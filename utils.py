@@ -465,8 +465,8 @@ def speaker_info(self, speaker, detailed=False):
         device = by_name(device_name)
         info = device.get_speaker_info()
         if detailed:
-            self.speak_dialog('sonos.speaker.detailed.info', data={
-                              'model_name': info['model_name'].split(' ')[0],
+            self.speak_dialog('sonos.speaker.info.detailed', data={
+                              'model_name': info['model_name'].split(' ')[1],
                               'model_number': info['model_number'],
                               'display_version': info['display_version'],
                               'uid': info['uid'],
@@ -476,7 +476,7 @@ def speaker_info(self, speaker, detailed=False):
                               'mac_address': info['mac_address']})
         else:
             self.speak_dialog('sonos.speaker.info', data={
-                              'model_name': info['model_name'].split(' ')[0],
+                              'model_name': info['model_name'].split(' ')[1],
                               'model_number': info['model_number'],
                               'display_version': info['display_version']})
     except exceptions.SoCoException as err:
