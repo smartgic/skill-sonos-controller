@@ -452,7 +452,7 @@ def _mode(self, speaker, value):
 def speaker_info(self, speaker, detailed=False):
     """Retrieve Sonos speaker information
 
-    :param speaker: Which device to manage the mode
+    :param speaker: Which speaker to retrieve information
     :type speaker: string
     :param detailed: Return detailed information
     :type detailed: bool, optional
