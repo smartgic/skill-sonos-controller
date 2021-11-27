@@ -86,9 +86,6 @@ class SonosController(MycroftSkill):
     @intent_handler('sonos.speaker.info.intent')
     def _handle_speaker_info(self, message):
         """Handle the Sonos devices information triggered by intents
-
-        It's only used by the user to get the device names, the main discovery
-        is automatically triggered during the skill initialization.
         """
         speaker_info(self, message.data.get('speaker'),
                      message.data.get('detailed'))
