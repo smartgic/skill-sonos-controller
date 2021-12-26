@@ -6,7 +6,7 @@
 
 # Sonos Controller
 
-Control Sonos speakers with music services support such as Spotify
+Control Sonos speakers with music services support such as Spotify, Deezer, Amazon Music, etc...
 
 ## About
 
