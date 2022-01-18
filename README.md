@@ -17,6 +17,7 @@ This skill interacts with your Sonos devices and allows you to play music from d
 * Local library
 * Spotify *(account required)*
 * Deezer *(account required)*
+* Amazon Music *(account required)*
 
 Before using a music service, **make sure that you linked** your service account to your Sonos devices by using the Sonos application:
 
