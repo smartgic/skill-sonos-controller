@@ -8,6 +8,10 @@
 
 Control Sonos speakers with music services support such as Spotify, Deezer, Amazon Music, etc...
 
+## Disclaimer
+
+This plugin is not officially commissioned/supported by Sonos. The trademark "Sonos" is registered by "Sonos, Inc."
+
 ## About
 
 [Sonos](https://www.sonos.com) is the ultimate wireless home sound system: a whole-house WiFi network that fills your home with brilliant sound, room by room.
