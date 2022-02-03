@@ -12,7 +12,8 @@ REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer', 'Plex']
 # List a supported categories for MusicLibrary
 SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
                                 'genres', 'composers', 'tracks', 'share',
-                                'sonos_playlists', 'playlists']
+                                'sonos_playlists', 'playlists', 'podcasts',
+                                'EPISODES']
 
 # Token file used by SoCo Python library
 TOKEN_FILE = '/.config/SoCo/token_store.json'
