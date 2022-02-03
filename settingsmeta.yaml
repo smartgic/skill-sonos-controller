@@ -5,7 +5,7 @@ skillMetadata:
         - name: default_source
           type: select
           label: Default source of music
-          options: "Music Library|music library;Spotify|spotify;Deezer|deezer;Amazon Music|amazon music"
+          options: "Music Library|music library;Spotify|spotify;Deezer|deezer;Amazon Music|amazon music;Plex|plex"
           value: "music library"
         - name: link_code
           type: text
