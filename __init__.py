@@ -139,7 +139,6 @@ class SonosController(MycroftSkill):
         :param message: List of registered utterances
         :type message: dict
         """
-        self.log.info("podcast")
         service = self.service
         podcast = message.data.get('podcast')
         speaker = message.data.get('speaker')
