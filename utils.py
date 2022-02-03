@@ -31,9 +31,6 @@ def ping(self):
 
 def authentication(self):
     """Some music services require an authentication.
-    SoCo is currently looking to bring back the music service which will make
-    this function disappears in the future.
-    https://github.com/SoCo/SoCo/pull/763
 
     :raises SoCoException: Raise SoCoException
     """
@@ -55,8 +52,8 @@ def authentication(self):
                 link_code = req.json()['extras']['code']
                 link_device_id = req.json()['extras']['device']
 
-                # SoCo part2 authentication mechanism.
-                provider.get_device_auth_token(link_code, link_device_id)
+                # SoCo second part of the authentication mechanism.
+                provider.complete_authentication(link_code, link_device_id)
 
                 # Delete the shortened URL from the database once the
                 # authentication is successfully done.
@@ -67,8 +64,10 @@ def authentication(self):
                 self.log.error(err)
         elif not os.path.isfile(token_file) and ping(self):
             try:
-                # Only retrieve the url, the code and the device ID.
-                url, code, device_id = provider.get_device_link_code()
+                # Retrieve the url, the code and the device ID.
+                url = provider.begin_authentication()
+                code = provider.link_code
+                device_id = provider.link_device_id
 
                 # URL shortening the music service authentication URL.
                 # The skill will speak the URL code not the authentication
