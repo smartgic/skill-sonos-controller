@@ -40,6 +40,7 @@ Before using a music service, **make sure that you linked** your service account
 * "play back to front album by lionel richie on dining room"
 * "play back to front album by lionel richie from spotify on dining room"
 * "play soundtrack album from spotify on dining room"
+* "play the mysterious universe podcast from plex on office"
 * "discover sonos devices"
 * "what is playing"
 * "which artist is playing"
@@ -60,7 +61,7 @@ Before using a music service, **make sure that you linked** your service account
 * "next music"
 * "previous music"
 * "give me information on dining room device"
-* "gime me detailed information about library speaker"
+* "give me detailed information about library speaker"
 
 ## Installation
 
@@ -90,6 +91,12 @@ This link will redirect you to the music service authentication login page using
 <img src='docs/sonos-spotify-agreement.png' width='450'/>
 
 Once you successfully logged to Spotify, enter the same code as provided before into the `Link Code` field. Mycroft will confirm the configuration and gives you some example of what you could say.
+
+## Supported languages
+
+* English
+* French
+* Italian
 
 ## Credits
 

@@ -1,0 +1,6 @@
+fai partire la podcast {podcast} (su | in ) ({speaker})
+fai partire da {service} la podcast {podcast} (su | in ) ({speaker})
+fai partire la podcast {podcast} da {service} (su | in ) ({speaker})
+riproduci (la | ) podcast {podcast} (su | in ) ({speaker})
+riproduci da {service} (la | ) podcast {podcast} (su | in ) ({speaker})
+riproduci (la | ) podcast {podcast} da {service} (su | in ) ({speaker})

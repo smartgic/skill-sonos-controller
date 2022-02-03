@@ -9,7 +9,7 @@ from .utils import get_category, check_speaker
 
 
 def search(self, service, speaker, category, playlist=None, album=None,
-           artist=None, track=None):
+           artist=None, track=None, podcast=None):
     """Search an item to play, it could be a playlist, an album or a track.
 
     This function will build a dict with all the required information
@@ -29,6 +29,8 @@ def search(self, service, speaker, category, playlist=None, album=None,
     :type artist: string, optional
     :param track: Track name
     :type track: string, optional
+    :param podcast: Podcast name
+    :type podcast: string, optional
     :return:
     :raises SoCoException: Raise SoCoException
     """
@@ -47,6 +49,7 @@ def search(self, service, speaker, category, playlist=None, album=None,
                 data['album'] = album
                 data['artist'] = artist
                 data['track'] = track
+                data['podcast'] = podcast
                 search_type(self, data)
             else:
                 self.speak_dialog('error.category', data={
@@ -66,6 +69,8 @@ def search_type(self, data):
         search_album(self, data)
     elif data['category'] == 'tracks':
         search_track(self, data)
+    elif data['podcast'] == 'podcasts':
+        search_podcast(self, data)
 
 
 def search_playlist(self, data):
@@ -311,5 +316,37 @@ def search_track(self, data):
                 self.speak_dialog('sonos.track', data={
                     'track': title, 'service': data['service'],
                     'speaker': data['speaker']})
+    except exceptions.SoCoException as err:
+        self.log.error(err)
+
+
+def search_podcast(self, data):
+    """Search for podcast into Music Services only.
+
+    :param data: Dict with all the required data
+    :type data: dict
+    :return:
+    :raises SoCoException: Raise SoCoException
+    """
+    try:
+        picked = None
+        title = None
+
+        # Clear the current content playing
+        device = by_name(data['speaker'])
+        device.clear_queue()
+
+        podcasts = data['provider'].search('podcasts', data['podcast'])
+        picked = choice(podcasts)
+        device.add_to_queue(picked)
+        title = picked.title
+
+        # Play the picked podcast
+        device.play_from_queue(0)
+
+        if self.confirmation:
+            self.speak_dialog('sonos.podcast', data={
+                'podcast': title, 'service': data['service'],
+                'speaker': data['speaker']})
     except exceptions.SoCoException as err:
         self.log.error(err)

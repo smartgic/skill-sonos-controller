@@ -131,6 +131,22 @@ class SonosController(MycroftSkill):
 
         search(self, service, speaker, 'playlists', playlist=playlist)
 
+    @intent_handler('sonos.podcast.intent')
+    def _handle_podcast(self, message):
+        """Handle the podcast integration which include the search and
+        the dispatch on the Sonos speakers(s).
+
+        :param message: List of registered utterances
+        :type message: dict
+        """
+        service = self.service
+        podcast = message.data.get('podcast')
+        speaker = message.data.get('speaker')
+        if message.data.get('service'):
+            service = check_service(self, message.data.get('service'))
+
+        search(self, service, speaker, 'podcasts', podcast=podcast)
+
     @intent_handler('sonos.album.intent')
     def _handle_album(self, message):
         """Handle the album integration which include the search and

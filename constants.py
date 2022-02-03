@@ -9,7 +9,7 @@ SUPPORTED_SERVICES = ['Amazon Music', 'Apple Music', 'Deezer',
 # Service that requires authentication
 REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer', 'Plex']
 
-# List a supported categories for MusicLibrary
+# List of supported categories
 SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
                                 'genres', 'composers', 'tracks', 'share',
                                 'sonos_playlists', 'playlists', 'podcasts',
@@ -28,6 +28,6 @@ LOUDER_QUIETER = 30
 # Link to the URL shortener
 # This constant is only used by utils.authentication() method to
 # provide support for the music services authentication.
-# These services generate URL that are too long to be spoken by Mycrof
+# These services generate URL that are too long to be spoken by Mycroft
 # which is why an URL shortener service is used.
 URL_SHORTENER = 'https://sonos.smartgic.io'
