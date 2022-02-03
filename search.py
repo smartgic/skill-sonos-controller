@@ -70,6 +70,7 @@ def search_type(self, data):
     elif data['category'] == 'tracks':
         search_track(self, data)
     elif data['podcast'] == 'podcasts':
+        self.log.info("search type podcast")
         search_podcast(self, data)
 
 
@@ -328,6 +329,7 @@ def search_podcast(self, data):
     :return:
     :raises SoCoException: Raise SoCoException
     """
+    self.log.info("search podcast")
     try:
         picked = None
         title = None
