@@ -1,15 +1,17 @@
 """This file contains functions related to extra operations
 and are called by the handle_* methods from __init__.py
 """
+import json
 import os
 import requests
+from pathlib import Path
 from soco import exceptions
 from soco import discover
 from soco.discovery import by_name
 from soco.music_library import MusicLibrary
 from soco.music_services import MusicService
 from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
-    SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE
+    SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE, TOKEN_COLLECTION
 
 
 def ping(self):
@@ -40,7 +42,25 @@ def authentication(self):
     if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
         provider = MusicService(self.service.title())
 
-        if not os.path.isfile(token_file) and self.code != '' and ping(self):
+        # Collect authenticated music services from token file if it exists.
+        token_data = {}
+        if Path(token_file).is_file():
+            try:
+                with open(token_file, encoding='utf-8') as data:
+                    token_data(json.load(data))
+            except IOError as err:
+                self.log.error(err)
+
+        # Check if the music service has been already authenticated.
+        # Each music service has a service ID and this service ID is written
+        # into the token file as key.
+        authenticated = False
+        if len(token_data) > 0:
+            for service in token_data[TOKEN_COLLECTION]:
+                if service.split('#')[0] == provider.service_id:
+                    authenticated = True
+
+        if not authenticated and self.code and ping(self):
             try:
                 # Retrieve the link code based on the URL code configured
                 # on home.mycroft.ai.
@@ -62,7 +82,7 @@ def authentication(self):
                 self.speak_dialog('sonos.authenticated')
             except exceptions.SoCoException as err:
                 self.log.error(err)
-        elif not os.path.isfile(token_file) and ping(self):
+        elif not authenticated and ping(self):
             try:
                 # Retrieve the url, the code and the device ID.
                 url = provider.begin_authentication()

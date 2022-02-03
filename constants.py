@@ -1,10 +1,10 @@
 """This file contains constants mostly called by utils.py
 """
 # List of current supported service by SoCo
-SUPPORTED_SERVICES = ["Amazon Music", "Apple Music", "Deezer",
-                      "Google Play Music", "Music Library", "Napster", "Plex",
-                      "SoundCloud", "Spotify", "TuneIn", "Wolfgangs Music",
-                      "YouTube Music"]
+SUPPORTED_SERVICES = ['Amazon Music', 'Apple Music', 'Deezer',
+                      'Google Play Music', 'Music Library', 'Napster', 'Plex',
+                      'SoundCloud', 'Spotify', 'TuneIn', 'Wolfgangs Music',
+                      'YouTube Music']
 
 # Service that requires authentication
 REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer']
@@ -16,6 +16,9 @@ SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
 
 # Token file used by SoCo Python library
 TOKEN_FILE = '/.config/SoCo/token_store.json'
+
+# Token collection name
+TOKEN_COLLECTION = 'default'
 
 # Volume values
 DEFAULT_VOL_INCREMENT = 10
