@@ -47,7 +47,7 @@ def authentication(self):
         if Path(token_file).is_file():
             try:
                 with open(token_file, encoding='utf-8') as data:
-                    token_data(json.load(data))
+                    token_data = json.load(data)
             except IOError as err:
                 self.log.error(err)
 
