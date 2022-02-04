@@ -106,6 +106,10 @@ def search_playlist(self, data):
                 return
         else:
             playlists = data['provider'].search('playlists', data['playlist'])
+            if len(playlists) < 1:
+                self.speak_dialog('error.playlist', data={
+                    'playlist': data['playlist']})
+                return
             picked = choice(playlists)
             device.add_to_queue(picked)
             title = picked.title
@@ -337,6 +341,10 @@ def search_podcast(self, data):
         device.clear_queue()
 
         podcasts = data['provider'].search('podcasts', data['podcast'])
+        if len(podcasts) < 1:
+            self.speak_dialog('error.podcast', data={
+                'podcast': data['podcast']})
+            return
         picked = choice(podcasts)
         device.add_to_queue(picked)
         title = picked.title
