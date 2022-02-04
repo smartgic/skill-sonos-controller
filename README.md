@@ -117,5 +117,5 @@ Once you successfully logged to Spotify, enter the same code as provided before 
 #smarthome
 #spotify
 #deezer
-#amazon music
+#amazonmusic
 #plex
