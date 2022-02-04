@@ -328,7 +328,6 @@ def search_podcast(self, data):
     :return:
     :raises SoCoException: Raise SoCoException
     """
-    self.log.info("search podcast")
     try:
         picked = None
         title = None
