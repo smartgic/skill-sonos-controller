@@ -69,8 +69,7 @@ def search_type(self, data):
         search_album(self, data)
     elif data['category'] == 'tracks':
         search_track(self, data)
-    elif data['podcast'] == 'podcasts':
-        self.log.info("search type podcast")
+    elif data['category'] == 'podcasts':
         search_podcast(self, data)
 
 

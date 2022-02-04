@@ -9,11 +9,10 @@ SUPPORTED_SERVICES = ['Amazon Music', 'Apple Music', 'Deezer',
 # Service that requires authentication
 REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer', 'Plex']
 
-# List of supported categories
-SUPPORTED_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
-                                'genres', 'composers', 'tracks', 'share',
-                                'sonos_playlists', 'playlists', 'podcasts',
-                                'EPISODES']
+# List of supported categories for music library
+SUPPORTED_MUSIC_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
+                                      'genres', 'composers', 'tracks', 'share',
+                                      'sonos_playlists', 'playlists']
 
 # Token file used by SoCo Python library
 TOKEN_FILE = '/.config/SoCo/token_store.json'

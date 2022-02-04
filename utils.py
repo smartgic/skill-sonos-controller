@@ -10,7 +10,7 @@ from soco import discover
 from soco.discovery import by_name
 from soco.music_library import MusicLibrary
 from soco.music_services import MusicService
-from .constants import SUPPORTED_LIBRARY_CATEGORIES, URL_SHORTENER, \
+from .constants import SUPPORTED_MUSIC_LIBRARY_CATEGORIES, URL_SHORTENER, \
     SUPPORTED_SERVICES, REQUIRED_AUTHENTICATION, TOKEN_FILE, TOKEN_COLLECTION
 
 
@@ -164,7 +164,7 @@ def get_category(self, service, category):
 
         if service == 'Music Library':
             provider = MusicLibrary()
-            available_categories = SUPPORTED_LIBRARY_CATEGORIES
+            available_categories = SUPPORTED_MUSIC_LIBRARY_CATEGORIES
         else:
             provider = MusicService(service)
             available_categories = provider.available_search_categories
