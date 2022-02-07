@@ -40,7 +40,7 @@ def authentication(self):
     token_file = os.getenv('HOME') + TOKEN_FILE
 
     if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
-        provider = MusicService(self.service.title())
+        provider = MusicService(self.service)
 
         # Collect authenticated music services from token file if it exists.
         token_data = {}
