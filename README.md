@@ -23,6 +23,7 @@ This skill interacts with your Sonos devices and allows you to play music from d
 * Deezer *(account required)*
 * Plex *(account required)*
 * Spotify *(account required)*
+* Tidal *(account required)*
 
 Before using a music service, **make sure that you linked** your service account to your Sonos devices by using the Sonos application:
 
@@ -119,3 +120,4 @@ Once you successfully logged to Spotify, enter the same code as provided before 
 #deezer
 #amazonmusic
 #plex
+#tidal
