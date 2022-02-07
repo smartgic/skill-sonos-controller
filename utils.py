@@ -40,7 +40,10 @@ def authentication(self):
     token_file = os.getenv('HOME') + TOKEN_FILE
 
     if self.service in map(str.lower, set(REQUIRED_AUTHENTICATION)):
-        provider = MusicService(self.service)
+        service = self.service.title()
+        if self.service.title() == 'Tidal':
+            service = 'TIDAL'
+        provider = MusicService(service)
 
         # Collect authenticated music services from token file if it exists.
         token_data = {}
@@ -194,7 +197,7 @@ def subscribed_services(self):
         # Commented until SoCo integrates this method back
         # self.services = MusicService.get_subscribed_services_names()
         self.services = ['Spotify', 'Amazon Music', 'Deezer', 'Plex',
-                         'Wolfgangs Music', 'Music Library', 'TIDAL']
+                         'Wolfgangs Music', 'Music Library', 'Tidal']
         return self.services
     except exceptions.SoCoException as err:
         self.log.error(err)
