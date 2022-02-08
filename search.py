@@ -37,7 +37,12 @@ def search(self, service, speaker, category, playlist=None, album=None,
     if service in map(str.lower, set(self.services)):
         device_name = check_speaker(self, speaker)
         if device_name:
-            provider = get_category(self, service.title(), category)
+            # A function should be created to handle this type of exception.
+            music_service = service.title()
+            if music_service == 'Tidal':
+                music_service = 'TIDAL'
+
+            provider = get_category(self, music_service, category)
             if provider:
                 # Build data dictionnary to pass to search_type()
                 data = {}

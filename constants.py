@@ -3,11 +3,12 @@
 # List of current supported service by SoCo
 SUPPORTED_SERVICES = ['Amazon Music', 'Apple Music', 'Deezer',
                       'Google Play Music', 'Music Library', 'Napster', 'Plex',
-                      'SoundCloud', 'Spotify', 'TuneIn', 'Wolfgangs Music',
-                      'YouTube Music']
+                      'SoundCloud', 'Spotify', 'Tidal', 'TuneIn',
+                      'Wolfgangs Music', 'YouTube Music']
 
 # Service that requires authentication
-REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer', 'Plex']
+REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer', 'Plex',
+                           'Tidal']
 
 # List of supported categories for music library
 SUPPORTED_MUSIC_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
