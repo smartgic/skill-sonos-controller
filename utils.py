@@ -262,6 +262,13 @@ def check_service(self, service):
                         self.speak_dialog('error.auth', data={
                             'service': service})
                         return service
+
+                # Required because by default all the processing is done in
+                # case but for some reason Tidal music service is fully upper
+                # case.
+                if service == 'tidal':
+                    service = 'TIDAL'
+
                 return service
 
     self.log.error('{} service not supported'.format(service))
