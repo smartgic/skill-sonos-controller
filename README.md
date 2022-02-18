@@ -20,6 +20,7 @@ This skill interacts with your Sonos devices and allows you to play music from d
 
 * Local library
 * Amazon Music *(account required)*
+* Apple Music *(account required)*
 * Deezer *(account required)*
 * Plex *(account required)*
 * Spotify *(account required)*
@@ -61,7 +62,7 @@ Before using a music service, **make sure that you linked** your service account
 * "enable repeat mode"
 * "next music"
 * "previous music"
-* "give me information on dining room device"
+* "give me information on dining room speaker"
 * "give me detailed information about library speaker"
 
 ## Installation

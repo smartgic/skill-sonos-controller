@@ -196,8 +196,8 @@ def subscribed_services(self):
     try:
         # Commented until SoCo integrates this method back
         # self.services = MusicService.get_subscribed_services_names()
-        self.services = ['Spotify', 'Amazon Music', 'Deezer', 'Plex',
-                         'Wolfgangs Music', 'Music Library', 'Tidal']
+        self.services = ['Spotify', 'Apple Music', 'Amazon Music', 'Deezer',
+                         'Plex', 'Wolfgangs Music', 'Music Library', 'Tidal']
         return self.services
     except exceptions.SoCoException as err:
         self.log.error(err)

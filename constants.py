@@ -7,8 +7,8 @@ SUPPORTED_SERVICES = ['Amazon Music', 'Apple Music', 'Deezer',
                       'Wolfgangs Music', 'YouTube Music']
 
 # Service that requires authentication
-REQUIRED_AUTHENTICATION = ['Spotify', 'Amazon Music', 'Deezer', 'Plex',
-                           'Tidal']
+REQUIRED_AUTHENTICATION = ['Spotify', 'Apple Music', 'Amazon Music', 'Deezer',
+                           'Plex', 'Tidal']
 
 # List of supported categories for music library
 SUPPORTED_MUSIC_LIBRARY_CATEGORIES = ['artists', 'album_artists', 'albums',
