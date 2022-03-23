@@ -10,7 +10,7 @@ Control Sonos speakers with music services support such as Spotify, Deezer, Amaz
 
 ## Disclaimer
 
-*This plugin is not officially commissioned/supported by Sonos. The trademark "Sonos" is registered by "Sonos, Inc."*
+*This skill is not officially commissioned/supported by Sonos. The trademark "Sonos" is registered by "Sonos, Inc."*
 
 ## About
 
