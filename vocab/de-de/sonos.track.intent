@@ -1,4 +1,4 @@
-play {track} (on | in) {speaker}
-play {track} by {artist} (on | in) {speaker}
-play {track} from {service} (on | in) {speaker}
-play {track} by {artist} from {service} (on | in) {speaker}
+Spiele {track} (auf | in | über) {speaker}
+Spiele {track} von {artist} (auf | in | über) {speaker}
+Spiele {track} über {service} (auf | in | über) {speaker}
+Spiele {track} von {artist} über {service} (auf | in | über) {speaker}
