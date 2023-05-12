@@ -107,7 +107,7 @@ def authentication(self):
                 # Map the code with NATO
                 data = {"slash": ". ".join(map(self.nato_dict.get, url_shorted)) + "."}
                 self.log.info("sonos link code: {}".format(url_shorted))
-                self.speak_dialog("sonos.link_code", data={"code": data})
+                self.speak_dialog("sonos.link_code", data={"code": data}, wait=True)
             except exceptions.SoCoException as err:
                 self.log.error(err)
 
