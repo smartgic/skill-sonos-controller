@@ -1,10 +1,12 @@
-[![Build Status](https://travis-ci.com/smartgic/mycroft-sonos-controller-skill.svg?branch=20.8.1)](https://travis-ci.com/github/smartgic/mycroft-sonos-controller-skill) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-pink.svg?style=flat)](https://github.com/smartgic/mycroft-sonos-controller-skill/pulls) [![Skill: MIT](https://img.shields.io/badge/mycroft.ai-skill-blue)](https://mycroft.ai) [![Discord](https://img.shields.io/discord/809074036733902888)](https://discord.gg/sHM3Duz5d3)
+# Sonos Controller
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-pink.svg?style=flat)](https://github.com/smartgic/mycroft-sonos-controller-skill/pulls) [![Skill: MIT](https://img.shields.io/badge/mycroft.ai-skill-blue)](https://mycroft.ai)
+[![Discord](https://img.shields.io/discord/809074036733902888)](https://discord.gg/sHM3Duz5d3)
 
 <p align="center">
   <img alt="Mycrof Sonos Controller Skill" src="docs/mycroft-sonos-logo.png" width="500px">
 </p>
-
-# Sonos Controller
 
 Control Sonos speakers with music services support such as Spotify, Deezer, Amazon Music, etc...
 
@@ -105,20 +107,3 @@ Once you successfully logged to Spotify, enter the same code as provided before 
 * [Smart'Gic](https://smartgic.io/)
 * [SoCo](https://github.com/SoCo/SoCo)
 * [@rbcolom](https://github.com/rbcolom) - Italian translation
-
-## Category
-
-**Music & Audio**
-
-## Tags
-
-#music
-#audio
-#sonos
-#sound
-#smarthome
-#spotify
-#deezer
-#amazonmusic
-#plex
-#tidal
