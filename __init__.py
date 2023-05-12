@@ -1,7 +1,7 @@
 """Sonos controller entrypoint skill
 """
 import logging
-from mycroft import MycroftSkill, intent_handler
+from mycroft import intent_handler
 from ovos_workshop.skills import OVOSSkill
 from .utils import (
     authentication,
