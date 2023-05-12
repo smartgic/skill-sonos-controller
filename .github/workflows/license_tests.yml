@@ -4,4 +4,4 @@ on:
   pull_request:
 jobs:
   license_tests:
-    uses: smartgic/.github/.github/workflows/license_tests.yml@main
+    uses: smartgic/.github/.github/workflows/license_tests.yml
