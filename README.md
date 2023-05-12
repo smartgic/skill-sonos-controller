@@ -18,7 +18,6 @@ This skill interacts with your Sonos devices and allows you to play music from d
 
 * Local library
 * Amazon Music *(account required)*
-* Apple Music *(account required)*
 * Deezer *(account required)*
 * Plex *(account required)*
 * Spotify *(account required)*
@@ -89,7 +88,7 @@ This skill utilizes the `settings.json` file which allows you to configure it. T
 | --- | --- | --- |
 | `default_source`| `music library`, `amazon music`, `deezer`, `plex`, `spotify`, `tidal` | Default source of music to play from |
 | `link_code`| `ABCD` | Link code spoken by the skill *(Visit sonos.smartgic.io/ABCD)* |
-| `duck` | `true`, `false` | Reduce volume level temporarily when speaking *(wake word detected)* |
+| `duck` | `true`, `false` | Reduce volume level temporarly when speaking *(wake word detected)* |
 | `confirmation` |`true`, `false` | Receive playing confirmation |
 
 To authenticate to Spotify music service:
@@ -99,7 +98,7 @@ To authenticate to Spotify music service:
   "__mycroft_skill_firstrun": false,
   "confirmation": true,
   "default_source": "spotify",
-  "duck": true,
+  "duck": true
 }
 ```
 
@@ -107,7 +106,7 @@ When Spotify music service is selected OVOS will speak to you with a URL and cod
 
 <https://sonos.smartgic.io> is a URL shortener system which will temporary store the music service authentication URL. Once the authentication is done, the URL will be deleted from the URL shortener system.
 
-This link will redirect you to the music service authentication login page using the `https` protocol.
+This link will redirect you to the music service official authentication login page using secured protocol.
 
 <img src='docs/spotify-auth.png' width='450'/>
 
@@ -115,7 +114,7 @@ This link will redirect you to the music service authentication login page using
 
 <img src='docs/sonos-spotify-authenticated.png' width='450'/>
 
-Once you successfully logged to Spotify, enter the same code as provided before into the `link_code` key.
+Once successfully logged to Spotify, enter the same code as provided before into `~/ovos/config/skills/skill-sonos-controller.smartgic/settings.json` using the `link_code` key.
 
 ```json
 {
@@ -127,7 +126,7 @@ Once you successfully logged to Spotify, enter the same code as provided before 
 }
 ```
 
-OVOS will confirm the success of the configuration and gives you some example of what you could say.
+OVOS will confirm the success of the authentification and gives you some example of what you could say.
 
 ## Supported languages
 
