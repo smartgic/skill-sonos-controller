@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.vendor="Smart'Gic"
 ARG ALPHA=false
 
 RUN if [ "${ALPHA}" == "true" ]; then \
-    pip3 install git+https://github.com/smartgic/mycroft-sonos-controller-skill.git@refactor/ovos; \
+    pip3 install git+https://github.com/smartgic/skill-sonos-controller.git; \
     else \
     pip3 install smartgic-skill-sonos-controller; \
     fi \
