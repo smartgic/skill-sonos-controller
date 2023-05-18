@@ -1,1 +1,3 @@
+ovos-utils
+ovos_workshop
 soco~=0.29
