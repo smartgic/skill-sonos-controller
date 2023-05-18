@@ -1,7 +1,9 @@
 """Sonos controller entrypoint skill
 """
 import logging
-from mycroft import intent_handler
+from ovos_utils import classproperty
+from ovos_utils.process_utils import RuntimeRequirements
+from ovos_workshop.decorators import intent_handler
 from ovos_workshop.skills import OVOSSkill
 from .utils import (
     authentication,
@@ -41,6 +43,23 @@ class SonosController(OVOSSkill):
         # Override SoCo logging level for discovery and services
         logging.getLogger("soco.discovery").setLevel(logging.WARN)
         logging.getLogger("soco.services").setLevel(logging.WARN)
+
+    @classproperty
+    def runtime_requirements(self):
+        """Check for skill functionalities requirements before trying to
+        start the skill.
+        """
+        return RuntimeRequirements(
+            internet_before_load=False,
+            network_before_load=True,
+            gui_before_load=False,
+            requires_internet=False,
+            requires_network=True,
+            requires_gui=False,
+            no_internet_fallback=True,
+            no_network_fallback=True,
+            no_gui_fallback=True,
+        )
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
@@ -408,8 +427,3 @@ class SonosController(OVOSSkill):
         self._entity()
         discovery(self)
         subscribed_services(self)
-
-
-def create_skill():
-    """Main function to register the skill"""
-    return SonosController()
