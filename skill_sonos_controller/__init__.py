@@ -46,9 +46,9 @@ class SonosControllerSkill(OVOSSkill):
 
     def _setup(self):
         """Provision initialized variables and retrieve configuration
-        from home.mycroft.ai.
+        from settings.json file.
         """
-        # By default the Music Library service is used
+        # By default, the Music Library service is used
         self.service = self.settings.get("default_source", "music library")
         self.code = self.settings.get("link_code")
         # Initiate NATO dict
@@ -59,12 +59,12 @@ class SonosControllerSkill(OVOSSkill):
 
         if self.duck:
             # Manage Sonos volume when wakeword is detected
-            # https://tinyurl.com/244286w8
+            # https://openvoiceos.github.io/message_spec/dinkum/
             self.add_event("recognizer_loop:record_begin", self._handle_duck_volume)
             self.add_event("recognizer_loop:record_end", self._handle_unduck_volume)
 
         # Handle events sent by Mycroft playback skill
-        # https://bit.ly/3nIGHw8
+        # https://openvoiceos.github.io/message_spec/ovos_audio/#listens-to_1
         self.add_event("mycroft.audio.service.stop", self._handle_stop_music)
         self.add_event("mycroft.audio.service.next", self._handle_next_music)
         self.add_event("mycroft.audio.service.prev", self._handle_previous_music)
@@ -72,7 +72,7 @@ class SonosControllerSkill(OVOSSkill):
         self.add_event("mycroft.audio.service.resume", self._handle_resume_music)
 
     @intent_handler("sonos.discovery.intent")
-    def _handle_speaker_discovery(self):
+    def _handle_speaker_discovery(self, _):
         """Handle the Sonos devices discovery triggered by intents
 
         It's only used by the user to get the device names, the main discovery
@@ -87,17 +87,17 @@ class SonosControllerSkill(OVOSSkill):
                     self.speak(speaker.player_name.lower())
 
     @intent_handler("sonos.speaker.info.intent")
-    def _handle_speaker_info(self, message):
+    def _handle_speaker_info(self, message: Message):
         """Handle the Sonos devices information triggered by intents"""
         speaker_info(self, message.data.get("speaker"), message.data.get("detailed"))
 
     @intent_handler("sonos.service.intent")
-    def _handle_subscribed_services(self):
+    def _handle_subscribed_services(self, _):
         """Handle the subscribed services listing triggerd by intents
 
         It's only used by the user to get the service that are subscribed by
-        the Sonos devices. The service detection is performed during the
-        skill initialization.
+        the Sonos devices (from the applications). The service detection is
+        performed during the skill initialization.
 
         :return: A list of services
         :rtype: list
@@ -116,7 +116,7 @@ class SonosControllerSkill(OVOSSkill):
         return None
 
     @intent_handler("sonos.playlist.intent")
-    def _handle_playlist(self, message):
+    def _handle_playlist(self, message: Message):
         """Handle the playlist integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -132,7 +132,7 @@ class SonosControllerSkill(OVOSSkill):
         search(self, service, speaker, "playlists", playlist=playlist)
 
     @intent_handler("sonos.podcast.intent")
-    def _handle_podcast(self, message):
+    def _handle_podcast(self, message: Message):
         """Handle the podcast integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -148,7 +148,7 @@ class SonosControllerSkill(OVOSSkill):
         search(self, service, speaker, "podcasts", podcast=podcast)
 
     @intent_handler("sonos.album.intent")
-    def _handle_album(self, message):
+    def _handle_album(self, message: Message):
         """Handle the album integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -167,7 +167,7 @@ class SonosControllerSkill(OVOSSkill):
         search(self, service, speaker, "albums", artist=artist, album=album)
 
     @intent_handler("sonos.track.intent")
-    def _handle_track(self, message):
+    def _handle_track(self, message: Message):
         """Handle the track integration which include the search and
         the dispatch on the Sonos speakers(s).
 
@@ -186,7 +186,7 @@ class SonosControllerSkill(OVOSSkill):
         search(self, service, speaker, "tracks", artist=artist, track=track)
 
     @intent_handler("sonos.pause.music.intent")
-    def _handle_pause_music(self, message):
+    def _handle_pause_music(self, message: Message):
         """Handle pause music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -195,7 +195,7 @@ class SonosControllerSkill(OVOSSkill):
         run_command(self, command="pause", speaker=message.data.get("speaker"))
 
     @intent_handler("sonos.stop.music.intent")
-    def _handle_stop_music(self, message):
+    def _handle_stop_music(self, message: Message):
         """Handle stop music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -204,7 +204,7 @@ class SonosControllerSkill(OVOSSkill):
         run_command(self, command="stop", speaker=message.data.get("speaker"))
 
     @intent_handler("sonos.resume.music.intent")
-    def _handle_resume_music(self, message):
+    def _handle_resume_music(self, message: Message):
         """Handle resume music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -218,7 +218,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.next.music.intent")
-    def _handle_next_music(self, message):
+    def _handle_next_music(self, message: Message):
         """Handle next music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -227,7 +227,7 @@ class SonosControllerSkill(OVOSSkill):
         run_command(self, command="next", speaker=message.data.get("speaker"))
 
     @intent_handler("sonos.previous.music.intent")
-    def _handle_previous_music(self, message):
+    def _handle_previous_music(self, message: Message):
         """Handle previous music command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -236,7 +236,7 @@ class SonosControllerSkill(OVOSSkill):
         run_command(self, command="previous", speaker=message.data.get("speaker"))
 
     @intent_handler("sonos.volume.up.intent")
-    def _handle_volume_up(self, message):
+    def _handle_volume_up(self, message: Message):
         """Handle volume up command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -264,7 +264,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.volume.louder.intent")
-    def _handle_volume_louder(self, message):
+    def _handle_volume_louder(self, message: Message):
         """Handle volume louder command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -278,7 +278,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.volume.quieter.intent")
-    def _handle_volume_quieter(self, message):
+    def _handle_volume_quieter(self, message: Message):
         """Handle volume quieter command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -291,7 +291,7 @@ class SonosControllerSkill(OVOSSkill):
             value=LOUDER_QUIETER,
         )
 
-    def _handle_duck_volume(self, message):
+    def _handle_duck_volume(self, message: Message):
         """Handle the duck volume on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -305,7 +305,7 @@ class SonosControllerSkill(OVOSSkill):
             value=DEFAULT_VOL_INCREMENT,
         )
 
-    def _handle_unduck_volume(self, message):
+    def _handle_unduck_volume(self, message: Message):
         """Handle the unduck volume on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -320,7 +320,7 @@ class SonosControllerSkill(OVOSSkill):
         self.current_volume = {}
 
     @intent_handler("sonos.shuffle.on.intent")
-    def _handle_shuffle_on(self, message):
+    def _handle_shuffle_on(self, message: Message):
         """Handle shuffe mode on command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -334,7 +334,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.shuffle.off.intent")
-    def _handle_shuffle_off(self, message):
+    def _handle_shuffle_off(self, message: Message):
         """Handle shuffe mode off command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -345,7 +345,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.repeat.on.intent")
-    def _handle_repeat_on(self, message):
+    def _handle_repeat_on(self, message: Message):
         """Handle repeat mode on command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -359,7 +359,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.repeat.off.intent")
-    def _handle_repeat_off(self, message):
+    def _handle_repeat_off(self, message: Message):
         """Handle repeat mode off command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -370,7 +370,7 @@ class SonosControllerSkill(OVOSSkill):
         )
 
     @intent_handler("sonos.what.is.playing.intent")
-    def _handle_what_is_playing(self, message):
+    def _handle_what_is_playing(self, message: Message):
         """Handle what is playing command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -379,7 +379,7 @@ class SonosControllerSkill(OVOSSkill):
         get_track_info(self, message.data.get("speaker"), False)
 
     @intent_handler("sonos.which.artist.intent")
-    def _handle_which_artist_playing(self, message):
+    def _handle_which_artist_playing(self, message: Message):
         """Handle which artist is playing command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -391,9 +391,8 @@ class SonosControllerSkill(OVOSSkill):
         """The initialize method is called after the Skill is fully
         constructed and registered with the system. It is used to perform
         any final setup for the Skill including accessing Skill settings.
-        https://tinyurl.com/4pevkdhj
+        https://openvoiceos.github.io/ovos-technical-manual/skill_structure/#initialize
         """
-
         # Initialize variables with empty or None values
         self.speakers = []
         self.services = []
@@ -415,7 +414,7 @@ class SonosControllerSkill(OVOSSkill):
     def on_settings_changed(self):
         """Each Mycroft device will check for updates to a users settings
         regularly, and write these to the Skills settings.json.
-        https://tinyurl.com/f2bkymw
+        https://openvoiceos.github.io/ovos-technical-manual/skill_settings
         """
         self._setup()
         authentication(self)
