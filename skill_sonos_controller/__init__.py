@@ -1,7 +1,10 @@
 """Sonos controller entrypoint skill
 """
+
 import logging
+from ovos_bus_client.message import Message
 from ovos_utils import classproperty
+from ovos_utils.log import LOG
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.skills import OVOSSkill
@@ -20,7 +23,7 @@ from .search import search
 from .constants import DEFAULT_VOL_INCREMENT, LOUDER_QUIETER
 
 
-class SonosController(OVOSSkill):
+class SonosControllerSkill(OVOSSkill):
     """This is the place where all the magic happens for the Sonos
     controller skill.
     """
@@ -44,16 +47,19 @@ class SonosController(OVOSSkill):
         logging.getLogger("soco.discovery").setLevel(logging.WARN)
         logging.getLogger("soco.services").setLevel(logging.WARN)
 
+        self.settings_change_callback = self.on_settings_changed
+        self.on_settings_changed()
+
     @classproperty
     def runtime_requirements(self):
         """Check for skill functionalities requirements before trying to
         start the skill.
         """
         return RuntimeRequirements(
-            internet_before_load=False,
+            internet_before_load=True,
             network_before_load=True,
             gui_before_load=False,
-            requires_internet=False,
+            requires_internet=True,
             requires_network=True,
             requires_gui=False,
             no_internet_fallback=True,
@@ -267,7 +273,7 @@ class SonosController(OVOSSkill):
         )
 
     @intent_handler("sonos.volume.down.intent")
-    def _handle_volume_down(self, message):
+    def _handle_volume_down(self, message: Message):
         """Handle volume down command on Sonos speakers.
 
         :param message: Contains the utterance, the variables, etc...
@@ -415,13 +421,13 @@ class SonosController(OVOSSkill):
         https://tinyurl.com/4pevkdhj
         """
         self.settings_change_callback = self.on_settings_changed
-        self.on_settings_changed()
 
     def on_settings_changed(self):
         """Each Mycroft device will check for updates to a users settings
         regularly, and write these to the Skills settings.json.
         https://tinyurl.com/f2bkymw
         """
+        LOG.info("skill reload")
         self._setup()
         authentication(self)
         self._entity()

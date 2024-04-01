@@ -1,6 +1,7 @@
 """This file contains functions related to extra operations
 and are called by the handle_* methods from __init__.py
 """
+
 import json
 import os
 import requests

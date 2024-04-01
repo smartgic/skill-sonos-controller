@@ -1,3 +1,1 @@
-ovos-utils
-ovos_workshop
-soco~=0.29
+soco~=0.30

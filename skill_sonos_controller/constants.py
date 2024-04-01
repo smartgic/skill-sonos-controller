@@ -1,5 +1,6 @@
 """This file contains constants mostly called by utils.py
 """
+
 # List of current supported service by SoCo
 SUPPORTED_SERVICES = [
     "Amazon Music",

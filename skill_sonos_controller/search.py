@@ -1,5 +1,6 @@
 """This file contains functions related to the searching items
 """
+
 import re
 from random import choice
 from urllib.parse import unquote
