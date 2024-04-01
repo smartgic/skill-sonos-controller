@@ -4,7 +4,6 @@
 import logging
 from ovos_bus_client.message import Message
 from ovos_utils import classproperty
-from ovos_utils.log import LOG
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.skills import OVOSSkill
@@ -27,28 +26,6 @@ class SonosControllerSkill(OVOSSkill):
     """This is the place where all the magic happens for the Sonos
     controller skill.
     """
-
-    def __init__(self, *args, **kwargs):
-        """Constructor method"""
-        super().__init__(*args, **kwargs)
-
-        # Initialize variables with empty or None values
-        self.speakers = []
-        self.services = []
-        self.service = None
-        self.nato_dict = None
-        self.settings_change_callback = None
-        self.code = None
-        self.duck = None
-        self.confirmation = None
-        self.current_volume = {}
-
-        # Override SoCo logging level for discovery and services
-        logging.getLogger("soco.discovery").setLevel(logging.WARN)
-        logging.getLogger("soco.services").setLevel(logging.WARN)
-
-        self.settings_change_callback = self.on_settings_changed
-        self.on_settings_changed()
 
     @classproperty
     def runtime_requirements(self):
@@ -410,26 +387,37 @@ class SonosControllerSkill(OVOSSkill):
         """
         get_track_info(self, message.data.get("speaker"), True)
 
-    def _entity(self):
-        """Register the Padatious entitiies"""
-        self.register_entity_file("service.entity")
-
     def initialize(self):
         """The initialize method is called after the Skill is fully
         constructed and registered with the system. It is used to perform
         any final setup for the Skill including accessing Skill settings.
         https://tinyurl.com/4pevkdhj
         """
+
+        # Initialize variables with empty or None values
+        self.speakers = []
+        self.services = []
+        self.service = None
+        self.nato_dict = None
+        self.code = None
+        self.duck = None
+        self.confirmation = None
+        self.current_volume = {}
+
+        # Override SoCo logging level for discovery and services
+        logging.getLogger("soco.discovery").setLevel(logging.WARN)
+        logging.getLogger("soco.services").setLevel(logging.WARN)
+
+        self.register_entity_file("service.entity")
         self.settings_change_callback = self.on_settings_changed
+        self.on_settings_changed()
 
     def on_settings_changed(self):
         """Each Mycroft device will check for updates to a users settings
         regularly, and write these to the Skills settings.json.
         https://tinyurl.com/f2bkymw
         """
-        LOG.info("skill reload")
         self._setup()
         authentication(self)
-        self._entity()
         discovery(self)
         subscribed_services(self)
