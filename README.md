@@ -29,45 +29,45 @@ Before using a music service, **make sure that you linked** your service account
 
 ## Examples
 
-- "play i got a feeling on living room"
-- "play i got a feeling by black eyed peas on living room"
-- "play i got a feeling from spotify on living room"
-- "play i got a feeling by black eyed peas from spotify on living room"
-- "play soundtrack playlist on dining room"
-- "play soundtrack playlist from spotify on dining room"
-- "play soundtrack album on dining room"
-- "play back to front album by lionel richie on dining room"
-- "play back to front album by lionel richie from spotify on dining room"
-- "play soundtrack album from spotify on dining room"
-- "play the mysterious universe podcast from plex on office"
-- "discover sonos devices"
-- "what is playing"
-- "which artist is playing"
-- "what are my music services"
-- "volume louder"
-- "volume quieter"
-- "volume down on living room"
-- "volume up"
-- "quieter"
-- "louder"
-- "pause music"
-- "stop music"
-- "stop the music on office speaker"
-- "resume music"
-- "shuffle off"
-- "shuffle on"
-- "disable repeat mode"
-- "enable repeat mode"
-- "next music"
-- "previous music"
-- "give me information on dining room speaker"
-- "give me detailed information about library speaker"
+- _play i got a feeling on living room_
+- _play i got a feeling by black eyed peas on living room_
+- _play i got a feeling from spotify on living room_
+- _play i got a feeling by black eyed peas from spotify on living room_
+- _play soundtrack playlist on dining room_
+- _play soundtrack playlist from spotify on dining room_
+- _play soundtrack album on dining room_
+- _play back to front album by lionel richie on dining room_
+- _play back to front album by lionel richie from spotify on dining room_
+- _play soundtrack album from spotify on dining room_
+- _play the mysterious universe podcast from plex on office_
+- _discover sonos devices_
+- _what is playing_
+- _which artist is playing_
+- _what are my music services_
+- _volume louder_
+- _volume quieter_
+- _volume down on living room_
+- _volume up_
+- _quieter_
+- _louder_
+- _pause music_
+- _stop music_
+- _stop the music on office speaker_
+- _resume music_
+- _shuffle off_
+- _shuffle on_
+- _disable repeat mode_
+- _enable repeat mode_
+- _next music_
+- _previous music_
+- _give me information on dining room speaker_
+- _give me detailed information about library speaker_
 
 ## Installation
 
 When using `ovos-core`, two approaches are available to install this skill.
 
-The first one will be to use `pip` and install the skill at the same "place" as `ovos-core`, sharing Python libraries.
+The first one will be to use `pip` and install the skill in the same "place" as `ovos-core`, sharing Python libraries.
 
 ```bash
 pip install git+https://github.com/smartgic/skill-sonos-controller
@@ -82,7 +82,10 @@ docker compose up -d
 
 ## Configuration
 
-This skill utilizes the `settings.json` file which allows you to configure it. This file is available at `~/ovos/config/skills/skill-sonos-controller.smartgic/settings.json`.
+This skill utilizes the `settings.json` file which allows you to configure it. This file is available in different places depending how Open Voice OS has been installed:
+
+- `venv`: `~/.config/mycroft/skills/skill-sonos-controller.smartgic/settings.json`
+- `containers`: `~/ovos/config/skills/skill-sonos-controller.smartgic/settings.json`
 
 | Option           | Value                                                                 | Description                                                         |
 | ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
@@ -126,7 +129,7 @@ Once successfully logged to Spotify, enter the same code as provided before into
 }
 ```
 
-OVOS will confirm the success of the authentification and gives you some example of what you could say.
+OVOS will confirm the success of the authentification and gives you some example of what you could say to your assistant.
 
 ## Supported languages
 
