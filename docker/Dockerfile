@@ -17,7 +17,7 @@ ARG ALPHA=false
 RUN if [ "${ALPHA}" == "true" ]; then \
     pip3 install git+https://github.com/smartgic/skill-sonos-controller.git; \
     else \
-    pip3 install smartgic-skill-sonos-controller; \
+    pip3 install skill-sonos-controller; \
     fi \
     && rm -rf ${HOME}/.cache
 

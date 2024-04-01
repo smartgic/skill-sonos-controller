@@ -70,7 +70,7 @@ When using `ovos-core`, two approaches are available to install this skill.
 The first one will be to use `pip` and install the skill at the same "place" as `ovos-core`, sharing Python libraries.
 
 ```bash
-pip install git+https://github.com/smartgic/mycroft-sonos-controller-skill.git
+pip install git+https://github.com/smartgic/sonos-controller-skill.git
 ```
 
 The second one will be to run the skill as standalone within a container. Run the `docker compose` command but before edit the `.env` environment file if required.
