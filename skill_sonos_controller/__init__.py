@@ -4,6 +4,7 @@
 import logging
 from ovos_bus_client.message import Message
 from ovos_utils import classproperty
+from ovos_utils.log import LOG
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.skills import OVOSSkill
@@ -110,7 +111,7 @@ class SonosControllerSkill(OVOSSkill):
                     self.speak(service)
             return self.services
 
-        self.log.warning("no subscription found for any music service")
+        LOG.warning("no subscription found for any music service")
         self.speak_dialog("error.service")
 
         return None

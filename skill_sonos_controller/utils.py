@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import requests
+from ovos_utils.log import LOG
 from soco import exceptions
 from soco import discover
 from soco.discovery import by_name
@@ -32,10 +33,10 @@ def ping(self):
     try:
         if requests.get(URL_SHORTENER, timeout=HTTP_REQUEST_TIMEOUT).status_code == 200:
             return True
-        self.log.error("url shortener service is not reachable")
+        LOG.error("url shortener service is not reachable")
         return False
     except requests.ConnectionError as err:
-        self.log.error(err)
+        LOG.error(err)
         return False
 
 
@@ -60,7 +61,7 @@ def authentication(self):
                 with open(token_file, encoding="utf-8") as data:
                     token_data = json.load(data)
             except IOError as err:
-                self.log.error(err)
+                LOG.error(err)
 
         # Check if the music service has been already authenticated.
         # Each music service has a service ID and this service ID is written
@@ -96,7 +97,7 @@ def authentication(self):
 
                 self.speak_dialog("sonos.authenticated")
             except exceptions.SoCoException as err:
-                self.log.error(err)
+                LOG.error(err)
         elif not authenticated and ping(self):
             try:
                 # Retrieve the url, the code and the device ID.
@@ -115,10 +116,10 @@ def authentication(self):
 
                 # Map the code with NATO
                 data = {"slash": ". ".join(map(self.nato_dict.get, url_shorted)) + "."}
-                self.log.info(f"sonos link code: {url_shorted}")
+                LOG.info(f"sonos link code: {url_shorted}")
                 self.speak_dialog("sonos.link_code", data={"code": data}, wait=True)
             except exceptions.SoCoException as err:
-                self.log.error(err)
+                LOG.error(err)
 
 
 def discovery(self):
@@ -131,13 +132,13 @@ def discovery(self):
     try:
         self.speakers = discover()
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
     if not self.speakers:
-        self.log.warning("unable to find sonos devices")
+        LOG.warning("unable to find sonos devices")
         self.speak_dialog("error.discovery")
     else:
-        self.log.info(f"{len(self.speakers)} device(s) found")
+        LOG.info(f"{len(self.speakers)} device(s) found")
 
 
 def get_state(self, speaker):
@@ -156,7 +157,7 @@ def get_state(self, speaker):
             key = "current_transport_state"
             return device.get_current_transport_info()[key]
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
     return None
 
 
@@ -186,9 +187,9 @@ def get_category(self, service, category):
             if category in categories:
                 return provider
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
-    self.log.warning(f"{category} category not found for {service} service")
+    LOG.warning(f"{category} category not found for {service} service")
     self.speak_dialog("error.category", data={"category": category, "service": service})
     return None
 
@@ -216,7 +217,7 @@ def subscribed_services(self):
         ]
         return self.services
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def check_speaker(self, speaker, bypass_coordinator=False):
@@ -246,9 +247,9 @@ def check_speaker(self, speaker, bypass_coordinator=False):
                         return coordinator.player_name
                 return device.player_name
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
-    self.log.warning(f"{speaker} speaker not found")
+    LOG.warning(f"{speaker} speaker not found")
     self.speak_dialog("error.speaker", data={"speaker": speaker})
 
     return None
@@ -272,12 +273,12 @@ def check_service(self, service):
                 auth = map(str.lower, set(REQUIRED_AUTHENTICATION))
                 if service in auth:
                     if not os.path.isfile(os.getenv("HOME") + TOKEN_FILE):
-                        self.log.warning(f"{service} requires authentication")
+                        LOG.warning(f"{service} requires authentication")
                         self.speak_dialog("error.auth", data={"service": service})
                         return service
                 return service
 
-    self.log.error(f"{service} service not supported")
+    LOG.error(f"{service} service not supported")
     self.speak_dialog("error.support", data={"service": service})
 
     return None
@@ -336,7 +337,7 @@ def run_command(self, command, speaker, state="playing", extras=None):
                             else:
                                 eval(f"device.{command}()")
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def volume(self, way, speaker, value):
@@ -372,7 +373,7 @@ def volume(self, way, speaker, value):
                     if len(self.current_volume) > 0:
                         device.volume = self.current_volume[device.player_name]
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def get_volume(self):
@@ -387,7 +388,7 @@ def get_volume(self):
         for device in self.speakers:
             self.current_volume[device.player_name] = device.volume
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def get_track_info(self, speaker, artist_only=False):
@@ -401,7 +402,7 @@ def get_track_info(self, speaker, artist_only=False):
     """
     try:
         if speaker:
-            self.log.debug("> get_track_info() - speaker detected")
+            LOG.debug("> get_track_info() - speaker detected")
             device_name = check_speaker(self, speaker)
             if not device_name:
                 return None
@@ -418,14 +419,14 @@ def get_track_info(self, speaker, artist_only=False):
                         },
                     )
             else:
-                self.log.debug("> get_track_info() - speaker detected not playing")
+                LOG.debug("> get_track_info() - speaker detected not playing")
                 self.speak_dialog("sonos.nothing.playing")
         else:
-            self.log.debug("> get_track_info() - speaker not detected")
+            LOG.debug("> get_track_info() - speaker not detected")
             nothing_playing = True
             for device in self.speakers:
                 if get_state(self, device.player_name) == "PLAYING":
-                    self.log.debug("> get_track_info() - speaker not detected playing")
+                    LOG.debug("> get_track_info() - speaker not detected playing")
                     if artist_only:
                         if device.get_current_track_info()["artist"]:
                             self.speak_dialog(
@@ -447,10 +448,10 @@ def get_track_info(self, speaker, artist_only=False):
                             )
                     nothing_playing = False
             if nothing_playing:
-                self.log.debug("> get_track_info() - speaker not playing")
+                LOG.debug("> get_track_info() - speaker not playing")
                 self.speak_dialog("sonos.nothing.playing")
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def _valid_music_source(self, speaker):
@@ -467,10 +468,10 @@ def _valid_music_source(self, speaker):
                 f"unsupported action on {speaker.player_name} speaker when music "
                 "source is tv or line-in"
             )
-            self.log.warning(msg)
+            LOG.warning(msg)
             return False
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
     return True
 
 
@@ -486,7 +487,7 @@ def _mode(self, speaker, value):
     try:
         speaker.play_mode = value.upper()
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def speaker_info(self, speaker, detailed=False):
@@ -529,4 +530,4 @@ def speaker_info(self, speaker, detailed=False):
                 },
             )
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)

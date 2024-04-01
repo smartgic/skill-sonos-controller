@@ -4,6 +4,7 @@
 import re
 from random import choice
 from urllib.parse import unquote
+from ovos_utils.log import LOG
 from soco import exceptions
 from soco.discovery import by_name
 from .utils import get_category, check_speaker
@@ -140,7 +141,7 @@ def search_playlist(self, data):
                 },
             )
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def search_album(self, data):
@@ -253,7 +254,7 @@ def search_album(self, data):
                     },
                 )
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def search_track(self, data):
@@ -363,7 +364,7 @@ def search_track(self, data):
                     },
                 )
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
 
 
 def search_podcast(self, data):
@@ -403,4 +404,4 @@ def search_podcast(self, data):
                 },
             )
     except exceptions.SoCoException as err:
-        self.log.error(err)
+        LOG.error(err)
