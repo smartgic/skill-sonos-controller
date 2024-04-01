@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-from setuptools import setup
 from os import walk, path
+from setuptools import setup
 
 BASEDIR = path.abspath(path.dirname(__file__))
 URL = "https://github.com/smartgic/skill-sonos-controller"
 SKILL_CLAZZ = "SonosControllerSkill"
 PYPI_NAME = "skill-sonos-controller"
 
-# below derived from github url to ensure standard skill_id
-SKILL_AUTHOR, SKILL_NAME = URL.split(".com/")[-1].split("/")
+SKILL_AUTHOR, SKILL_NAME = URL.split(".com/", maxsplit=1)[-1].split("/")
 SKILL_PKG = SKILL_NAME.lower().replace("-", "_")
 PLUGIN_ENTRY_POINT = (
     f"{SKILL_NAME.lower()}.{SKILL_AUTHOR.lower()}={SKILL_PKG}:{SKILL_CLAZZ}"
@@ -23,8 +22,8 @@ def get_version():
     version = None
     version_file = path.join(BASE_PATH, "version.py")
     major, minor, build, alpha = (None, None, None, None)
-    with open(version_file) as f:
-        for line in f:
+    with open(version_file, encoding="utf-8") as file_version:
+        for line in file_version:
             if "VERSION_MAJOR" in line:
                 major = line.split("=")[1].strip()
             elif "VERSION_MINOR" in line:
@@ -65,7 +64,7 @@ def find_resource_files():
     return package_data
 
 
-with open("README.md", "r") as f:
+with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(

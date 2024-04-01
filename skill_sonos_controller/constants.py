@@ -57,3 +57,6 @@ LOUDER_QUIETER = 30
 # These services generate URL that are too long to be spoken by Mycroft
 # which is why an URL shortener service is used.
 URL_SHORTENER = "https://sonos.smartgic.io"
+
+# Timeouts
+HTTP_REQUEST_TIMEOUT = 5
