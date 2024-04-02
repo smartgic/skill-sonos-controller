@@ -54,7 +54,7 @@ class SonosControllerSkill(OVOSSkill):
         self.code = self.settings.get("link_code")
         # Initiate NATO dict
         # https://en.wikipedia.org/wiki/NATO_phonetic_alphabet
-        self.nato_dict = self.translate_namedvalues("codes")
+        self.nato_dict = self.resources.load_named_value_file("codes")
         self.duck = self.settings.get("duck")
         self.confirmation = self.settings.get("confirmation")
 
