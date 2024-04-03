@@ -35,6 +35,7 @@ def ping(self):
             return True
     except requests.exceptions.RequestException as err:
         LOG.error(err)
+        self.speak_dialog("error.urlshortener")
         return False
 
 
