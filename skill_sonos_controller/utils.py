@@ -28,14 +28,12 @@ def ping(self):
     better handle error in case the service is down. Check GitHub issue for
     more information: https://tinyurl.com/57fp6dde
 
-    :raises ConnectionError: Raise ConnectionError
+    :raises RequestException: Raise RequestException
     """
     try:
         if requests.get(URL_SHORTENER, timeout=HTTP_REQUEST_TIMEOUT).status_code == 200:
             return True
-        LOG.error("url shortener service is not reachable")
-        return False
-    except requests.ConnectionError as err:
+    except requests.exceptions.RequestException as err:
         LOG.error(err)
         return False
 
