@@ -21,7 +21,8 @@ def search(
     track=None,
     podcast=None,
 ):
-    """Search an item to play, it could be a playlist, an album or a track.
+    """Search an item to play, it could be a playlist, an album,
+    a podcast or a track.
 
     This function will build a dict with all the required information
     collected and will pass it to the others functions.
@@ -78,6 +79,11 @@ def search_type(self, data):
     :param data: Dict with all the required data
     :type data: dict
     """
+    if self.searching_confirmation:
+        self.speak_dialog(
+            "sonos.searching",
+            data={"service": data["service"]},
+        )
     if data["category"] == "playlists":
         search_playlist(self, data)
     elif data["category"] == "albums":
@@ -133,7 +139,7 @@ def search_playlist(self, data):
 
         is_speaker_muted(self, device)
 
-        if self.confirmation:
+        if self.playing_confirmation:
             self.speak_dialog(
                 "sonos.playlist",
                 data={
@@ -237,7 +243,7 @@ def search_album(self, data):
 
         is_speaker_muted(self, device)
 
-        if self.confirmation:
+        if self.playing_confirmation:
             if data["artist"]:
                 self.speak_dialog(
                     "sonos.album.artist",
@@ -349,7 +355,7 @@ def search_track(self, data):
 
         is_speaker_muted(self, device)
 
-        if self.confirmation:
+        if self.playing_confirmation:
             if data["artist"]:
                 self.speak_dialog(
                     "sonos.track.artist",
@@ -402,7 +408,7 @@ def search_podcast(self, data):
 
         is_speaker_muted(self, device)
 
-        if self.confirmation:
+        if self.playing_confirmation:
             self.speak_dialog(
                 "sonos.podcast",
                 data={

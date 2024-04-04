@@ -56,7 +56,8 @@ class SonosControllerSkill(OVOSSkill):
         # https://en.wikipedia.org/wiki/NATO_phonetic_alphabet
         self.nato_dict = self.resources.load_named_value_file("codes")
         self.duck = self.settings.get("duck", False)
-        self.confirmation = self.settings.get("confirmation", False)
+        self.playing_confirmation = self.settings.get("playing_confirmation", False)
+        self.searching_confirmation = self.settings.get("searching_confirmation", True)
 
         if self.duck:
             # Manage Sonos volume when wakeword is detected
@@ -401,7 +402,7 @@ class SonosControllerSkill(OVOSSkill):
         self.nato_dict = None
         self.code = None
         self.duck = None
-        self.confirmation = None
+        self.playing_confirmation = None
         self.current_volume = {}
 
         # Override SoCo logging level for discovery and services
