@@ -7,7 +7,7 @@ from urllib.parse import unquote
 from ovos_utils.log import LOG
 from soco import exceptions
 from soco.discovery import by_name
-from .utils import get_category, check_speaker
+from .utils import get_category, check_speaker, is_speaker_muted
 
 
 def search(
@@ -131,6 +131,8 @@ def search_playlist(self, data):
         # Play the picked playlist
         device.play_from_queue(0)
 
+        is_speaker_muted(self, device)
+
         if self.confirmation:
             self.speak_dialog(
                 "sonos.playlist",
@@ -232,6 +234,8 @@ def search_album(self, data):
 
         # Play the picked album
         device.play_from_queue(0)
+
+        is_speaker_muted(self, device)
 
         if self.confirmation:
             if data["artist"]:
@@ -343,6 +347,8 @@ def search_track(self, data):
         # Play the picked track
         device.play_from_queue(0)
 
+        is_speaker_muted(self, device)
+
         if self.confirmation:
             if data["artist"]:
                 self.speak_dialog(
@@ -393,6 +399,8 @@ def search_podcast(self, data):
 
         # Play the picked podcast
         device.play_from_queue(0)
+
+        is_speaker_muted(self, device)
 
         if self.confirmation:
             self.speak_dialog(

@@ -376,7 +376,7 @@ def volume(self, way, speaker, value):
 
 
 def get_volume(self):
-    """Get current volume value on all Sonos devices.
+    """Get current volume value from all Sonos devices.
 
     This function is mainly used to handle the duck/unduck handler which
     will provide a better experience by restoring the right volume value.
@@ -386,6 +386,7 @@ def get_volume(self):
     try:
         for device in self.speakers:
             self.current_volume[device.player_name] = device.volume
+            LOG.debug(f"volume set to {device.volume} for {device.player_name} speaker")
     except exceptions.SoCoException as err:
         LOG.error(err)
 
@@ -401,7 +402,6 @@ def get_track_info(self, speaker, artist_only=False):
     """
     try:
         if speaker:
-            LOG.debug("> get_track_info() - speaker detected")
             device_name = check_speaker(self, speaker)
             if not device_name:
                 return None
@@ -418,14 +418,12 @@ def get_track_info(self, speaker, artist_only=False):
                         },
                     )
             else:
-                LOG.debug("> get_track_info() - speaker detected not playing")
                 self.speak_dialog("sonos.nothing.playing")
         else:
             LOG.debug("> get_track_info() - speaker not detected")
             nothing_playing = True
             for device in self.speakers:
                 if get_state(self, device.player_name) == "PLAYING":
-                    LOG.debug("> get_track_info() - speaker not detected playing")
                     if artist_only:
                         if device.get_current_track_info()["artist"]:
                             self.speak_dialog(
@@ -447,7 +445,6 @@ def get_track_info(self, speaker, artist_only=False):
                             )
                     nothing_playing = False
             if nothing_playing:
-                LOG.debug("> get_track_info() - speaker not playing")
                 self.speak_dialog("sonos.nothing.playing")
     except exceptions.SoCoException as err:
         LOG.error(err)
@@ -530,3 +527,19 @@ def speaker_info(self, speaker, detailed=False):
             )
     except exceptions.SoCoException as err:
         LOG.error(err)
+
+
+def is_speaker_muted(self, speaker):
+    """Check if the speaker is muted and play a message if it is
+
+    :param speaker: Which speaker to retrieve the volume
+    :type speaker: string
+    """
+    if speaker.volume == 0:
+        LOG.debug(f"speaker {speaker.player_name} is muted")
+        self.speak_dialog(
+            "sonos.speaker.muted",
+            data={
+                "speaker": speaker,
+            },
+        )
