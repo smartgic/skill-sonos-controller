@@ -540,6 +540,6 @@ def is_speaker_muted(self, speaker):
         self.speak_dialog(
             "sonos.speaker.muted",
             data={
-                "speaker": speaker,
+                "speaker": speaker.player_name,
             },
         )
