@@ -1,0 +1,2 @@
+group all (Sonos | ) (speakers | rooms) (with | from) {speaker}
+play everywhere from {speaker}

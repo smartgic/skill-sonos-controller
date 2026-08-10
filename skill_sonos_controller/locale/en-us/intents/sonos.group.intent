@@ -1,0 +1,2 @@
+group {speaker} with {group_speaker}
+play {speaker} and {group_speaker} together

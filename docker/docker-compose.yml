@@ -1,6 +1,3 @@
----
-version: "3.9"
-
 services:
   smartgic_skill_sonos_controller:
     container_name: smartgic_skill_sonos_controller
@@ -12,4 +9,5 @@ services:
     ipc: host
     volumes:
       - ${CONFIG_FOLDER}:/home/${OVOS_USER}/.config/mycroft
+      - ${SONOS_CONFIG_FOLDER}:/home/${OVOS_USER}/.config/SoCo
       - ${TMP_FOLDER}:/tmp/mycroft

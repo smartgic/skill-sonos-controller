@@ -1,0 +1,4 @@
+authenticate {service} with sonos
+connect {service} to sonos
+finish sonos authentication
+complete sonos authentication

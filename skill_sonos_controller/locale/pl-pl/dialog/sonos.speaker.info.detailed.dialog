@@ -1,0 +1,1 @@
+Model głośnika to {model_name}, numer modelu to {model_number}, wersja to {display_version}, identyfikator to {uid}, numer seryjny to {serial_number}, wersja oprogramowania to {software_version}, wersja sprzętu to {hardware_version}, a adres MAC to {mac_address}

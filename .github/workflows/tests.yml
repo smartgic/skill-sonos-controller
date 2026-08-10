@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e '.[test]'
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest
+      - if: matrix.python-version == '3.14'
+        run: python -m build
+
+  latest-ovos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - name: Install the current OVOS alpha compatibility set
+        run: >-
+          python -m pip install --pre -e '.[test]'
+          -c https://raw.githubusercontent.com/OpenVoiceOS/ovos-releases/main/constraints-alpha.txt
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest

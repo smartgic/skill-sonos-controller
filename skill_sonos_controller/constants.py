@@ -1,62 +1,57 @@
-"""This file contains constants mostly called by utils.py
-"""
+"""Constants shared by the Sonos controller skill."""
 
-# List of current supported service by SoCo
-SUPPORTED_SERVICES = [
-    "Amazon Music",
-    "Apple Music",
-    "Deezer",
-    "Google Play Music",
-    "Music Library",
-    "Napster",
-    "Plex",
-    "SoundCloud",
-    "Spotify",
-    "Tidal",
-    "TuneIn",
-    "Wolfgangs Music",
-    "YouTube Music",
-]
+DEFAULT_DISCOVERY_TIMEOUT = 5
+DEFAULT_SOURCE = "Music Library"
+DEFAULT_VOLUME_STEP = 10
+LARGE_VOLUME_STEP = 30
+MUSIC_LIBRARY = "Music Library"
 
-# Service that requires authentication
-REQUIRED_AUTHENTICATION = [
-    "Spotify",
-    "Apple Music",
-    "Amazon Music",
-    "Deezer",
-    "Plex",
-    "Tidal",
-]
+# Canonical regional locales currently shipped by ovos-core. Locale resource
+# directories use lowercase BCP-47 tags, as expected by ovos-workshop.
+SUPPORTED_LOCALES = (
+    "ca-es",
+    "da-dk",
+    "de-de",
+    "en-us",
+    "es-es",
+    "eu-es",
+    "fa-ir",
+    "fr-fr",
+    "gl-es",
+    "it-it",
+    "nl-be",
+    "nl-nl",
+    "pl-pl",
+    "pt-br",
+    "pt-pt",
+    "uk-ua",
+)
 
-# List of supported categories for music library
-SUPPORTED_MUSIC_LIBRARY_CATEGORIES = [
-    "artists",
-    "album_artists",
-    "albums",
-    "genres",
-    "composers",
-    "tracks",
-    "share",
-    "sonos_playlists",
-    "playlists",
-]
+# SoCo exposes these categories for the local Sonos music index.
+MUSIC_LIBRARY_CATEGORIES = frozenset(
+    {
+        "album_artists",
+        "albums",
+        "artists",
+        "composers",
+        "genres",
+        "playlists",
+        "share",
+        "sonos_playlists",
+        "tracks",
+    }
+)
 
-# Token file used by SoCo Python library
-TOKEN_FILE = "/.config/SoCo/token_store.json"
+# Different SMAPI providers use different names for podcast-like content.
+CATEGORY_ALIASES = {
+    "albums": ("albums", "books"),
+    "artists": ("artists", "authors", "narrators", "users", "people", "hosts"),
+    "playlists": ("playlists", "mix stations"),
+    "podcasts": ("podcasts", "shows", "radio shows", "radio episodes", "episodes"),
+    "stations": ("stations", "radio stations", "radios"),
+    "tracks": ("tracks", "books"),
+}
 
-# Token collection name
-TOKEN_COLLECTION = "default"
-
-# Volume values
-DEFAULT_VOL_INCREMENT = 10
-LOUDER_QUIETER = 30
-
-# Link to the URL shortener
-# This constant is only used by utils.authentication() method to
-# provide support for the music services authentication.
-# These services generate URL that are too long to be spoken by Mycroft
-# which is why an URL shortener service is used.
-URL_SHORTENER = "https://sonos.smartgic.io"
-
-# Timeouts
-HTTP_REQUEST_TIMEOUT = 5
+# This service only stores the temporary registration URL and link metadata.
+DEFAULT_URL_SHORTENER = "https://sonos.smartgic.io"
+HTTP_REQUEST_TIMEOUT = 10

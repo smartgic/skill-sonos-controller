@@ -1,4 +1,4 @@
-(riproduci | avvia) {track} (su | in | ) ({speaker} | )
-(riproduci | avvia) {track} (di | degli) {artist} (su | in | ) ({speaker} | )
-(riproduci | avvia) {track} da {service} (su | in | ) ({speaker} | )
-(riproduci | avvia) {track} (di | degli) {artist} da {service} (su | in | ) ({speaker} | )
+(riproduci | avvia) (il brano | la canzone) {track} (su | in) {speaker}
+(riproduci | avvia) (il brano | la canzone) {track} (di | degli) {artist} (su | in) {speaker}
+(riproduci | avvia) (il brano | la canzone) {track} da {service} (su | in) {speaker}
+(riproduci | avvia) (il brano | la canzone) {track} (di | degli) {artist} da {service} (su | in) {speaker}

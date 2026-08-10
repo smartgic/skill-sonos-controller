@@ -1,4 +1,4 @@
-play {track} (on | in) {speaker}
-play {track} by {artist} (on | in) {speaker}
-play {track} from {service} (on | in) {speaker}
-play {track} by {artist} from {service} (on | in) {speaker}
+play (track | song) {track} (on | in) {speaker}
+play (track | song) {track} by {artist} (on | in) {speaker}
+play (track | song) {track} from {service} (on | in) {speaker}
+play (track | song) {track} by {artist} from {service} (on | in) {speaker}
