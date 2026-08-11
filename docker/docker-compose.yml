@@ -6,7 +6,6 @@ services:
     image: smartgic/smartgic-skill-sonos-controller:${VERSION}
     pull_policy: always
     network_mode: host
-    ipc: host
     volumes:
       - ${CONFIG_FOLDER}:/home/${OVOS_USER}/.config/mycroft
       - ${SONOS_CONFIG_FOLDER}:/home/${OVOS_USER}/.config/SoCo

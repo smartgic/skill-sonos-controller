@@ -1,6 +1,3 @@
-VERSION_MAJOR = 0
-VERSION_MINOR = 2
-VERSION_BUILD = 0
-VERSION_ALPHA = 0
+"""Package version exposed to setuptools and runtime consumers."""
 
-__version__ = f"{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_BUILD}"
+__version__ = "0.2.0"

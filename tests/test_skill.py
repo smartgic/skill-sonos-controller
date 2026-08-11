@@ -29,6 +29,11 @@ def test_classifier_only_message_is_hydrated_from_selected_intent_file():
             return []
 
     class Skill:
+        _entity_parser = SonosControllerSkill._entity_parser
+
+        def __init__(self):
+            self._entity_parsers = {}
+
         @staticmethod
         def load_lang(**_kwargs):
             return Resources()
@@ -51,6 +56,7 @@ def test_classifier_only_message_is_hydrated_from_selected_intent_file():
         ("speaker", "office"),
         ("track", "imagine"),
     }
+    assert set(skill._entity_parsers) == {"en-us"}
 
 
 def test_completed_authentication_is_kept_when_link_cleanup_fails(monkeypatch):

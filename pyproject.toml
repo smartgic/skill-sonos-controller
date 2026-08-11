@@ -47,10 +47,11 @@ end2end = [
   "ovos-padatious>=2.0.1a2,<3.0.0",
   "ovos-utils>=0.13.9a2,<1.0.0",
   "ovos-workshop>=9.3.3a1,<10.0.0",
-  "ovoscope>=1.5.0,<2.0.0",
-  "padacioso>=2.2.2a2,<3.0.0",
+  "ovoscope>=1.6.4a1,<2.0.0",
+  "padacioso>=2.2.3a1,<3.0.0",
   "pytest>=8.0",
   "pytest-cov>=5.0",
+  "pytest-xdist>=3.8.0,<4.0.0",
 ]
 
 [project.urls]
@@ -77,7 +78,7 @@ skill_sonos_controller = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--strict-markers --strict-config --cov=skill_sonos_controller.controller --cov=skill_sonos_controller.auth --cov-report=term-missing"
+addopts = "--strict-markers --strict-config"
 testpaths = ["tests"]
 markers = [
   "live_sonos: opt-in test that briefly controls a real idle Sonos speaker",

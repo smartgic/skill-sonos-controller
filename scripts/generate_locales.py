@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Generate the complete non-English OVOS resource catalog.
 
 The English resources remain the schema authority.  This script refuses to

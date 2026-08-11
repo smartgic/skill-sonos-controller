@@ -2,6 +2,9 @@ name: Run License Tests
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   license_tests:
     uses: smartgic/.github/.github/workflows/license_tests.yml@main

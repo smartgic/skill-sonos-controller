@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import logging
-from typing import Any
+from collections.abc import Callable
+from typing import Any, TypeVar, cast
 
 import requests
 from ovos_bus_client.message import Message
@@ -44,44 +44,18 @@ DEFAULT_SETTINGS = {
     "url_shortener": DEFAULT_URL_SHORTENER,
 }
 
-CLASSIFIER_INTENT_HANDLERS = {
-    "sonos.album.intent": "_handle_album",
-    "sonos.artist.intent": "_handle_artist",
-    "sonos.authenticate.intent": "_handle_authenticate",
-    "sonos.discovery.intent": "_handle_speaker_discovery",
-    "sonos.group.all.intent": "_handle_group_all",
-    "sonos.group.intent": "_handle_group",
-    "sonos.mute.intent": "_handle_mute",
-    "sonos.next.music.intent": "_handle_next_music",
-    "sonos.pause.music.intent": "_handle_pause_music",
-    "sonos.playlist.intent": "_handle_playlist",
-    "sonos.podcast.intent": "_handle_podcast",
-    "sonos.previous.music.intent": "_handle_previous_music",
-    "sonos.repeat.off.intent": "_handle_repeat_off",
-    "sonos.repeat.on.intent": "_handle_repeat_on",
-    "sonos.resume.music.intent": "_handle_resume_music",
-    "sonos.service.intent": "_handle_subscribed_services",
-    "sonos.shuffle.off.intent": "_handle_shuffle_off",
-    "sonos.shuffle.on.intent": "_handle_shuffle_on",
-    "sonos.speaker.info.intent": "_handle_speaker_info",
-    "sonos.station.intent": "_handle_station",
-    "sonos.stop.music.intent": "_handle_stop_music",
-    "sonos.speech.off.intent": "_handle_speech_off",
-    "sonos.speech.on.intent": "_handle_speech_on",
-    "sonos.track.intent": "_handle_track",
-    "sonos.tv.intent": "_handle_tv",
-    "sonos.ungroup.intent": "_handle_ungroup",
-    "sonos.unmute.intent": "_handle_unmute",
-    "sonos.volume.down.intent": "_handle_volume_down",
-    "sonos.volume.louder.intent": "_handle_volume_louder",
-    "sonos.volume.quieter.intent": "_handle_volume_quieter",
-    "sonos.volume.set.intent": "_handle_volume_set",
-    "sonos.volume.up.intent": "_handle_volume_up",
-    "sonos.what.is.playing.intent": "_handle_what_is_playing",
-    "sonos.which.artist.intent": "_handle_which_artist_playing",
-    "sonos.night.off.intent": "_handle_night_off",
-    "sonos.night.on.intent": "_handle_night_on",
-}
+Handler = TypeVar("Handler", bound=Callable[..., Any])
+CLASSIFIER_INTENT_HANDLERS: dict[str, str] = {}
+
+
+def sonos_intent_handler(intent_file: str) -> Callable[[Handler], Handler]:
+    """Register an OVOS intent and its model2vec hydration handler together."""
+
+    def decorate(handler: Handler) -> Handler:
+        CLASSIFIER_INTENT_HANDLERS[intent_file] = handler.__name__
+        return cast(Handler, intent_handler(intent_file)(handler))
+
+    return decorate
 
 
 def _as_bool(value: Any) -> bool:
@@ -113,6 +87,7 @@ class SonosControllerSkill(OVOSSkill):
         self.playing_confirmation = False
         self.searching_confirmation = True
         self.nato_dict: dict[str, str] = {}
+        self._entity_parsers: dict[str, IntentContainer] = {}
         super().__init__(bus=bus, skill_id=skill_id, **kwargs)
 
         # The current OVOS loader supplies both values. Keeping unbound
@@ -130,8 +105,6 @@ class SonosControllerSkill(OVOSSkill):
         self.on_settings_changed()
         self._register_audio_events()
 
-        logging.getLogger("soco.discovery").setLevel(logging.WARNING)
-        logging.getLogger("soco.music_services").setLevel(logging.WARNING)
         self._refresh_household(announce=False)
 
     @classproperty
@@ -161,7 +134,10 @@ class SonosControllerSkill(OVOSSkill):
 
     def on_settings_changed(self) -> None:
         """Reload inexpensive settings without rediscovery or event duplication."""
-        self.service = str(self.settings.get("default_source", DEFAULT_SOURCE)).strip()
+        configured_service = str(
+            self.settings.get("default_source", DEFAULT_SOURCE)
+        ).strip()
+        self.service = configured_service or DEFAULT_SOURCE
         self.duck_enabled = _as_bool(self.settings.get("duck", False))
         self.playing_confirmation = _as_bool(
             self.settings.get("playing_confirmation", False)
@@ -182,7 +158,7 @@ class SonosControllerSkill(OVOSSkill):
             return False
         return True
 
-    @intent_handler("sonos.discovery.intent")
+    @sonos_intent_handler("sonos.discovery.intent")
     def _handle_speaker_discovery(self, message: Message) -> None:
         """Refresh and optionally list Sonos rooms."""
         if self._hydrate_message_entities(message, "sonos.discovery.intent"):
@@ -197,7 +173,7 @@ class SonosControllerSkill(OVOSSkill):
             for speaker in self.controller.speakers:
                 self.speak(speaker.player_name)
 
-    @intent_handler("sonos.service.intent")
+    @sonos_intent_handler("sonos.service.intent")
     def _handle_subscribed_services(self, message: Message) -> list[str] | None:
         """List services dynamically discovered for this Sonos household."""
         if self._hydrate_message_entities(message, "sonos.service.intent"):
@@ -217,7 +193,23 @@ class SonosControllerSkill(OVOSSkill):
         return services
 
     def _message_service(self, message: Message) -> str:
-        return str(message.data.get("service") or self.service).strip()
+        requested_service = str(message.data.get("service") or "").strip()
+        return requested_service or self.service or DEFAULT_SOURCE
+
+    def _entity_parser(self, lang: str) -> IntentContainer:
+        """Return the cached local parser used to hydrate classifier results."""
+        cache_key = lang.casefold()
+        parser = self._entity_parsers.get(cache_key)
+        if parser is None:
+            resources = self.load_lang(lang=lang)
+            parser = IntentContainer(n_workers=1)
+            for candidate in CLASSIFIER_INTENT_HANDLERS:
+                parser.add_intent(
+                    candidate,
+                    resources.load_intent_file(candidate),
+                )
+            self._entity_parsers[cache_key] = parser
+        return parser
 
     def _hydrate_message_entities(self, message: Message, intent_file: str) -> bool:
         """Verify a classifier label and recover its free-form slots.
@@ -240,13 +232,7 @@ class SonosControllerSkill(OVOSSkill):
             return False
         lang = str(message.data.get("lang") or getattr(message, "lang", self.lang))
         try:
-            resources = self.load_lang(lang=lang)
-            parser = IntentContainer(n_workers=1)
-            for candidate in CLASSIFIER_INTENT_HANDLERS:
-                parser.add_intent(
-                    candidate,
-                    resources.load_intent_file(candidate),
-                )
+            parser = self._entity_parser(lang)
             match = parser.calc_intent(utterance) or {}
             entities = match.get("entities") or {}
             for name, value in entities.items():
@@ -332,7 +318,7 @@ class SonosControllerSkill(OVOSSkill):
                 self.speak_dialog(
                     "sonos.speaker.muted", data={"speaker": result.speaker}
                 )
-        except (NoSpeakersError, SpeakerNotFoundError, SoCoException):
+        except (OSError, NoSpeakersError, SpeakerNotFoundError, SoCoException):
             LOG.debug("Unable to read Sonos volume after starting playback")
 
         if not self.playing_confirmation:
@@ -349,27 +335,27 @@ class SonosControllerSkill(OVOSSkill):
             data["artist"] = result.artist
         self.speak_dialog(dialog, data=data)
 
-    @intent_handler("sonos.playlist.intent")
+    @sonos_intent_handler("sonos.playlist.intent")
     def _handle_playlist(self, message: Message) -> None:
         self._play_from_message(message, "playlists", "playlist")
 
-    @intent_handler("sonos.podcast.intent")
+    @sonos_intent_handler("sonos.podcast.intent")
     def _handle_podcast(self, message: Message) -> None:
         self._play_from_message(message, "podcasts", "podcast")
 
-    @intent_handler("sonos.album.intent")
+    @sonos_intent_handler("sonos.album.intent")
     def _handle_album(self, message: Message) -> None:
         self._play_from_message(message, "albums", "album")
 
-    @intent_handler("sonos.artist.intent")
+    @sonos_intent_handler("sonos.artist.intent")
     def _handle_artist(self, message: Message) -> None:
         self._play_from_message(message, "artists", "artist")
 
-    @intent_handler("sonos.station.intent")
+    @sonos_intent_handler("sonos.station.intent")
     def _handle_station(self, message: Message) -> None:
         self._play_from_message(message, "stations", "station")
 
-    @intent_handler("sonos.track.intent")
+    @sonos_intent_handler("sonos.track.intent")
     def _handle_track(self, message: Message) -> None:
         self._play_from_message(message, "tracks", "track")
 
@@ -405,39 +391,39 @@ class SonosControllerSkill(OVOSSkill):
             LOG.warning("Sonos %s command failed: %s", command, error)
             self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.pause.music.intent")
+    @sonos_intent_handler("sonos.pause.music.intent")
     def _handle_pause_music(self, message: Message) -> None:
         self._run_transport(message, "pause")
 
-    @intent_handler("sonos.stop.music.intent")
+    @sonos_intent_handler("sonos.stop.music.intent")
     def _handle_stop_music(self, message: Message) -> None:
         self._run_transport(message, "stop")
 
-    @intent_handler("sonos.resume.music.intent")
+    @sonos_intent_handler("sonos.resume.music.intent")
     def _handle_resume_music(self, message: Message) -> None:
         self._run_transport(message, "play", required_state="PAUSED_PLAYBACK")
 
-    @intent_handler("sonos.next.music.intent")
+    @sonos_intent_handler("sonos.next.music.intent")
     def _handle_next_music(self, message: Message) -> None:
         self._run_transport(message, "next")
 
-    @intent_handler("sonos.previous.music.intent")
+    @sonos_intent_handler("sonos.previous.music.intent")
     def _handle_previous_music(self, message: Message) -> None:
         self._run_transport(message, "previous")
 
-    @intent_handler("sonos.shuffle.on.intent")
+    @sonos_intent_handler("sonos.shuffle.on.intent")
     def _handle_shuffle_on(self, message: Message) -> None:
         self._set_playback_option(message, "shuffle", True)
 
-    @intent_handler("sonos.shuffle.off.intent")
+    @sonos_intent_handler("sonos.shuffle.off.intent")
     def _handle_shuffle_off(self, message: Message) -> None:
         self._set_playback_option(message, "shuffle", False)
 
-    @intent_handler("sonos.repeat.on.intent")
+    @sonos_intent_handler("sonos.repeat.on.intent")
     def _handle_repeat_on(self, message: Message) -> None:
         self._set_playback_option(message, "repeat", True)
 
-    @intent_handler("sonos.repeat.off.intent")
+    @sonos_intent_handler("sonos.repeat.off.intent")
     def _handle_repeat_off(self, message: Message) -> None:
         self._set_playback_option(message, "repeat", False)
 
@@ -480,24 +466,25 @@ class SonosControllerSkill(OVOSSkill):
             self.speak_dialog("error.discovery")
         except (OSError, SoCoException) as error:
             LOG.warning("Sonos volume change failed: %s", error)
+            self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.volume.up.intent")
+    @sonos_intent_handler("sonos.volume.up.intent")
     def _handle_volume_up(self, message: Message) -> None:
         self._change_volume(message, DEFAULT_VOLUME_STEP)
 
-    @intent_handler("sonos.volume.down.intent")
+    @sonos_intent_handler("sonos.volume.down.intent")
     def _handle_volume_down(self, message: Message) -> None:
         self._change_volume(message, -DEFAULT_VOLUME_STEP)
 
-    @intent_handler("sonos.volume.louder.intent")
+    @sonos_intent_handler("sonos.volume.louder.intent")
     def _handle_volume_louder(self, message: Message) -> None:
         self._change_volume(message, LARGE_VOLUME_STEP)
 
-    @intent_handler("sonos.volume.quieter.intent")
+    @sonos_intent_handler("sonos.volume.quieter.intent")
     def _handle_volume_quieter(self, message: Message) -> None:
         self._change_volume(message, -LARGE_VOLUME_STEP)
 
-    @intent_handler("sonos.volume.set.intent")
+    @sonos_intent_handler("sonos.volume.set.intent")
     def _handle_volume_set(self, message: Message) -> None:
         """Set an exact 0-100 volume using OVOS's locale-aware parser."""
         if self._hydrate_message_entities(message, "sonos.volume.set.intent"):
@@ -541,20 +528,23 @@ class SonosControllerSkill(OVOSSkill):
             LOG.warning("Sonos mute change failed: %s", error)
             self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.mute.intent")
+    @sonos_intent_handler("sonos.mute.intent")
     def _handle_mute(self, message: Message) -> None:
         self._set_mute(message, True)
 
-    @intent_handler("sonos.unmute.intent")
+    @sonos_intent_handler("sonos.unmute.intent")
     def _handle_unmute(self, message: Message) -> None:
         self._set_mute(message, False)
 
     def _change_group(self, operation: str, message: Message) -> None:
-        intent_name = {
+        intent_names = {
             "all": "sonos.group.all.intent",
             "group": "sonos.group.intent",
             "ungroup": "sonos.ungroup.intent",
-        }[operation]
+        }
+        if operation not in intent_names:
+            raise ValueError(f"Unsupported grouping operation: {operation}")
+        intent_name = intent_names[operation]
         if self._hydrate_message_entities(message, intent_name):
             return
         try:
@@ -568,10 +558,8 @@ class SonosControllerSkill(OVOSSkill):
                 )
             elif operation == "all":
                 self.controller.group_all(str(message.data.get("speaker") or ""))
-            elif operation == "ungroup":
-                self.controller.ungroup_speaker(str(message.data.get("speaker") or ""))
             else:
-                raise ValueError(f"Unsupported grouping operation: {operation}")
+                self.controller.ungroup_speaker(str(message.data.get("speaker") or ""))
         except (SpeakerNotFoundError, AmbiguousSpeakerError):
             speaker = (
                 message.data.get("group_speaker")
@@ -585,15 +573,15 @@ class SonosControllerSkill(OVOSSkill):
             LOG.warning("Sonos grouping failed: %s", error)
             self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.group.intent")
+    @sonos_intent_handler("sonos.group.intent")
     def _handle_group(self, message: Message) -> None:
         self._change_group("group", message)
 
-    @intent_handler("sonos.group.all.intent")
+    @sonos_intent_handler("sonos.group.all.intent")
     def _handle_group_all(self, message: Message) -> None:
         self._change_group("all", message)
 
-    @intent_handler("sonos.ungroup.intent")
+    @sonos_intent_handler("sonos.ungroup.intent")
     def _handle_ungroup(self, message: Message) -> None:
         self._change_group("ungroup", message)
 
@@ -621,23 +609,23 @@ class SonosControllerSkill(OVOSSkill):
             LOG.warning("Sonos home-theater change failed: %s", error)
             self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.tv.intent")
+    @sonos_intent_handler("sonos.tv.intent")
     def _handle_tv(self, message: Message) -> None:
         self._change_home_theater(message, "tv")
 
-    @intent_handler("sonos.night.on.intent")
+    @sonos_intent_handler("sonos.night.on.intent")
     def _handle_night_on(self, message: Message) -> None:
         self._change_home_theater(message, "night", True)
 
-    @intent_handler("sonos.night.off.intent")
+    @sonos_intent_handler("sonos.night.off.intent")
     def _handle_night_off(self, message: Message) -> None:
         self._change_home_theater(message, "night", False)
 
-    @intent_handler("sonos.speech.on.intent")
+    @sonos_intent_handler("sonos.speech.on.intent")
     def _handle_speech_on(self, message: Message) -> None:
         self._change_home_theater(message, "speech", True)
 
-    @intent_handler("sonos.speech.off.intent")
+    @sonos_intent_handler("sonos.speech.off.intent")
     def _handle_speech_off(self, message: Message) -> None:
         self._change_home_theater(message, "speech", False)
 
@@ -657,11 +645,11 @@ class SonosControllerSkill(OVOSSkill):
         except (OSError, SoCoException, NoSpeakersError) as error:
             LOG.debug("Sonos volume restore skipped: %s", error)
 
-    @intent_handler("sonos.what.is.playing.intent")
+    @sonos_intent_handler("sonos.what.is.playing.intent")
     def _handle_what_is_playing(self, message: Message) -> None:
         self._speak_track_info(message, artist_only=False)
 
-    @intent_handler("sonos.which.artist.intent")
+    @sonos_intent_handler("sonos.which.artist.intent")
     def _handle_which_artist_playing(self, message: Message) -> None:
         self._speak_track_info(message, artist_only=True)
 
@@ -726,7 +714,7 @@ class SonosControllerSkill(OVOSSkill):
             LOG.warning("Unable to read Sonos track information: %s", error)
             self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.speaker.info.intent")
+    @sonos_intent_handler("sonos.speaker.info.intent")
     def _handle_speaker_info(self, message: Message) -> None:
         if self._hydrate_message_entities(message, "sonos.speaker.info.intent"):
             return
@@ -761,7 +749,7 @@ class SonosControllerSkill(OVOSSkill):
             LOG.warning("Unable to read Sonos speaker information: %s", error)
             self.speak_dialog("error.sonos")
 
-    @intent_handler("sonos.authenticate.intent")
+    @sonos_intent_handler("sonos.authenticate.intent")
     def _handle_authenticate(self, message: Message) -> None:
         """Begin or finish authentication for any compatible SMAPI service."""
         if self._hydrate_message_entities(message, "sonos.authenticate.intent"):

@@ -150,18 +150,24 @@ python -m venv .venv
 .venv/bin/pip install -e '.[test]'
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
-.venv/bin/pytest
+.venv/bin/pytest --cov=skill_sonos_controller --cov-report=term-missing --cov-fail-under=80
+.venv/bin/python scripts/generate_locales.py
+rm -rf build dist skill_sonos_controller.egg-info
 .venv/bin/python -m build
+.venv/bin/python scripts/verify_distribution.py
 ```
 
 Intent routing is also tested end to end with OVOScope. This boots the real
-MiniCroft skill loader and tests all 36 intents in all 16 locales with
-Padacioso, the complete English surface with Padatious and trainable model2vec,
-model2vec free-form entity hydration, and a runtime-advertised provider name
-(650 cases total). The frozen model2vec classifier cannot learn newly registered
-skill labels, so the suite deliberately uses its prototype pipeline. The test
-replaces the Sonos controller before skill construction, so it never discovers
-or changes speakers on the local network:
+MiniCroft skill loader for 1,281 cases. Every one of the 1,078 non-empty intent
+template lines across all 16 locales is routed through Padacioso and executes
+its handler. All 97 English template lines are also run through Padatious and
+trainable model2vec, alongside model2vec free-form entity hydration, default and
+runtime-advertised providers, all common OVOS audio-service bus controls, and
+the distinct volume-step semantics. The frozen model2vec classifier cannot
+learn newly registered skill labels, so the suite deliberately uses its
+prototype pipeline. A deterministic controller is installed before skill
+construction, so the suite never discovers or changes speakers on the local
+network:
 
 ```bash
 .venv/bin/pip install --pre -e '.[test,end2end]'
@@ -176,6 +182,11 @@ resources can be regenerated and schema-checked with:
 python scripts/generate_locales.py
 ovos-localize-cli --repo . --report-format text
 ```
+
+`pyproject.toml` is the dependency source of truth; `requirements.txt` remains
+as an OPM compatibility input and is checked for exact agreement. The
+distribution verifier rejects stale or missing package files in either the
+wheel or source archive, including files left behind by an earlier build.
 
 There is also an opt-in hardware test. It refuses to run unless the selected
 speaker is stopped, ungrouped, and has an empty queue. Playback is capped at
