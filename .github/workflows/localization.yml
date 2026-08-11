@@ -1,7 +1,6 @@
 name: Localization validation
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
@@ -10,4 +9,4 @@ permissions:
 
 jobs:
   validate:
-    uses: OpenVoiceOS/gh-automations/.github/workflows/validate-translations.yml@dev
+    uses: OpenVoiceOS/gh-automations/.github/workflows/locale-check.yml@dev
